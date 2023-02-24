@@ -234,6 +234,7 @@ var slider_height = slider.node().getBoundingClientRect().height
         slider_selector.on("click", updateView);
   
     function updateView() {
+        
         currview = 1-currview;
       slider_image.attr("xlink:href", d => slider_imgs[currview] )
        
@@ -275,7 +276,7 @@ var slider_height = slider.node().getBoundingClientRect().height
       slider_selector_text.text(views[currview] + " view")
       slider_infos_text.text( views[currview] +" "+ sliderVals[0]  + " - " +sliderVals[1])
       
-
+      updateMap(v1, v2, currview);
       
     }
 

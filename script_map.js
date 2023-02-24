@@ -1,28 +1,24 @@
-map_img = "https://static.observableusercontent.com/files/ff39fb0c36250ff304094b5054737ce4090a69ebbe50b6e63f4241d091303d68954886aca98b556b93c77ca16dcdb6838b30255b4eb18237d0ccee2b66fe2b02"
-slider_bg_img = "https://static.observableusercontent.com/files/87f1a6ba97f3bf7363485948ba3a49c537049241fd269d6208296969f3c5f4bc9996501240cb749e4f989496a6da0025e7dc5fb09fd58aca3ca561442b67ada2"
-img_url = "https://static.observableusercontent.com/files/011fa531b2a084ac483f14c59d1206bb2100b5e1a32f497c304a7abd6b2764f7ccc1aca4ab4f5df7e8fd1d3fefc11bfa45d9d2bb9dcaf8bdb50c10d32f9232ae"
-range_button_high_img = "https://static.observableusercontent.com/files/f0d26a3e7acd3cf496dd4654302f2349d123375919c97745370673add5c9bdd0dbe9264b3291719643c83a7d4924bad32bbe8a553d90817be375c91223d64411"
-range_button_low_img = "https://static.observableusercontent.com/files/400f43d492aaa54f21fdcc5fbf3ee54461f1015db6fdee2746c292d7551d6cad85b80e3485c8323773477afb73a1365d6514c11599dae2ed9cd5272c51545d09"
-slider_books_bar_img = "https://static.observableusercontent.com/files/dcbc61b413efeb432ca3f2ad113073a5449a43ba0381a2249b0be1aaa1fc6fb682c7b1c724d72ebc616afffbd852877f21e92e50d5943583e291b74c4bc4b9fd"
-slider_years_bar_img = "https://static.observableusercontent.com/files/4fa24e56387b03eef4e3b04db5219bc0211bf2b822d3da0c6e1542cc3c98edd00576e12e1b1ada68c10e27f1dd754a9df0e8596d2c52cff9479c0140aaba6262"
-slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5c2eee490ca98d9e4e6d09e0ca93468d0cec7f4b82aa9d73afebc254ed325e86a879ab9c7c07c881f5d987d75278444d98ddad9cd52224e69427e5"
+map_img = "assets/speculative_map_cut.jpg"
+slider_bg_img = "assets/slider_bg.png"
+range_button_high_img = "assets/range_button_high.png"
+range_button_low_img ="assets/range_button_low.png"
+slider_books_bar_img = "assets/slider_bar_5.png"
+slider_years_bar_img = "assets/slider_bar_4.png"
+slider_info_bg_img = "assets/slider_info_bg.png"
 
-
-
-
-
-
-
-    const width = 1800;
-    const height = 1800;
+    const width = window.innerWidth;
+    //height automatic
+    const height = width
     const svg = d3.select("#main_svg")
+                    .attr("width", width)
+                    .attr("height", height)
     const g = svg.append("g")
 
 
     //APPEND MAP
     g.append("svg:image")
         .attr("xlink:href", d => map_img)
-        .style("width", "100%")
+        .style('width', "100%")
         .style("height", "auto")
 
 
@@ -47,6 +43,7 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
     // ---------------------------//
     //          Slider           // 
     // --------------------------// 
+        const g_slider=g.append("g").attr("transform", "translate(0," + (height/1.25) + ")")
           var v1 = 1, v2 = 5;
          var sliderVals = [v1, v2];
         var views = ["Books", "Years"];
@@ -60,8 +57,8 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
     //      Slider - infos        // 
     // --------------------------// 
 
-    const slider_infos =g.append('g')
-      .attr("transform", "translate(530," + (height - 370) + ")")
+    const slider_infos =g_slider.append('g')
+      .attr("transform", "translate(" + width/3 +",0)")
     slider_infos.append("svg:image")
         .attr("xlink:href", d => slider_info_bg_img)
         .style("width", "40%")
@@ -70,35 +67,38 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
    var slider_infos_text = slider_infos.append("text")
             .attr("text-anchor", "middle")
               .attr("font-size","40px")
-              .attr("x", 380) //use getBBox later, now static
-              .attr("y", 45)
+              .attr("x", slider_infos.node().getBoundingClientRect().width/2)
+              .attr("y", slider_infos.node().getBoundingClientRect().height/2)
              .text( views[currview] +" "+sliderVals[0]  + " - " +sliderVals[1])
 
     
 
     //brown slider background
-    g.append("svg:image")
+    g_slider.append("svg:image")
         .attr("xlink:href", d => slider_bg_img)
         .style("width", "100%")
         .style("height", "auto")
-        .attr('y', height - 305)
+        .attr('y', 60)
 
   // ----------------------------//
     //  Slider - handles+bar     // 
     // --------------------------// 
-    const slider = g.append("g")
-        .attr("transform", "translate(530," + (height - 280) + ")")
+    const slider = g_slider.append("g")
+    .attr("transform", "translate(" + width/3 +",90)")
+        
 
    var slider_image= slider.append("svg:image")
         .attr("xlink:href", d => slider_imgs[currview] )
-        .attr("transform", "translate(10,0)")
+        .attr("transform", "translate(15,0)")
         .style("height", "1.5%")
 
 
       
+var slider_width = slider.node().getBoundingClientRect().width
+var slider_height = slider.node().getBoundingClientRect().height
     var x_slider = d3.scaleLinear()
-        .domain([1, 5]) //TODO: find a way to make the domain dynamic
-        .range([10, 615]) //<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
+        .domain([1, 5]) 
+        .range([slider_width/35,slider_width/1.12])
         .clamp(true);
     var xMin = x_slider(1),
         xMax = x_slider(5)
@@ -110,9 +110,9 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
     var selRange = slider.append("line")
             .attr("class", "sel-range")
             .style("stroke" , "#94C2ED")
-             .attr("transform", "translate(0, 14)")
+             .attr("transform", "translate(0," + slider_height/2 +")")
             .style("opacity", 0.6)
-            .style("stroke-width",  "29px")
+            .style("stroke-width",  slider_height+"px")
             .attr("x1", 20+x_slider(sliderVals[0]))
             .attr("x2", 20+x_slider(sliderVals[1]))
             
@@ -215,22 +215,23 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
 
     //ATTENTION: cannot append "select" element on observable, gotta use the Observable Inputs -> gotta change when hosting on webpage
    const slider_selector = slider.append("rect")
-                            .attr("x", -450)
+                            
                             .attr('width', 200)
                               .attr('height', 40)
                               .attr('stroke', 'black')
                               .attr('fill', 'white')
-                              .attr("cursor", "pointer");              
+                              .attr("cursor", "pointer");      
+    slider_selector.attr("x", -slider_width/1.5)
+                    .attr("y", -slider_height/2)        
   
     var slider_selector_text = slider.append("text")
-          .attr("x", -360)
-          .attr("y", 25)
-          .attr("text-anchor", "middle")
+          .attr("x",slider_selector.attr("x")*0.9)
+          .attr("y", -slider_selector.attr("y")*1.2)
           .attr("font-size","25px")
           .attr("cursor", "pointer")
           .text(views[currview] + " view");
-        slider_selector_text.on("click", () => {updateView()});
-        slider_selector.on("click", () => {updateView()});
+        slider_selector_text.on("click",updateView);
+        slider_selector.on("click", updateView);
   
     function updateView() {
         currview = 1-currview;
@@ -243,7 +244,7 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
         sliderVals=[v1,v2];
          x_slider = d3.scaleLinear()
         .domain([1, 5]) //TODO: find a way to make the domain dynamic
-        .range([10, 615]) //<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
+        .range([slider_width/35,slider_width/1.12])//<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
         .clamp(true);
         xMin = x_slider(1);
         xMax = x_slider(5);
@@ -259,7 +260,7 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
         sliderVals=[v1,v2];
         x_slider = d3.scaleLinear()
         .domain([297, 300]) //TODO: find a way to make the domain dynamic
-        .range([100, 550]) //<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
+        .range([slider_width/6,slider_width/1.25])
         .clamp(true);
 
         xMin = x_slider(297);
@@ -288,8 +289,8 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
     }
     var mousemove = function(e, d) {
         tooltip
-            .style('top', e.clientY - 20 + 'px')
-            .style('left', e.clientX + 20 + 'px')
+            .style('top', e.pageY - 20 + 'px')
+            .style('left', e.pageX + 20 + 'px')
             .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location)
     }
     var mouseleave = function(d) {
@@ -301,19 +302,15 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
     // ---------------------------//
     //            Zoom           //
     // --------------------------// 
-    var zoom = d3.zoom()
+    let zoom = d3.zoom()
         .scaleExtent([1, 8])
-        .on("zoom", zoomed);
+        .translateExtent([[0,0], [g.node().getBBox().width, height]])
+        .on("zoom", handleZoom)
 
-    function zoomed(event) {
-        const {
-            transform
-        } = event;
-        g.attr("transform", transform);
-        g.attr("stroke-width", 1 / transform.k);
+    function handleZoom(e) {
+        g.attr("transform", e.transform)
     }
-
-    svg.call(zoom);
+    g.call(zoom);
 
 
     function updateMap(v1, v2, currview) {
@@ -339,6 +336,7 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
             .attr("opacity", 1);
 
     }
+  
 
 
 

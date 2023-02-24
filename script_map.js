@@ -9,6 +9,8 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     const width = window.innerWidth;
     //height automatic
     const height = width
+
+
     const svg = d3.select("#main_svg")
                     .attr("width", width)
                     .attr("height", height)
@@ -57,18 +59,19 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     //      Slider - infos        // 
     // --------------------------// 
 
-    const slider_infos =g_slider.append('g')
+    var slider_infos =g_slider.append('g')
       .attr("transform", "translate(" + width/3 +",0)")
     slider_infos.append("svg:image")
         .attr("xlink:href", d => slider_info_bg_img)
         .style("width", "40%")
         .style("height", "auto")
-  //WIP
+  
+
    var slider_infos_text = slider_infos.append("text")
             .attr("text-anchor", "middle")
-              .attr("font-size","40px")
-              .attr("x", slider_infos.node().getBoundingClientRect().width/2)
-              .attr("y", slider_infos.node().getBoundingClientRect().height/2)
+              .attr("font-size","38px")
+              .attr("x",width/5)
+              .attr("y",height/38)
              .text( views[currview] +" "+sliderVals[0]  + " - " +sliderVals[1])
 
     
@@ -93,12 +96,10 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         .style("height", "1.5%")
 
 
-      
-var slider_width = slider.node().getBoundingClientRect().width
-var slider_height = slider.node().getBoundingClientRect().height
+
     var x_slider = d3.scaleLinear()
         .domain([1, 5]) 
-        .range([slider_width/35,slider_width/1.12])
+        .range([width/50,width/2.95])
         .clamp(true);
     var xMin = x_slider(1),
         xMax = x_slider(5)
@@ -110,9 +111,9 @@ var slider_height = slider.node().getBoundingClientRect().height
     var selRange = slider.append("line")
             .attr("class", "sel-range")
             .style("stroke" , "#94C2ED")
-             .attr("transform", "translate(0," + slider_height/2 +")")
+             .attr("transform", "translate(0,"+ height/130+")")
             .style("opacity", 0.6)
-            .style("stroke-width",  slider_height+"px")
+            .style("stroke-width",  height/65+"px")
             .attr("x1", 20+x_slider(sliderVals[0]))
             .attr("x2", 20+x_slider(sliderVals[1]))
             
@@ -210,28 +211,27 @@ var slider_height = slider.node().getBoundingClientRect().height
 
    
     // ---------------------------//
-    //      Slider - selector     // 
+    //      View     selector     // 
     // --------------------------// 
 
     //ATTENTION: cannot append "select" element on observable, gotta use the Observable Inputs -> gotta change when hosting on webpage
-   const slider_selector = slider.append("rect")
-                            
+   const view_selector = slider.append("rect")
                             .attr('width', 200)
                               .attr('height', 40)
                               .attr('stroke', 'black')
                               .attr('fill', 'white')
                               .attr("cursor", "pointer");      
-    slider_selector.attr("x", -slider_width/1.5)
-                    .attr("y", -slider_height/2)        
+    view_selector.attr("x", -width/5)
+                    .attr("y", -height/120)        
   
     var slider_selector_text = slider.append("text")
-          .attr("x",slider_selector.attr("x")*0.9)
-          .attr("y", -slider_selector.attr("y")*1.2)
+          .attr("x",view_selector.attr("x")*0.9)
+          .attr("y", -view_selector.attr("y"))
           .attr("font-size","25px")
           .attr("cursor", "pointer")
           .text(views[currview] + " view");
         slider_selector_text.on("click",updateView);
-        slider_selector.on("click", updateView);
+        view_selector.on("click", updateView);
   
     function updateView() {
         
@@ -245,7 +245,7 @@ var slider_height = slider.node().getBoundingClientRect().height
         sliderVals=[v1,v2];
          x_slider = d3.scaleLinear()
         .domain([1, 5]) //TODO: find a way to make the domain dynamic
-        .range([slider_width/35,slider_width/1.14])//<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
+        .range([width/50,width/2.95])//<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
         .clamp(true);
         xMin = x_slider(1);
         xMax = x_slider(5);
@@ -261,7 +261,7 @@ var slider_height = slider.node().getBoundingClientRect().height
         sliderVals=[v1,v2];
         x_slider = d3.scaleLinear()
         .domain([297, 300]) //TODO: find a way to make the domain dynamic
-        .range([slider_width/6,slider_width/1.24])
+        .range([width/15,width/3.22])
         .clamp(true);
 
         xMin = x_slider(297);
@@ -305,7 +305,7 @@ var slider_height = slider.node().getBoundingClientRect().height
     // --------------------------// 
     let zoom = d3.zoom()
         .scaleExtent([1, 8])
-        .translateExtent([[0,0], [g.node().getBBox().width, height]])
+        .translateExtent([[0,0], [width, height]])
         .on("zoom", handleZoom)
 
     function handleZoom(e) {
@@ -420,6 +420,5 @@ circles.append('circle')
         // handle error here
         console.log(err)
     })
-
 
    

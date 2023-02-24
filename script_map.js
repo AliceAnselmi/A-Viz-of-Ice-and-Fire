@@ -7,15 +7,26 @@ slider_books_bar_img = "https://static.observableusercontent.com/files/dcbc61b41
 slider_years_bar_img = "https://static.observableusercontent.com/files/4fa24e56387b03eef4e3b04db5219bc0211bf2b822d3da0c6e1542cc3c98edd00576e12e1b1ada68c10e27f1dd754a9df0e8596d2c52cff9479c0140aaba6262"
 slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5c2eee490ca98d9e4e6d09e0ca93468d0cec7f4b82aa9d73afebc254ed325e86a879ab9c7c07c881f5d987d75278444d98ddad9cd52224e69427e5"
 
+
+
+
+
+
+
     const width = 1800;
     const height = 1800;
-    const svg = d3.select(DOM.svg(width, height))
+    const svg = d3.select("#main_svg")
     const g = svg.append("g")
+
+
     //APPEND MAP
     g.append("svg:image")
         .attr("xlink:href", d => map_img)
         .style("width", "100%")
         .style("height", "auto")
+
+
+
 
 
     // ---------------------------//
@@ -330,10 +341,24 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
     }
 
 
+
+    //CSV FUNCTIONS
+    Promise.all([
+        d3.csv("data/character-deaths.csv"),
+        d3.csv("data/locations-coordinates.csv"),
+    ]).then(function(files) {
+        // files[0] will contain file1.csv
+        // files[1] will contain file2.csv
+        const data = files[0];
+        const coordinates = files[1];
+
+
+        
     // ---------------------------//
     //  Coordinates calculation  //
     // --------------------------//
-    var calculate_coordinates = (x_perc, y_perc) => {
+
+         var calculate_coordinates = (x_perc, y_perc) => {
         var x_img = x_perc * width;
         var y_img = y_perc * height;
         return [x_img, y_img];
@@ -364,29 +389,38 @@ slider_info_bg_img = "https://static.observableusercontent.com/files/b1350498da5
     // ---------------------------//
     //           Circles         //
     // --------------------------// 
+    
     var circles = g.selectAll('.circles')
-        .data(data)
-        .enter()
-        .append('g')
-        .attr('class', 'circles')
+    .data(data)
+    .enter()
+    .append('g')
+    .attr('class', 'circles')
 
-    //CREATE THE CIRCLE
-    var cxdef = 450
-    var cydef = 980
-    circles.append('circle')
-        .attr('cx', (d, i) => {
-            var coords = process_coordinates(d)
-            var ranNum = Math.ceil(Math.random() * 5) * (Math.round(Math.random()) ? 1 : -1)
-            return coords[0] + ranNum;
-        })
-        .attr('cy', (d, i) => {
-            var coords = process_coordinates(d)
-            var ranNum = Math.ceil(Math.random() * 5) * (Math.round(Math.random()) ? 1 : -1)
-            return coords[1] + ranNum;
-        })
-        .attr('r', 5)
-        .attr('stroke', 'black')
-        .style("fill", "red")
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
+//CREATE THE CIRCLE
+var cxdef = 450
+var cydef = 980
+circles.append('circle')
+    .attr('cx', (d, i) => {
+        var coords = process_coordinates(d)
+        var ranNum = Math.ceil(Math.random() * 5) * (Math.round(Math.random()) ? 1 : -1)
+        return coords[0] + ranNum;
+    })
+    .attr('cy', (d, i) => {
+        var coords = process_coordinates(d)
+        var ranNum = Math.ceil(Math.random() * 5) * (Math.round(Math.random()) ? 1 : -1)
+        return coords[1] + ranNum;
+    })
+    .attr('r', 5)
+    .attr('stroke', 'black')
+    .style("fill", "red")
+    .on("mouseover", mouseover)
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave)
+
+    }).catch(function(err) {
+        // handle error here
+        console.log(err)
+    })
+
+
+   

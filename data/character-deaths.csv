@@ -1,0 +1,294 @@
+Name,Allegiances,Death_Year,Book_of_Death,Death_Chapter,Book_Intro_Chapter,Gender,Nobility,GoT,CoK,SoS,FfC,DwD,Death_Location,Timeline_Chapter_Death,Timeline_Chapter_Intro
+Waymar Royce,Night's Watch,297,1,0,0,1,1,1,0,0,0,0,Haunted Forest,0,0
+Will,Night's Watch,297,1,0,0,1,0,1,0,0,0,0,Haunted Forest,0,0
+Gared,Night's Watch,297,1,1,0,1,0,1,0,0,0,0,The North,1,0
+Robar Royce,Baratheon,299,2,6,29,1,1,1,1,1,0,0,Storm's End,79,102
+Burton Crakehall,Lannister,299,2,7,55,1,1,1,1,0,0,0,Riverlands,80,128
+Janos Slynt,None,300,5,7,27,1,1,1,1,1,0,1,Castle Black,278,298
+Lyman Darry,Tully,299,3,7,71,1,1,1,1,0,0,0,Darry,150,214
+Doreah,Targaryen,299,2,12,11,0,0,1,1,0,0,0,Red Waste,85,84
+Kyra,Stark,300,5,12,37,0,0,1,1,0,0,1,Dreadfort,283,308
+Mycah,Stark,298,1,16,15,1,0,1,0,0,0,0,Riverlands,16,15
+Yoren,Night's Watch,299,2,19,13,1,0,1,1,0,0,0,Gods Eye,92,86
+Rickard Karstark,Stark,299,3,20,53,1,1,1,1,1,0,0,Riverrun,163,196
+Arys Oakheart,Lannister,300,4,21,57,1,1,1,1,0,1,0,Greenblood,246,282
+Porther,Stark,299,2,21,22,1,0,1,1,0,0,0,King's Landing,94,95
+Vayon Poole,Stark,298,1,21,7,1,0,1,1,0,0,0,King's Landing,21,7
+Marillion,Arryn,300,4,23,28,1,0,1,0,1,1,0,The Eyrie,248,253
+Benjen Stark,Night's Watch,298,1,24,5,1,1,1,0,0,0,0,Beyond the Wall,24,5
+Rast,Night's Watch,299,3,26,55,1,0,1,0,1,0,0,Castle Black,169,198
+Beric Dondarrion,None,300,4,27,42,1,1,1,0,1,0,0,Riverlands,252,267
+Hugh,Arryn,298,1,29,25,1,0,1,0,0,0,0,King's Landing,29,25
+Medger Cerwyn,Stark,299,2,30,53,1,1,1,1,0,0,0,Harrenhal,103,126
+Jyck,Lannister,298,1,31,21,1,0,1,0,0,0,0,Mountains of the Moon,31,21
+Kurleket,None,298,1,31,31,1,0,1,0,0,0,0,Mountains of the Moon,31,31
+Mohor,None,298,1,31,31,1,1,1,0,0,0,0,Mountains of the Moon,31,31
+Morrec,Lannister,298,1,31,13,1,0,1,0,0,0,0,Mountains of the Moon,31,13
+Jeor Mormont,Night's Watch,299,3,33,48,1,1,1,1,1,0,0,Craster's Keep,176,191
+Renly Baratheon,Baratheon,299,2,33,15,1,1,1,1,0,0,0,Storm's End,106,88
+Alyn,Stark,298,3,34,12,1,0,1,0,0,0,0,Riverlands,177,155
+Dareon,Night's Watch,300,4,34,19,1,0,1,0,0,1,0,Braavos,259,244
+Lharys,Stark,298,1,34,31,1,1,1,0,0,0,0,Mountains of the Moon,34,31
+Aemon Targaryen (son of Maekar I),Night's Watch,300,4,35,21,1,1,1,0,1,1,0,Summer Sea,260,246
+Heward,Stark,298,1,35,35,1,0,1,0,0,0,0,King's Landing,35,35
+Hoster Tully,Tully,299,3,35,71,1,1,1,1,1,0,0,Riverrun,178,214
+Jory Cassel,Stark,298,1,35,1,1,1,1,0,0,0,0,King's Landing,35,1
+Stevron Frey,Stark,299,2,35,59,1,1,1,1,0,0,0,Oxcross,108,132
+Wyl (guard),Stark,298,1,35,35,1,0,1,0,0,0,0,King's Landing,35,35
+Hali,Wildling,298,1,37,37,0,0,1,0,0,0,0,Wolfswood,37,37
+Helman Tallhart,Stark,299,3,37,55,1,1,1,0,1,0,0,Duskendale,180,198
+Jared Frey,None,300,5,37,59,1,1,1,1,0,0,1,The North,308,330
+Stiv,Wildling,298,1,37,37,1,0,1,0,0,0,0,Wolfswood,37,37
+Wallen,Wildling,298,1,37,37,1,0,1,0,0,0,0,Wolfswood,37,37
+Barra,None,299,2,39,35,0,0,1,0,0,0,0,King's Landing,112,108
+Gyles Rosby,Lannister,300,4,39,57,1,1,1,1,1,1,0,King's Landing,264,282
+Tregar,Lannister,298,1,39,35,1,0,1,0,0,0,0,King's Landing,39,35
+Vardis Egen,Arryn,298,1,40,34,1,0,1,0,0,0,0,The Eyrie,40,34
+Aron Santagar,Lannister,299,2,41,18,1,1,1,1,0,0,0,King's Landing,114,91
+Preston Greenfield,Baratheon,299,2,41,43,1,0,1,1,0,0,0,King's Landing,114,116
+Tyrek Lannister,Lannister,299,2,41,30,1,1,1,1,0,0,0,King's Landing,114,103
+Chiggen,Lannister,298,1,42,31,1,0,1,0,0,0,0,Mountains of the Moon,42,31
+Leo Lefford,Lannister,299,2,45,62,1,1,1,1,0,0,0,Red Fork,118,135
+Chett,Night's Watch,299,3,46,41,1,0,1,1,1,0,0,Fist of the First Men,189,184
+Hake,Night's Watch,299,3,46,52,1,0,1,1,1,0,0,Fist of the First Men,189,195
+Mikken,Stark,299,2,46,8,1,0,1,1,0,0,0,Winterfell,119,81
+Viserys Targaryen,Targaryen,298,1,46,3,1,1,1,0,0,0,0,Vaes Dothrak,46,3
+Robert Baratheon,Baratheon,298,1,47,4,1,1,1,0,0,0,0,King's Landing,47,4
+Cayn,Stark,298,1,49,4,1,0,1,0,0,0,0,King's Landing,49,4
+Tomard,Stark,298,1,49,22,1,0,1,0,0,0,0,King's Landing,49,22
+Chayle,Stark,299,2,50,9,1,0,1,1,0,0,0,Winterfell,123,82
+Desmond,Stark,298,1,50,1,1,0,1,0,0,0,0,King's Landing,50,1
+Hullen,Stark,298,1,50,1,1,0,1,0,0,0,0,King's Landing,50,1
+Syrio Forel,Stark,298,1,50,22,1,0,1,0,0,0,0,King's Landing,50,22
+Catelyn Tully,Stark,299,3,51,2,0,1,1,1,1,0,0,The Twins,194,145
+Dacey Mormont,Stark,299,3,51,63,0,1,1,0,1,0,0,The Twins,194,206
+Jon Umber (Small),Stark,299,3,51,63,1,1,1,0,1,0,0,The Twins,194,206
+Little Walder Frey,None,300,5,51,59,1,1,1,1,0,0,1,Winterfell,322,330
+Robb Stark,Stark,299,3,51,1,1,1,1,1,1,0,0,Riverrun,194,144
+Robin Flint,Stark,299,3,51,63,1,1,1,1,1,0,0,The Twins,194,206
+Wendel Manderly,Stark,299,3,51,55,1,1,1,1,1,0,0,The Twins,194,198
+Gladden Wylde,Stark,298,1,55,43,1,1,1,0,0,0,0,Mummer's Ford,55,43
+Raymun Darry,Targaryen,298,1,55,16,1,1,1,0,0,0,0,Mummer's Ford,55,16
+Masha Heddle,Tully,298,1,56,28,0,0,1,0,0,0,0,Crossroads Inn,56,28
+Jaremy Rykker,Night's Watch,298,5,60,21,1,1,1,0,0,0,0,Castle Black,331,292
+Joffrey Baratheon,Lannister,300,3,60,5,1,1,1,1,1,0,0,King's Landing,203,148
+Dontos Hollard,None,300,3,61,57,1,1,1,1,1,0,0,Blackwater Bay,204,200
+Fogo,None,298,1,61,46,1,1,1,0,0,0,0,Dothraki Sea,61,46
+Mandon Moore,Baratheon,299,2,61,51,1,1,1,1,0,0,0,Blackwater Rush,134,124
+Ogo,None,298,1,61,46,1,1,1,0,0,0,0,Dothraki Sea,61,46
+Qotho,None,298,1,61,11,1,0,1,0,0,0,0,Dothraki Sea,61,11
+Bryan Fossoway,Baratheon,299,2,62,42,1,1,1,1,0,0,0,Blackwater Rush,135,115
+Conn,Lannister,298,1,62,42,1,0,1,0,0,0,0,Green Fork,62,42
+Halys Hornwood,Stark,298,1,62,53,1,1,1,0,0,0,0,Green Fork,62,53
+Ulf son of Umar,Lannister,298,1,62,56,1,0,1,0,0,0,0,Green Fork,62,56
+Daryn Hornwood,Stark,298,1,63,63,1,1,1,0,0,0,0,Whispering Wood,63,63
+Eddard Karstark,Stark,298,1,63,53,1,1,1,0,0,0,0,Whispering Wood,63,53
+Torrhen Karstark,Stark,298,1,63,53,1,1,1,0,0,0,0,Whispering Wood,63,53
+Cohollo,None,298,1,64,11,1,0,1,0,0,0,0,Dothraki Sea,64,11
+Donal Noye,Night's Watch,300,3,64,19,1,0,1,1,1,0,0,Castle Black,207,162
+Drogo,Targaryen,298,1,64,3,1,1,1,0,0,0,0,Dothraki Sea,64,3
+Haggo,None,298,1,64,11,1,0,1,0,0,0,0,Dothraki Sea,64,11
+Quaro,Targaryen,298,1,64,50,1,0,1,0,0,0,0,Dothraki Sea,64,50
+Bryce Caron,Baratheon,299,2,65,29,1,1,1,1,0,0,0,Blackwater Rush,138,102
+Eddard Stark,Stark,299,1,65,1,1,1,1,0,0,0,0,King's Landing,65,1
+Rodrik Cassel,Stark,299,2,66,7,1,1,1,1,0,0,0,Winterfell,139,80
+Mordane,Stark,298,1,67,7,0,0,1,0,0,0,0,King's Landing,67,7
+Eroeh,Targaryen,298,1,68,61,1,0,1,0,0,0,0,Dothraki Sea,68,61
+Endrew Tarth,Night's Watch,299,3,69,60,1,0,1,0,1,0,0,Bridge of Skulls,212,203
+Luwin,Stark,299,2,69,14,1,0,1,1,0,0,0,Winterfell,142,87
+Jon Snow,Night's Watch,300,5,70,1,1,1,1,1,1,1,1,Castle Black,340,272
+Gregor Clegane,Lannister,300,4,72,29,1,1,1,1,1,0,0,King's Landing,297,254
+Mirri Maz Duur,None,299,1,72,61,0,0,1,0,0,0,0,Red Waste,72,61
+Pycelle,Lannister,300,5,73,20,1,0,1,1,1,1,1,King's Landing,343,291
+Shae,Lannister,300,3,77,62,0,0,1,1,1,0,0,King's Landing,220,205
+Tywin Lannister,Lannister,300,3,77,42,1,1,1,1,1,0,0,King's Landing,220,185
+Lysa Tully,Arryn,300,3,80,34,0,1,1,0,1,0,0,The Eyrie,223,177
+Kevan Lannister,Lannister,300,5,72,56,1,1,1,1,1,1,1,King's Landing,343,327
+Merrett Frey,None,300,3,81,59,1,1,1,0,1,0,0,Oldstones,224,202
+Cressen,Baratheon,299,1,0,0,1,0,0,1,0,0,0,Dragonstone,0,0
+Pate (novice),None,300,4,0,0,1,0,0,0,0,1,0,Oldtown,225,225
+Thistle,Wildling,300,5,0,0,0,0,0,0,0,0,1,Beyond the Wall,271,271
+Varamyr,Wildling,300,5,0,15,1,0,0,0,1,0,1,Beyond the Wall,271,286
+Qyle,Night's Watch,299,2,2,2,1,0,0,1,0,0,0,Gods Eye,75,75
+Stalwart Shield,Targaryen,300,5,2,2,1,0,0,0,0,0,1,Meereen,273,273
+Iggo,None,299,3,3,3,1,0,0,0,1,0,0,Riverlands,146,146
+Alan of Rosby,Night's Watch,300,5,4,18,1,1,0,1,1,0,1,Haunted Forest,275,289
+Clubfoot Karl,Night's Watch,300,5,4,0,1,0,0,0,1,0,1,Haunted Forest,275,271
+Dirk,Night's Watch,300,5,4,0,1,0,0,0,1,0,1,Beyond the Wall,275,271
+Garth of Greenaway,Night's Watch,300,5,4,33,1,0,0,0,1,0,1,Beyond the Wall,275,304
+Grubbs,Night's Watch,300,5,4,0,1,0,0,0,1,0,1,Beyond the Wall,275,271
+Imry Florent,Baratheon,299,3,4,58,1,1,0,1,1,0,0,Blackwater Rush,147,201
+Mawney,Night's Watch,300,5,4,18,1,0,0,0,1,0,1,Beyond the Wall,275,289
+Muttering Bill,Night's Watch,300,5,4,,1,0,0,0,1,0,1,Haunted Forest,275,271
+Ollo Lophand,Night's Watch,300,5,4,0,1,0,0,0,1,0,1,Haunted Forest,275,271
+Orphan Oss,Night's Watch,300,5,4,,1,0,0,0,1,0,1,Haunted Forest,275,271
+Willam Wells,Martell,300,5,6,6,1,0,0,0,0,0,1,Disputed Lands,277,277
+Praed,None,299,2,9,5,1,0,0,1,0,0,0,Crownlands,82,78
+Allard Seaworth,Baratheon,299,2,10,10,1,1,0,1,0,0,0,Blackwater Bay,83,83
+Guncer Sunglass,Baratheon,299,3,10,0,1,1,0,1,1,0,0,Dragonstone,153,143
+Hubard Rambton,Baratheon,299,5,10,10,1,1,0,1,0,0,0,Dragonstone,281,281
+Lord of Bones,Wildling,300,5,10,68,1,1,0,1,1,0,1,Castle Black,281,339
+Hazzea,None,300,5,11,11,0,0,0,0,0,0,1,Meereen,282,282
+Mossador,Targaryen,300,5,11,11,1,0,0,0,1,0,1,Meereen,282,282
+Dobber,None,299,2,14,5,1,0,0,1,0,0,0,Gods Eye,87,78
+Koss,Night's Watch,299,2,14,5,1,0,0,1,0,0,0,Gods Eye,87,78
+Woth,Night's Watch,299,2,14,14,1,0,0,1,0,0,0,Gods Eye,87,87
+Oppo,None,300,4,17,60,1,0,0,0,1,1,0,Volantis,242,285
+Mallador Locke,Night's Watch,299,5,18,13,1,0,0,1,1,0,0,Beyond the Wall,289,284
+Maslyn,Night's Watch,299,3,18,0,1,0,0,0,1,0,0,Fist of the First Men,161,143
+Sawane Botley,Greyjoy,299,4,18,1,1,1,0,0,0,1,0,Pyke,243,226
+Small Paul,Night's Watch,299,3,18,0,1,0,0,0,1,0,0,Beyond the Wall,161,143
+Softfoot,Night's Watch,299,3,18,0,1,0,0,0,1,0,0,Beyond the Wall,161,143
+Thoren Smallwood,Night's Watch,299,3,18,6,1,1,0,1,1,0,0,Fist of the First Men,161,149
+Harrag Sharp,Greyjoy,299,5,19,66,1,1,0,1,0,1,0,Winterfell,290,337
+Jacelyn Bywater,Lannister,299,2,19,8,0,1,0,1,0,0,0,King's Landing,92,81
+Kurz,Night's Watch,299,2,19,5,1,0,0,1,0,0,0,Riverlands,92,78
+Lommy,Night's Watch,299,2,19,1,1,0,0,1,0,0,0,Riverlands,92,74
+Adrack Humble,Greyjoy,300,5,20,20,1,1,0,0,0,0,1,Moat Cailin,291,291
+Dagon Codd,Greyjoy,300,5,20,20,1,1,0,0,0,0,1,Moat Cailin,291,291
+Delp,Tully,299,3,20,39,1,0,0,1,1,0,0,Riverrun,163,182
+Dick Crabb,None,300,4,20,9,1,0,0,0,0,1,0,Whispers,245,234
+Elwood,Tully,299,3,20,20,1,0,0,0,1,0,0,Riverrun,163,163
+Pyg,None,300,4,20,20,1,0,0,0,1,1,0,Whispers,245,245
+Ralf Kenning,Greyjoy,300,5,20,18,1,0,0,0,0,1,1,Moat Cailin,291,289
+Shagwell,None,300,4,20,30,1,0,0,1,1,1,0,Whispers,245,255
+Timeon,None,300,4,20,21,1,0,0,0,1,1,0,Whispers,245,246
+Tion Frey,Lannister,299,3,20,20,0,1,0,0,1,0,0,Riverrun,163,163
+Vargo Hoat,None,300,3,20,30,1,0,0,1,1,0,0,Harrenhal,163,173
+Willem Lannister,Lannister,299,3,20,19,1,1,0,0,1,0,0,Riverrun,163,162
+Cleos Frey,None,299,3,21,7,1,1,0,1,1,0,0,Maidenpool,164,150
+Senelle,Lannister,300,4,24,3,0,0,0,0,0,1,0,King's Landing,249,228
+Monford Velaryon,Baratheon,299,3,25,0,1,1,0,1,0,0,0,Blackwater Rush,168,143
+Jarl,Wildling,299,3,26,7,1,0,0,0,1,0,0,The Wall,169,150
+Rolfe the Dwarf,Greyjoy,300,5,26,26,1,0,0,0,0,0,1,Deepwood Motte,297,297
+Styr,Wildling,300,3,26,7,1,1,0,0,1,0,0,Castle Black,169,150
+Grazdan,None,299,3,27,27,1,1,0,0,1,0,0,Astapor,170,170
+Grazdan mo Ullhor,None,299,3,27,27,1,1,0,0,1,0,0,Astapor,170,170
+Kraznys mo Nakloz,None,299,3,27,23,1,1,0,0,1,0,0,Astapor,170,166
+Polliver,None,300,3,27,26,1,0,0,1,1,0,0,Crossroads Inn,170,169
+Cragorn,Greyjoy,300,4,29,19,1,0,0,0,0,1,0,Old Wyk,254,244
+Rhaegar Frey,None,300,5,29,19,1,1,0,0,0,0,1,The North,300,290
+Symond Frey,None,300,5,29,19,1,1,0,0,0,0,1,The North,300,290
+Talbert Serry,Tyrell,300,4,29,29,1,1,0,0,0,1,0,The Reach,254,254
+Chiswyck,None,299,2,30,26,1,0,0,1,0,0,0,Harrenhal,103,99
+Bennet,None,300,4,31,31,1,0,0,0,0,1,0,Saltpans,256,256
+Garth Greyfeather,Night's Watch,300,5,31,48,1,0,0,0,1,0,1,Beyond the Wall,302,319
+Hairy Hal,Night's Watch,300,5,31,55,1,0,0,0,1,1,1,Beyond the Wall,302,326
+Jack Bulwer,Night's Watch,300,5,31,64,1,0,0,0,1,1,1,Beyond the Wall,302,335
+Rupert Brax,Lannister,299,2,32,32,1,0,0,1,0,0,0,Oxcross,105,105
+Symon Silver Tongue,Lannister,299,3,32,44,1,0,0,1,1,0,0,King's Landing,175,187
+Tanda Stokeworth,Lannister,300,4,32,2,0,1,0,1,1,0,0,Stokeworth,257,227
+Bannen,Night's Watch,299,3,33,0,1,0,0,0,1,0,0,Craster's Keep,176,143
+Brown Bernarr,Night's Watch,299,3,33,23,1,0,0,1,1,0,0,Fist of the First Men,176,166
+Byam Flint,Night's Watch,299,3,33,33,1,0,0,0,1,0,0,Craster's Keep,176,176
+Craster,None,299,3,33,23,1,0,0,1,1,0,0,Craster's Keep,176,166
+Garth of Oldtown,Night's Watch,299,3,33,33,1,0,0,0,1,0,0,Craster's Keep,176,176
+Rolley,Night's Watch,299,3,33,0,1,0,0,0,1,0,0,Craster's Keep,176,143
+Anvil Ryn,None,299,3,34,34,1,0,0,0,1,0,0,Riverlands,177,177
+Becca the Baker,None,299,3,34,34,0,0,0,0,1,0,0,Riverlands,177,177
+Dudley,Stark,299,3,34,34,1,0,0,0,1,0,0,Riverlands,177,177
+Fletcher Will,None,299,3,34,34,1,0,0,0,1,0,0,Riverlands,177,177
+Maerie (Goodwife),None,299,3,34,34,0,0,0,0,1,0,0,Riverlands,177,177
+Maerie (Whore),None,299,3,34,34,0,0,0,0,1,0,0,Riverlands,177,177
+Mudge (miller),None,299,3,34,34,1,0,0,0,1,0,0,Donnelwood,177,177
+Nolla,None,299,3,34,34,0,0,0,0,1,0,0,Riverlands,177,177
+Pate (Lancewood),None,299,3,34,34,1,0,0,0,1,0,0,Riverlands,177,177
+Randa,None,299,3,34,34,0,0,0,0,1,0,0,Riverlands,177,177
+Wyl the Whittler,None,299,3,34,34,1,0,0,0,1,0,0,Riverlands,177,177
+Donella Hornwood,Stark,299,2,35,16,0,1,0,1,0,0,0,Hornwood,108,89
+Alester Florent,Baratheon,300,3,36,36,1,1,0,1,1,0,0,Dragonstone,179,179
+Falyse Stokeworth,Lannister,300,5,36,2,0,1,0,1,0,1,0,Stokeworth,307,273
+Benfred Tallhart,Stark,299,2,37,16,1,1,0,1,0,0,0,Stony Shore,110,89
+Biter,None,300,4,37,1,1,0,0,1,0,1,0,Crossroads Inn,262,226
+Rorge,None,300,4,37,1,1,0,0,1,1,1,0,Crossroads Inn,262,226
+Todric,Greyjoy,299,2,37,37,1,0,0,1,0,0,0,Stony Shore,110,110
+Weese,Lannister,299,2,38,26,1,0,0,1,0,0,0,Harrenhal,111,99
+Kyle (Banners),None,299,3,39,39,1,0,0,0,1,0,0,Burning Septry,182,182
+Poul Pemford,Tully,299,2,39,39,1,0,0,1,0,0,0,Riverrun,112,112
+Utt,None,299,3,39,30,1,0,0,1,1,0,0,Burning Septry,182,173
+Del,Wildling,299,3,41,41,1,0,0,0,1,0,0,Queenscrown,184,184
+Cortnay Penrose,Baratheon,299,2,42,31,1,1,0,1,0,0,0,Storm's End,115,104
+Emmon Cuy,Baratheon,299,2,42,33,1,1,0,1,0,0,0,Storm's End,115,106
+Harwood Fell,Baratheon,300,5,42,17,1,1,0,0,0,0,1,Wolfswood,313,288
+Hyle Hunt,None,300,4,42,14,1,1,0,0,0,1,0,Crossroads Inn,267,239
+Prendahl na Ghezn,None,299,3,42,42,1,0,0,0,1,0,0,Yunkai,185,185
+Sallor,None,299,3,42,42,1,0,0,0,1,0,0,Yunkai,185,185
+Hamish the Harper,None,300,5,43,32,1,0,0,0,1,1,0,King's Landing,314,303
+Raynald Westerling,Stark,299,3,44,14,1,1,0,0,1,1,0,The Twins,187,157
+Ryman Frey,None,300,4,44,14,1,1,0,0,1,1,0,Fairmarket,269,239
+Alebelly,Stark,299,2,46,4,1,0,0,1,0,0,0,Winterfell,119,77
+Lark,Night's Watch,299,3,46,23,1,0,0,1,1,0,0,Haunted Forest,189,166
+Yellow Dick,None,300,5,46,12,1,0,0,0,0,0,1,Winterfell,317,283
+Amory Lorch,Lannister,299,2,47,14,1,1,0,1,0,0,0,Harrenhal,120,87
+Ottyn Wythers,Night's Watch,299,3,48,13,1,0,0,1,1,0,0,Fist of the First Men,191,156
+Drennan,Greyjoy,299,2,50,50,1,0,0,1,0,0,0,Winterfell,123,123
+Squint,Greyjoy,299,2,50,50,1,0,0,1,0,0,0,Winterfell,123,123
+Aegon Frey (Jinglebell),None,299,3,51,49,1,1,0,0,1,0,0,The Twins,194,192
+Benfrey Frey,None,299,5,51,51,1,1,0,0,1,0,0,The Twins,322,322
+Donnel Locke,Stark,299,3,51,25,1,1,0,1,1,0,0,The Twins,194,168
+Lucas Blackwood,Tully,299,3,51,22,1,1,0,1,1,0,0,The Twins,194,165
+Luton,None,300,5,51,37,1,0,0,0,0,0,1,Winterfell,322,308
+Orell,Wildling,299,2,51,51,1,0,0,1,0,0,0,Skirling Pass,124,124
+Owen Norrey,Tully,299,3,51,51,1,1,0,0,1,0,0,The Twins,194,194
+Barsena,None,300,5,52,11,0,0,0,0,0,0,1,Meereen,323,282
+Dalbridge,Night's Watch,299,2,53,43,1,0,0,1,0,0,0,Skirling Pass,126,116
+Dick Follard,Night's Watch,299,3,55,41,1,0,0,0,1,0,0,Castle Black,198,184
+Dornish Dilly,Night's Watch,299,3,55,55,1,0,0,0,1,0,0,Castle Black,198,198
+Easy,Night's Watch,300,3,55,55,1,0,0,0,1,0,0,Castle Black,198,198
+Old Henly,Night's Watch,299,3,55,55,1,0,0,0,1,0,0,Castle Black,198,198
+Quort,Wildling,299,3,55,41,1,0,0,0,1,0,0,Castle Black,198,184
+Spotted Pate of Maidenpool,Night's Watch,299,3,55,0,1,0,0,0,1,0,0,Castle Black,198,143
+Stone Thumbs,Wildling,299,3,55,41,1,0,0,0,1,0,0,Castle Black,198,184
+Ygritte,Wildling,299,3,55,51,0,0,0,1,1,0,0,Castle Black,198,194
+Young Henly,Night's Watch,299,3,55,55,1,0,0,0,1,0,0,Castle Black,198,198
+Aggar,Greyjoy,299,2,56,50,1,0,0,1,0,0,0,Winterfell,129,123
+Farlen,Stark,299,2,56,46,1,0,0,1,0,0,0,Winterfell,129,119
+Gelmarr,Greyjoy,299,2,56,50,1,0,0,1,0,0,0,Winterfell,129,123
+Gynir,Greyjoy,299,2,56,50,1,0,0,1,0,0,0,Winterfell,129,123
+Mero,None,299,3,57,42,1,0,0,0,1,0,0,Meereen,200,185
+Nurse,None,300,5,57,57,1,0,0,0,0,0,1,Meereen,328,328
+Oznak zo Pahl,None,299,3,57,57,1,1,0,0,1,0,0,Meereen,200,200
+Yezzan Zo Qaggaz,None,300,5,57,25,1,1,0,0,0,0,1,Meereen,328,296
+Dale Seaworth,Baratheon,299,2,58,10,1,1,0,1,0,0,0,Blackwater Rush,131,83
+Maric Seaworth,Baratheon,299,2,58,10,1,1,0,1,0,0,0,Blackwater Rush,131,83
+Matthos Seaworth,Baratheon,299,2,58,10,1,1,0,1,0,0,0,Blackwater Rush,131,83
+Groleo,Targaryen,300,5,59,,1,0,0,0,1,0,1,Meereen,330,271
+Yurkhaz zo Yunzak,None,300,5,59,47,1,0,0,0,0,0,1,Meereen,330,318
+Bryen Farring,Baratheon,300,5,62,10,1,1,0,1,0,0,1,The North,333,281
+Guyard Morrigen,Baratheon,299,2,62,22,1,1,0,1,0,0,0,King's Landing,135,95
+Harra,None,299,2,64,26,0,0,0,1,0,0,0,Harrenhal,137,99
+Lucan,None,299,2,64,38,1,0,0,1,0,0,0,Harrenhal,137,111
+Mag Mar Tun Doh Weg,Wildling,300,3,64,15,1,1,0,0,1,0,0,Castle Black,207,158
+Tothmure,Lannister,299,2,64,30,1,0,0,1,0,0,0,Harrenhal,137,103
+Cley Cerwyn,Stark,299,2,66,16,1,1,0,1,0,0,0,Winterfell,139,89
+Dykk Harlaw,Greyjoy,299,2,66,66,1,0,0,1,0,0,0,Winterfell,139,139
+Gevin Harlaw,Greyjoy,299,2,66,37,1,1,0,1,0,0,0,Winterfell,139,110
+Kenned,Greyjoy,299,2,66,66,1,0,0,1,0,0,0,Winterfell,139,139
+Kromm,Greyjoy,299,2,66,56,1,0,0,1,0,0,0,Winterfell,139,129
+Leobald Tallhart,Stark,299,2,66,16,1,1,0,1,0,0,0,Winterfell,139,89
+Lorren,Greyjoy,299,2,66,37,1,0,0,1,0,0,0,Winterfell,139,110
+Red Rolfe,Greyjoy,299,2,66,66,1,0,0,1,0,0,0,Winterfell,139,139
+Tymor,Greyjoy,299,2,66,37,1,0,0,1,0,0,0,Winterfell,139,110
+Ulf the Ill,Greyjoy,299,2,66,66,1,0,0,1,0,0,0,Winterfell,139,139
+Khrazz,None,300,5,67,11,1,0,0,0,0,0,1,Meereen,338,282
+Ebben,Night's Watch,299,2,68,43,1,0,0,1,0,0,0,Skirling Pass,141,116
+Qhorin Halfhand,Night's Watch,299,2,68,43,1,0,0,1,0,0,0,Skirling Pass,141,116
+Frenya,Wildling,300,5,69,37,0,0,0,0,0,0,1,Winterfell,340,308
+Holly,Wildling,300,5,69,37,0,0,0,0,0,0,1,Winterfell,340,308
+Myrtle,Wildling,300,5,69,37,0,0,0,0,0,0,1,Winterfell,340,308
+Patrek of King's Mountain,Baratheon,300,5,69,44,1,1,0,0,0,0,1,Castle Black,340,315
+Poxy Tym,Stark,299,2,69,16,1,0,0,1,0,0,0,Winterfell,142,89
+Red Alyn,Night's Watch,300,3,69,55,1,0,0,0,1,0,0,Castle Black,212,198
+Rowan,Wildling,300,5,69,37,1,0,0,0,0,0,1,Winterfell,340,308
+Squirrel,Wildling,300,5,69,37,0,0,0,0,0,0,1,Winterfell,340,308
+Willow Witch-eye,Wildling,300,5,69,37,0,0,0,0,0,0,1,Winterfell,340,308
+Harghaz,None,300,5,70,52,1,0,0,0,0,0,1,Meereen,341,323
+Oberyn Martell,Martell,300,3,70,38,1,1,0,0,1,0,0,King's Landing,213,181
+Quentyn Martell,Martell,300,5,70,6,1,1,0,0,0,0,1,Meereen,341,277
+Tickler,Lannister,300,3,74,26,1,0,0,1,1,0,0,Crossroads Inn,217,169
+Harma,Wildling,300,3,75,0,0,1,0,0,1,0,0,The Wall,218,143
+Watt,Night's Watch,299,3,75,69,1,0,0,0,1,0,0,Bridge of Skulls,218,212
+Dalla,Wildling,300,3,76,73,0,1,0,0,1,0,0,Castle Black,219,216
+Garse Goodbrook,None,299,3,81,81,1,1,0,0,1,0,0,The Twins,224,224
+Petyr Frey,None,300,3,81,49,1,1,0,0,1,0,0,The Twins,224,192
+Tytos Frey,None,299,3,81,81,1,1,0,0,1,0,0,The Twins,224,224

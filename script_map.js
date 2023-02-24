@@ -244,7 +244,7 @@ var slider_height = slider.node().getBoundingClientRect().height
         sliderVals=[v1,v2];
          x_slider = d3.scaleLinear()
         .domain([1, 5]) //TODO: find a way to make the domain dynamic
-        .range([slider_width/35,slider_width/1.12])//<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
+        .range([slider_width/35,slider_width/1.14])//<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
         .clamp(true);
         xMin = x_slider(1);
         xMax = x_slider(5);
@@ -260,7 +260,7 @@ var slider_height = slider.node().getBoundingClientRect().height
         sliderVals=[v1,v2];
         x_slider = d3.scaleLinear()
         .domain([297, 300]) //TODO: find a way to make the domain dynamic
-        .range([slider_width/6,slider_width/1.25])
+        .range([slider_width/6,slider_width/1.24])
         .clamp(true);
 
         xMin = x_slider(297);

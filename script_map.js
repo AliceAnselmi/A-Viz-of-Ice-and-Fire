@@ -6,8 +6,9 @@ slider_books_bar_img = "assets/slider_bar_5.png"
 slider_years_bar_img = "assets/slider_bar_4.png"
 slider_info_bg_img = "assets/slider_info_bg.png"
 
+
+//TODO: CENTER CURSOR IN HANDLE
     const width = window.innerWidth;
-    //height automatic
     const height = width
 
 
@@ -17,7 +18,6 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     const g = svg.append("g")
 
 
-    //APPEND MAP
     g.append("svg:image")
         .attr("xlink:href", d => map_img)
         .style('width', "100%")
@@ -46,9 +46,9 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     //          Slider           // 
     // --------------------------// 
         const g_slider=g.append("g").attr("transform", "translate(0," + (height/1.25) + ")")
-          var v1 = 1, v2 = 5;
+          var v1 = 0, v2 = 343;
          var sliderVals = [v1, v2];
-        var views = ["Books", "Years"];
+        var views = ["Book", "Years"];
         var currview = 0; // 0 -> BOOKS, 1 -> YEARS
         const slider_imgs = []
         slider_imgs[0] = slider_books_bar_img;
@@ -59,6 +59,42 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     //      Slider - infos        // 
     // --------------------------// 
 
+    function calculate_book_and_chapter(chapter_tot){
+        var book, chapter;
+        if(chapter_tot >=0 && chapter_tot <=72){
+            book=1;
+            chapter=chapter_tot;
+        }
+        else if(chapter_tot >=73 && chapter_tot <=142){
+            book=2;
+            chapter=chapter_tot-72;
+        }
+        else if(chapter_tot >=143 && chapter_tot <=224){
+            book=3;
+            chapter=chapter_tot-142;
+        }
+        else if(chapter_tot >=225 && chapter_tot <=271){
+             book=4;
+            chapter=chapter_tot-224;
+        }
+        else if(chapter_tot >=272 && chapter_tot <=343){
+                book=5;
+                chapter=chapter_tot-271;
+            }
+        return [book, chapter];
+
+    }
+
+    function update_slider_infos(v1,v2){
+        slider_infos_text.text( 
+            () =>{
+                if(currview == 0)
+                    return "Book " + calculate_book_and_chapter(v1)[0] + " Ch " + calculate_book_and_chapter(v1)[1] + " - Book " + calculate_book_and_chapter(v2)[0] + " Ch " + calculate_book_and_chapter(v2)[1];
+                else
+                    return "Years " +  v1 + " - " + v2;
+                }
+            )  
+    }
     var slider_infos =g_slider.append('g')
       .attr("transform", "translate(" + width/3 +",0)")
     slider_infos.append("svg:image")
@@ -72,7 +108,9 @@ slider_info_bg_img = "assets/slider_info_bg.png"
               .attr("font-size","38px")
               .attr("x",width/5)
               .attr("y",height/38)
-             .text( views[currview] +" "+sliderVals[0]  + " - " +sliderVals[1])
+   update_slider_infos(sliderVals[0], sliderVals[1]);
+             
+            
 
     
 
@@ -98,11 +136,11 @@ slider_info_bg_img = "assets/slider_info_bg.png"
 
 
     var x_slider = d3.scaleLinear()
-        .domain([1, 5]) 
+        .domain([0, 343]) 
         .range([width/50,width/2.95])
         .clamp(true);
-    var xMin = x_slider(1),
-        xMax = x_slider(5)
+    var xMin = x_slider(0),
+        xMax = x_slider(343)
 
     var range_button_imgs = []
     range_button_imgs[0] = range_button_low_img;
@@ -139,6 +177,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     }
 
     function onDrag(event, d) {
+        handle.attr("x, ")
         //positioning of button
         var x_cursor = event.x;
          var x_other_handle=x_slider(sliderVals[d==0?1:0])
@@ -164,12 +203,18 @@ slider_info_bg_img = "assets/slider_info_bg.png"
              .attr("x1", 20+x_cursor)
               .attr("x2", 20+x_other_handle)
       var v= Math.round(x_slider.invert(x_cursor))
-      if(d==0){
-        slider_infos_text.text(  views[currview] +" "+ v  + " - " +sliderVals[1])
-      }else{
-        slider_infos_text.text( views[currview] +" "+ sliderVals[0]  + " - " +v)
+      if(d==0){ //if moving lower handle
+        update_slider_infos(v, sliderVals[1]);
+        v1 = Math.min(v, sliderVals[1]);
+        v2 = Math.max(v, sliderVals[1]);
+
       }
-      
+    else{ //otherwise
+        update_slider_infos(sliderVals[0], v);
+        v1 = Math.min(sliderVals[0], v);
+        v2 = Math.max(sliderVals[0], v);
+    }
+        updateMap(v1, v2, currview);
     }
 
     function endDrag(event, d) {
@@ -206,6 +251,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
              .attr("x1", 20+x_slider(v1))
               .attr("x2", 20+x_slider(v2))
       slider_infos_text.text(  views[currview] +" " + sliderVals[0]  + " - " +sliderVals[1])
+      update_slider_infos(sliderVals[0], sliderVals[1]);
         updateMap(v1, v2, currview);
     }
 
@@ -240,27 +286,28 @@ slider_info_bg_img = "assets/slider_info_bg.png"
        
      
       if(currview == 0){
-        v1=1;
-        v2=5;
+        v1=0;
+        v2=343;
         sliderVals=[v1,v2];
          x_slider = d3.scaleLinear()
-        .domain([1, 5]) //TODO: find a way to make the domain dynamic
-        .range([width/50,width/2.95])//<- OBSERVABLE doesn't allow to compute getBBox for an element before it is rendered, so i just used numbers
-        .clamp(true);
-        xMin = x_slider(1);
-        xMax = x_slider(5);
+         .domain([0, 343]) 
+         .range([width/50,width/2.95])
+         .clamp(true);
+        xMin = x_slider(0);
+        xMax = x_slider(343);
        
           slider_image.attr("transform", "translate(10,0)")
         selRange
             .attr("x1", 20+x_slider(sliderVals[0]))
             .attr("x2", 20+x_slider(sliderVals[1]))
+        updateMap(v1, v2, currview);
       }
       else{
         v1=297;
         v2=300;
         sliderVals=[v1,v2];
         x_slider = d3.scaleLinear()
-        .domain([297, 300]) //TODO: find a way to make the domain dynamic
+        .domain([297, 300]) 
         .range([width/15,width/3.22])
         .clamp(true);
 
@@ -274,8 +321,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
       }
        handle.attr("x", d => x_slider(sliderVals[d]))
       slider_selector_text.text(views[currview] + " view")
-      slider_infos_text.text( views[currview] +" "+ sliderVals[0]  + " - " +sliderVals[1])
-      
+      update_slider_infos(sliderVals[0], sliderVals[1]);
       updateMap(v1, v2, currview);
       
     }
@@ -319,7 +365,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         d3.selectAll(".circles")
             .filter((d) => {
               if(currview==0)
-                filteredvalue= d.Book_of_Death 
+                filteredvalue= d.Timeline_Chapter_Death
               else
                 filteredvalue = d.Death_Year
                   return filteredvalue< v1 || filteredvalue > v2
@@ -329,7 +375,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         d3.selectAll(".circles")
             .filter((d) => {
                 if(currview==0)
-                    filteredvalue= d.Book_of_Death 
+                    filteredvalue= d.Timeline_Chapter_Death
                  else
                     filteredvalue = d.Death_Year
                 return filteredvalue >= v1 && filteredvalue <= v2

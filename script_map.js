@@ -326,38 +326,18 @@ slider_info_bg_img = "assets/slider_info_bg.png"
       
     }
 
-    //-----------------------------//
-    //Circles mouse hover functions//
-    // ---------------------------//
-    var mouseover = function(d) {
-        d3.select(this).attr('stroke', 'red')
-        tooltip
-            .style("visibility", "visible")
-    }
-    var mousemove = function(e, d) {
-        tooltip
-            .style('top', e.pageY - 20 + 'px')
-            .style('left', e.pageX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location)
-    }
-    var mouseleave = function(d) {
-        d3.select(this).attr('stroke', 'black')
-        tooltip
-            .style("visibility", "hidden")
-    }
-
     // ---------------------------//
     //            Zoom           //
     // --------------------------// 
     let zoom = d3.zoom()
-        .scaleExtent([1, 8])
+        .scaleExtent([0.8, 8])
         .translateExtent([[0,0], [width, height]])
         .on("zoom", handleZoom)
 
     function handleZoom(e) {
         g.attr("transform", e.transform)
     }
-    g.call(zoom);
+   svg.call(zoom);
 
 
     function updateMap(v1, v2, currview) {
@@ -397,7 +377,6 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         const data = files[0];
         const coordinates = files[1];
 
-
         
     // ---------------------------//
     //  Coordinates calculation  //
@@ -429,42 +408,69 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     }
 
 
+    
 
 
     // ---------------------------//
-    //           Circles         //
+    //           Emblems          //
     // --------------------------// 
     
-    var circles = g.selectAll('.circles')
+
+
+
+    var emblems = g.selectAll('.emblems')
     .data(data)
     .enter()
     .append('g')
-    .attr('class', 'circles')
+    .attr('class', 'emblems')
 
-//CREATE THE CIRCLE
-var cxdef = 450
-var cydef = 980
-circles.append('circle')
-    .attr('cx', (d, i) => {
+
+emblems.append("svg:image")
+    .attr("xlink:href", (d) => {
+        var allegiance = d.Allegiances
+        return "assets/emblems/" + allegiance +".PNG"
+    })
+    .style('width', "1%")
+    .style("height", "auto")
+    .attr('x', (d) => {
         var coords = process_coordinates(d)
-        var ranNum = Math.ceil(Math.random() * 5) * (Math.round(Math.random()) ? 1 : -1)
+        var ranNum = Math.ceil(Math.random() * 12) * (Math.round(Math.random()) ? 1 : -1)
         return coords[0] + ranNum;
     })
-    .attr('cy', (d, i) => {
+    .attr('y', (d) => {
         var coords = process_coordinates(d)
-        var ranNum = Math.ceil(Math.random() * 5) * (Math.round(Math.random()) ? 1 : -1)
+        var ranNum = Math.ceil(Math.random() * 12) * (Math.round(Math.random()) ? 1 : -1)
         return coords[1] + ranNum;
     })
-    .attr('r', 5)
-    .attr('stroke', 'black')
-    .style("fill", "red")
     .on("mouseover", mouseover)
     .on("mousemove", mousemove)
     .on("mouseleave", mouseleave)
 
     }).catch(function(err) {
         // handle error here
-        console.log(err)
+        alert(alert_var)
     })
+
+    //-----------------------------//
+    //Emblems mouse hover functions//
+    // ---------------------------//
+
+
+    var mouseover = function(d) {
+        d3.select(this.parentNode).raise();
+        tooltip
+            .style("visibility", "visible")
+    }
+    var mousemove = function(e, d) {
+        tooltip
+            .style('top', e.pageY - 20 + 'px')
+            .style('left', e.pageX + 20 + 'px')
+            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location)
+    }
+    var mouseleave = function(d) {
+        tooltip
+            .style("visibility", "hidden")
+    }
+
 
    

@@ -342,7 +342,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
 
     function updateMap(v1, v2, currview) {
      var filteredvalue;
-        d3.selectAll(".circles")
+        d3.selectAll(".emblems")
             .filter((d) => {
               if(currview==0)
                 filteredvalue= d.Timeline_Chapter_Death
@@ -352,7 +352,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
             })
             .attr("opacity", 0);
 
-        d3.selectAll(".circles")
+        d3.selectAll(".emblems")
             .filter((d) => {
                 if(currview==0)
                     filteredvalue= d.Timeline_Chapter_Death

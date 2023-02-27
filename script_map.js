@@ -177,7 +177,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     }
 
     function onDrag(event, d) {
-        handle.attr("x, ")
+        //handle.attr("x, ")
         //positioning of button
         var x_cursor = event.x;
          var x_other_handle=x_slider(sliderVals[d==0?1:0])
@@ -253,6 +253,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
       slider_infos_text.text(  views[currview] +" " + sliderVals[0]  + " - " +sliderVals[1])
       update_slider_infos(sliderVals[0], sliderVals[1]);
         updateMap(v1, v2, currview);
+
     }
 
    
@@ -297,10 +298,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         xMax = x_slider(343);
        
           slider_image.attr("transform", "translate(10,0)")
-        selRange
-            .attr("x1", 20+x_slider(sliderVals[0]))
-            .attr("x2", 20+x_slider(sliderVals[1]))
-        updateMap(v1, v2, currview);
+        
       }
       else{
         v1=297;
@@ -314,11 +312,12 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         xMin = x_slider(297);
         xMax = x_slider(300);
         slider_image.attr("transform", "translate(90,0)")
-        selRange
-            .attr("x1", 20+x_slider(sliderVals[0]))
-            .attr("x2", 20+x_slider(sliderVals[1]))
-       
+
       }
+      selRange
+        .attr("x1", 20+x_slider(sliderVals[0]))
+        .attr("x2", 20+x_slider(sliderVals[1]))
+     
        handle.attr("x", d => x_slider(sliderVals[d]))
       slider_selector_text.text(views[currview] + " view")
       update_slider_infos(sliderVals[0], sliderVals[1]);
@@ -340,27 +339,30 @@ slider_info_bg_img = "assets/slider_info_bg.png"
    svg.call(zoom);
 
 
-    function updateMap(v1, v2, currview) {
+    function updateMap(min, max, currview) {
      var filteredvalue;
         d3.selectAll(".emblems")
             .filter((d) => {
               if(currview==0)
-                filteredvalue= d.Timeline_Chapter_Death
+                filteredvalue= d.Timeline_Chapter_Death;
               else
-                filteredvalue = d.Death_Year
-                  return filteredvalue< v1 || filteredvalue > v2
+                filteredvalue = d.Death_Year;
+                
+                  return filteredvalue < min || filteredvalue > max
             })
-            .attr("opacity", 0);
+            .attr("opacity", 0)
+            .attr("pointer-events", "none");
 
         d3.selectAll(".emblems")
             .filter((d) => {
                 if(currview==0)
                     filteredvalue= d.Timeline_Chapter_Death
                  else
-                    filteredvalue = d.Death_Year
-                return filteredvalue >= v1 && filteredvalue <= v2
+                    filteredvalue = d.Death_Year;
+                return filteredvalue >= min && filteredvalue <= max
             })
-            .attr("opacity", 1);
+            .attr("opacity", 1)
+            .attr("pointer-events", "all");
 
     }
   
@@ -372,8 +374,6 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         d3.csv("data/character-deaths.csv"),
         d3.csv("data/locations-coordinates.csv"),
     ]).then(function(files) {
-        // files[0] will contain file1.csv
-        // files[1] will contain file2.csv
         const data = files[0];
         const coordinates = files[1];
 

@@ -1,6 +1,11 @@
 
 html, body {
     margin: 0;
+    background: #FFFFFF;
+}
+
+body, svg {
+    font-family: 'Quintessential', serif;
 }
 
 .layout {
@@ -11,11 +16,18 @@ html, body {
 #main_svg {
     display: inline-block;
     /*overflow: hidden;*/
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0;
+    padding: 0;
+    width: 100%;
     height: 95vh;
+}
+
+#main_svg g image {
+    margin: 0;
+    padding: 0;
 }
 
 .slider {
     display: inline-block;
+    background: #000;
 }

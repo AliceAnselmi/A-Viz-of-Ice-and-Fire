@@ -33,15 +33,24 @@ p = Promise.all([
 function create_mapview()
 {
     const map_svg = d3.select("#main_svg")
-        .attr("width", "100%")
-        .attr("height", "100%")
         .attr("viewBox", "0 0 1000 1000")
+        .attr("preserveAspectRatio", "xMinYMin slice")
     const g = map_svg.append("g")
 
     const map_image = g.append("svg:image")
-        .attr("xlink:href", d => map_img)
-        .style('width', "1000")
-        .style("height", "1000")
+        .attr("href", d => map_img)
+        .style('width', "100%")
+        .style("height", "100%")
+        .style('x', "0")
+        .style('y', "0")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+
+    g.append("rect")
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("x", 500)
+        .attr("y", 500)
+        .attr("fill", "#ff00ff");
 
     // Zoom
     function handleZoom(e) {
@@ -102,7 +111,7 @@ function create_emblems(map)
         tooltip
             .style('top', e.pageY - 20 + 'px')
             .style('left', e.pageX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location)
+            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d[0].Death_Location)
     }
 
     function mouseleave(d)
@@ -129,7 +138,4 @@ const tooltip = d3.select("body").append("div")
     .style("padding", "5px")
 
 const map_svg = create_mapview();
-
-//const emblems = create_emblems(map_svg);
-
 

@@ -1,0 +1,21 @@
+
+html, body {
+    margin: 0;
+}
+
+.layout {
+    display: flex;
+    flex-flow: column;
+}
+
+#main_svg {
+    display: inline-block;
+    /*overflow: hidden;*/
+    margin-left: auto;
+    margin-right: auto;
+    height: 95vh;
+}
+
+.slider {
+    display: inline-block;
+}

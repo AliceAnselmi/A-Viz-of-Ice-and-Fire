@@ -11,25 +11,23 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     const width = window.innerWidth;
     const height = width
 
+    const map_width = map_img.width;
+    const map_height = map_img.height;
 
-    const svg = d3.select("#main_svg")
-                    .attr("width", width)
-                    .attr("height", height)
-    const g = svg.append("g")
+    const map_svg = d3.select("#main_svg")
+                    .attr("width", "100%")
+                    .attr("height", "100%")
+                    .attr("viewBox", "0 0 1000 1000")
+    const g = map_svg.append("g")
 
-
-    g.append("svg:image")
+    const map_image = g.append("svg:image")
         .attr("xlink:href", d => map_img)
-        .style('width', "100%")
-        .style("height", "auto")
+        .style('width', "1000")
+        .style("height", "1000")
 
+    console.log(map_image._groups[0][0].width)
 
-
-
-
-    // ---------------------------//
-    //       Tooltip              //
-    // ---------------------------//
+    // Tooltip
     const tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("position", "absolute")
@@ -40,27 +38,20 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         .style("border-radius", "5px")
         .style("padding", "5px")
 
+    // Slider
+    const g_slider=g.append("g").attr("transform", "translate(0," + (height/1.25) + ")")
+    var v1 = 0, v2 = 343;
+    var sliderVals = [v1, v2];
+    var views = ["Book", "Years"];
+    var currview = 0; // 0 -> BOOKS, 1 -> YEARS
+    const slider_imgs = []
+    slider_imgs[0] = slider_books_bar_img;
+    slider_imgs[1] = slider_years_bar_img;
   
-
-    // ---------------------------//
-    //          Slider           // 
-    // --------------------------// 
-        const g_slider=g.append("g").attr("transform", "translate(0," + (height/1.25) + ")")
-          var v1 = 0, v2 = 343;
-         var sliderVals = [v1, v2];
-        var views = ["Book", "Years"];
-        var currview = 0; // 0 -> BOOKS, 1 -> YEARS
-        const slider_imgs = []
-        slider_imgs[0] = slider_books_bar_img;
-        slider_imgs[1] = slider_years_bar_img;
-      
-  
-   // ---------------------------//
-    //      Slider - infos        // 
-    // --------------------------// 
+    // Slider - infos
 
     function calculate_book_and_chapter(chapter_tot){
-        var book, chapter;
+        let book, chapter;
         if(chapter_tot >=0 && chapter_tot <=72){
             book=1;
             chapter=chapter_tot;
@@ -82,7 +73,6 @@ slider_info_bg_img = "assets/slider_info_bg.png"
                 chapter=chapter_tot-271;
             }
         return [book, chapter];
-
     }
 
     function update_slider_infos(v1,v2){
@@ -95,6 +85,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
                 }
             )  
     }
+
     var slider_infos =g_slider.append('g')
       .attr("transform", "translate(" + width/3 +",0)")
     slider_infos.append("svg:image")
@@ -103,16 +94,12 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         .style("height", "auto")
   
 
-   var slider_infos_text = slider_infos.append("text")
+    var slider_infos_text = slider_infos.append("text")
             .attr("text-anchor", "middle")
               .attr("font-size","38px")
               .attr("x",width/5)
               .attr("y",height/38)
-   update_slider_infos(sliderVals[0], sliderVals[1]);
-             
-            
-
-    
+    update_slider_infos(sliderVals[0], sliderVals[1]);
 
     //brown slider background
     g_slider.append("svg:image")
@@ -121,24 +108,20 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         .style("height", "auto")
         .attr('y', 60)
 
-  // ----------------------------//
-    //  Slider - handles+bar     // 
-    // --------------------------// 
+    // Slider - handles+bar
     const slider = g_slider.append("g")
     .attr("transform", "translate(" + width/3 +",90)")
-        
 
-   var slider_image= slider.append("svg:image")
+    var slider_image= slider.append("svg:image")
         .attr("xlink:href", d => slider_imgs[currview] )
         .attr("transform", "translate(15,0)")
         .style("height", "1.5%")
-
-
 
     var x_slider = d3.scaleLinear()
         .domain([0, 343]) 
         .range([width/50,width/2.95])
         .clamp(true);
+
     var xMin = x_slider(0),
         xMax = x_slider(343)
 
@@ -180,7 +163,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         handle.attr("x, ")
         //positioning of button
         var x_cursor = event.x;
-         var x_other_handle=x_slider(sliderVals[d==0?1:0])
+        var x_other_handle=x_slider(sliderVals[d==0?1:0])
       //handle overlap
       if(d==0){ //if lower handle
       if(x_cursor >= x_other_handle-40){
@@ -256,19 +239,17 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     }
 
    
-    // ---------------------------//
-    //      View     selector     // 
-    // --------------------------// 
+    // View selector
 
     //ATTENTION: cannot append "select" element on observable, gotta use the Observable Inputs -> gotta change when hosting on webpage
    const view_selector = slider.append("rect")
-                            .attr('width', 200)
-                              .attr('height', 40)
-                              .attr('stroke', 'black')
-                              .attr('fill', 'white')
-                              .attr("cursor", "pointer");      
+                               .attr('width', 200)
+                               .attr('height', 40)
+                               .attr('stroke', 'black')
+                               .attr('fill', 'white')
+                               .attr("cursor", "pointer");      
     view_selector.attr("x", -width/5)
-                    .attr("y", -height/120)        
+                 .attr("y", -height/120)        
   
     var slider_selector_text = slider.append("text")
           .attr("x",view_selector.attr("x")*0.9)
@@ -276,79 +257,73 @@ slider_info_bg_img = "assets/slider_info_bg.png"
           .attr("font-size","25px")
           .attr("cursor", "pointer")
           .text(views[currview] + " view");
-        slider_selector_text.on("click",updateView);
-        view_selector.on("click", updateView);
+    slider_selector_text.on("click",updateView);
+    view_selector.on("click", updateView);
   
     function updateView() {
-        
         currview = 1-currview;
-      slider_image.attr("xlink:href", d => slider_imgs[currview] )
+        slider_image.attr("xlink:href", d => slider_imgs[currview] )
        
-     
-      if(currview == 0){
-        v1=0;
-        v2=343;
-        sliderVals=[v1,v2];
-         x_slider = d3.scaleLinear()
-         .domain([0, 343]) 
-         .range([width/50,width/2.95])
-         .clamp(true);
-        xMin = x_slider(0);
-        xMax = x_slider(343);
-       
-          slider_image.attr("transform", "translate(10,0)")
-        selRange
-            .attr("x1", 20+x_slider(sliderVals[0]))
-            .attr("x2", 20+x_slider(sliderVals[1]))
-        updateMap(v1, v2, currview);
-      }
-      else{
-        v1=297;
-        v2=300;
-        sliderVals=[v1,v2];
-        x_slider = d3.scaleLinear()
-        .domain([297, 300]) 
-        .range([width/15,width/3.22])
-        .clamp(true);
+        if(currview == 0){
+            v1=0;
+            v2=343;
+            sliderVals=[v1,v2];
+            x_slider = d3.scaleLinear()
+                        .domain([0, 343]) 
+                        .range([width/50,width/2.95])
+                        .clamp(true);
+            xMin = x_slider(0);
+            xMax = x_slider(343);
+        
+            slider_image.attr("transform", "translate(10,0)")
+            selRange.attr("x1", 20+x_slider(sliderVals[0]))
+                    .attr("x2", 20+x_slider(sliderVals[1]))
+            updateMap(v1, v2, currview);
+        } else {
+            v1=297;
+            v2=300;
+            sliderVals=[v1,v2];
+            x_slider = d3.scaleLinear()
+            .domain([297, 300]) 
+            .range([width/15,width/3.22])
+            .clamp(true);
 
-        xMin = x_slider(297);
-        xMax = x_slider(300);
-        slider_image.attr("transform", "translate(90,0)")
-        selRange
-            .attr("x1", 20+x_slider(sliderVals[0]))
-            .attr("x2", 20+x_slider(sliderVals[1]))
-       
-      }
-       handle.attr("x", d => x_slider(sliderVals[d]))
-      slider_selector_text.text(views[currview] + " view")
-      update_slider_infos(sliderVals[0], sliderVals[1]);
-      updateMap(v1, v2, currview);
+            xMin = x_slider(297);
+            xMax = x_slider(300);
+            slider_image.attr("transform", "translate(90,0)")
+            selRange
+                .attr("x1", 20+x_slider(sliderVals[0]))
+                .attr("x2", 20+x_slider(sliderVals[1]))
+        
+        }
+        handle.attr("x", d => x_slider(sliderVals[d]))
+        slider_selector_text.text(views[currview] + " view")
+        update_slider_infos(sliderVals[0], sliderVals[1]);
+        updateMap(v1, v2, currview);
       
     }
 
-    // ---------------------------//
-    //            Zoom           //
-    // --------------------------// 
+    // Zoom
+    function handleZoom(e) {
+        g.attr("transform", e.transform);
+        g.attr("scale", e.scale);
+    }
+    console.log(map_width, map_height)
     let zoom = d3.zoom()
         .scaleExtent([0.8, 8])
-        .translateExtent([[0,0], [width, height]])
+        .translateExtent([[0,0], [1000, 1000]])
         .on("zoom", handleZoom)
-
-    function handleZoom(e) {
-        g.attr("transform", e.transform)
-    }
-   svg.call(zoom);
-
+    map_svg.call(zoom);
 
     function updateMap(v1, v2, currview) {
-     var filteredvalue;
+        let filteredvalue;
         d3.selectAll(".emblems")
             .filter((d) => {
-              if(currview==0)
-                filteredvalue= d.Timeline_Chapter_Death
-              else
-                filteredvalue = d.Death_Year
-                  return filteredvalue< v1 || filteredvalue > v2
+                if(currview==0)
+                    filteredvalue= d.Timeline_Chapter_Death
+                else
+                    filteredvalue = d.Death_Year
+                return filteredvalue< v1 || filteredvalue > v2
             })
             .attr("opacity", 0);
 
@@ -361,13 +336,9 @@ slider_info_bg_img = "assets/slider_info_bg.png"
                 return filteredvalue >= v1 && filteredvalue <= v2
             })
             .attr("opacity", 1);
-
     }
-  
 
-
-
-    //CSV FUNCTIONS
+    // CSV FUNCTIONS
     Promise.all([
         d3.csv("data/character-deaths.csv"),
         d3.csv("data/locations-coordinates.csv"),
@@ -377,85 +348,66 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         const data = files[0];
         const coordinates = files[1];
 
-        
-    // ---------------------------//
-    //  Coordinates calculation  //
-    // --------------------------//
+        // Coordinates calculation
 
-         var calculate_coordinates = (x_perc, y_perc) => {
-        var x_img = x_perc * width;
-        var y_img = y_perc * height;
-        return [x_img, y_img];
-    }
+        function calculate_coordinates(x_perc, y_perc) {
+            let x_img = x_perc * width;
+            let y_img = y_perc * height;
+            return [x_img, y_img];
+        }
 
-    var process_coordinates = (d) => {
-        var location = d.Death_Location
-        var x_perc = coordinates
-            .filter((d) => {
-                return d.Location == location
+        var process_coordinates = (d) => {
+            var location = d.Death_Location
+            var x_perc = coordinates
+                .filter((d) => {
+                    return d.Location == location
+                })
+                .map((d) => {
+                    return d.x_percent
+                })
+            var y_perc = coordinates
+                .filter((d) => {
+                    return d.Location == location
+                })
+                .map((d) => {
+                    return d.y_percent
+                })
+            return calculate_coordinates(x_perc, y_perc)
+        }
+
+        // Emblems
+        var emblems = g.selectAll('.emblems')
+                        .data(data)
+                        .enter()
+                        .append('g')
+                        .attr('class', 'emblems')
+
+        emblems.append("svg:image")
+            .attr("xlink:href", (d) => {
+                var allegiance = d.Allegiances
+                return "assets/emblems/" + allegiance +".PNG"
             })
-            .map((d) => {
-                return d.x_percent
+            .style('width', "1%")
+            .style("height", "auto")
+            .attr('x', (d) => {
+                var coords = process_coordinates(d)
+                var ranNum = Math.ceil(Math.random() * 12) * (Math.round(Math.random()) ? 1 : -1)
+                return coords[0] + ranNum;
             })
-        var y_perc = coordinates
-            .filter((d) => {
-                return d.Location == location
+            .attr('y', (d) => {
+                var coords = process_coordinates(d)
+                var ranNum = Math.ceil(Math.random() * 12) * (Math.round(Math.random()) ? 1 : -1)
+                return coords[1] + ranNum;
             })
-            .map((d) => {
-                return d.y_percent
-            })
-        return calculate_coordinates(x_perc, y_perc)
-    }
-
-
-    
-
-
-    // ---------------------------//
-    //           Emblems          //
-    // --------------------------// 
-    
-
-
-
-    var emblems = g.selectAll('.emblems')
-    .data(data)
-    .enter()
-    .append('g')
-    .attr('class', 'emblems')
-
-
-emblems.append("svg:image")
-    .attr("xlink:href", (d) => {
-        var allegiance = d.Allegiances
-        return "assets/emblems/" + allegiance +".PNG"
-    })
-    .style('width', "1%")
-    .style("height", "auto")
-    .attr('x', (d) => {
-        var coords = process_coordinates(d)
-        var ranNum = Math.ceil(Math.random() * 12) * (Math.round(Math.random()) ? 1 : -1)
-        return coords[0] + ranNum;
-    })
-    .attr('y', (d) => {
-        var coords = process_coordinates(d)
-        var ranNum = Math.ceil(Math.random() * 12) * (Math.round(Math.random()) ? 1 : -1)
-        return coords[1] + ranNum;
-    })
-    .on("mouseover", mouseover)
-    .on("mousemove", mousemove)
-    .on("mouseleave", mouseleave)
-
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
     }).catch(function(err) {
         // handle error here
-        alert(alert_var)
+        alert(err)
     })
 
-    //-----------------------------//
-    //Emblems mouse hover functions//
-    // ---------------------------//
-
-
+    // Emblems mouse hover functions
     var mouseover = function(d) {
         d3.select(this.parentNode).raise();
         tooltip

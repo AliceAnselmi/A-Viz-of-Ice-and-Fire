@@ -33,23 +33,27 @@ p = Promise.all([
 function create_mapview()
 {
     const map_svg = d3.select("#main_svg")
-        .attr("viewBox", "0 0 1000 1000")
+        //.attr("viewBox", "0 0 1000 1000")
         .attr("preserveAspectRatio", "xMinYMin slice")
+
     const g = map_svg.append("g")
 
     const map_image = g.append("svg:image")
         .attr("href", d => map_img)
-        .style('width', "100%")
-        .style("height", "100%")
-        .style('x', "0")
-        .style('y', "0")
-        .attr("preserveAspectRatio", "xMinYMin meet")
+        //.attr('width', "100%")
+        //.attr("height", "100%")
+        .attr('x', "0")
+        .attr('y', "0")
+        //.attr("preserveAspectRatio", "xMinYMin slice")
+
+    map_width = parseInt(map_image.style("width"));
+    map_height = parseInt(map_image.style("height"));
 
     g.append("rect")
         .attr("width", 10)
         .attr("height", 10)
-        .attr("x", 500)
-        .attr("y", 500)
+        .attr("x", map_width/2 - 5)
+        .attr("y", map_height/2 - 5)
         .attr("fill", "#ff00ff");
 
     // Zoom
@@ -58,11 +62,23 @@ function create_mapview()
         g.attr("scale", e.scale);
     }
 
+    // FIXME: Change these values when the viewport is resized!
+    viewport_width = parseInt(map_svg.style("width"))
+    viewport_height = parseInt(map_svg.style("height"))
+
+    min_scale_x = viewport_width / map_width;
+    min_scale_y = viewport_height / map_height;
+    min_scale = Math.max(min_scale_x, min_scale_y);
+
     let zoom = d3.zoom()
-        .scaleExtent([1, 8])
-        .translateExtent([[0,0], [1000, 1000]])
+        .scaleExtent([min_scale, 8])
+        .translateExtent([[0,0], [map_width, map_height]])
         .on("zoom", handleZoom)
     map_svg.call(zoom);
+
+    zoom.scaleBy(map_svg, min_scale);
+
+    console.log(zoom)
 
     return map_svg
 }
@@ -70,6 +86,10 @@ function create_mapview()
 function create_emblems(map)
 {
     const emblem_g = map.select("g").append("g").attr("class", "emblems");
+
+    map_image = map.select("image")
+    map_width = parseInt(map_image.style("width"));
+    map_height = parseInt(map_image.style("height"));
 
     console.log(location_to_deaths)
     // FIXME: Make a parent element to all emblems
@@ -88,11 +108,11 @@ function create_emblems(map)
         .style("height", "auto")
         .attr('x', (d) => {
             let coord = place_to_coordinate[d[0].Death_Location];
-            return (coord.x_pixels / 4641.0) * 1000;
+            return (coord.x_pixels / 4641.0) * map_width;
         })
         .attr('y', (d) => {
             let coord = place_to_coordinate[d[0].Death_Location];
-            return (coord.y_pixels / 4032.0) * 1000;
+            return (coord.y_pixels / 4032.0) * map_height;
         })
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)

@@ -78,6 +78,24 @@ function create_mapview()
 
     zoom.scaleBy(map_svg, min_scale);
 
+    d3.select(window).on("resize", function() {
+        viewport_width = parseInt(map_svg.style("width"))
+        viewport_height = parseInt(map_svg.style("height"))
+    
+        min_scale_x = viewport_width / map_width;
+        min_scale_y = viewport_height / map_height;
+        min_scale = Math.max(min_scale_x, min_scale_y);
+
+        console.log("resize")
+        console.log(viewport_width)
+        console.log(min_scale)
+
+        zoom.scaleExtent([min_scale, 8])
+
+        map_svg.node().dispatchEvent(new WheelEvent(1));
+
+    });
+
     console.log(zoom)
 
     return map_svg

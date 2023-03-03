@@ -462,10 +462,27 @@ emblems.append("svg:image")
             .style("visibility", "visible")
     }
     var mousemove = function(e, d) {
+      var bookval = " "
+      if (d.GoT == 1) {
+        bookval += "Game of thrones,"
+      }
+      if (d.CoK == 1) {
+        bookval += " A Clash of Kings,"
+      }
+      if (d.SoS == 1) {
+        bookval += " A Storm of Swords,"
+      }
+      if (d.FfC == 1) {
+        bookval += " A Feast for Crows,"
+      }
+      if (d.DwD == 1) {
+        bookval += " A Dance with Dragons"
+      }
         tooltip
-            .style('top', e.pageY - 20 + 'px')
-            .style('left', e.pageX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location)
+            .style('top', e.clientY - 20 + 'px')
+            .style('left', e.clientX + 20 + 'px')
+            .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> Last appeared in book " + d.Book_of_Death + " chapter " + d.Death_Chapter + "<br> Appears in : " + "<br>" + bookval)
+    }
     }
     var mouseleave = function(d) {
         tooltip

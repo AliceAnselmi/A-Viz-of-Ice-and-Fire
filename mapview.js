@@ -121,9 +121,9 @@ function create_emblems(map)
             let coord = place_to_coordinate[d[0].Death_Location];
             return `translate(${coord.x_pixels},${coord.y_pixels})`
         })
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
+        //.on("mouseover", mouseover)
+        //.on("mousemove", mousemove)
+        //.on("mouseleave", mouseleave)
         .on("click", click)
     emblems
         .append('svg:image')
@@ -214,7 +214,10 @@ function select_emblem(emblem, data)
         .attr('width', "3%")
         .attr("height", "3%")
         .attr('x', 0)
-        .attr('y', 0);
+        .attr('y', 0)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave);
     
     d3.forceSimulation(nodes)
         .force("link", forceLink)
@@ -233,6 +236,28 @@ function select_emblem(emblem, data)
         node
             .attr("x", function (d) { return d.x - (this.width.animVal.value / 2); })
             .attr("y", function (d) { return d.y - (this.height.animVal.value / 2); });
+    }
+    
+    function mouseover(d)
+    {
+        // What odes this do?
+        d3.select(this.parentNode).raise();
+        tooltip.style("visibility", "visible");
+    }
+
+    function mousemove(e, d)
+    {
+        d = d.data
+        console.log(d)
+        tooltip
+            .style('top', e.pageY - 20 + 'px')
+            .style('left', e.pageX + 20 + 'px')
+            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location)
+    }
+
+    function mouseleave(d)
+    {
+        tooltip.style("visibility", "hidden");
     }
 }
 

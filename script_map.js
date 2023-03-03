@@ -454,10 +454,8 @@ emblems.append("svg:image")
     //-----------------------------//
     //Emblems mouse hover functions//
     // ---------------------------//
-
-
     var mouseover = function(d) {
-        d3.select(this.parentNode).raise();
+        d3.select(this).attr('stroke', 'red')
         tooltip
             .style("visibility", "visible")
     }
@@ -478,16 +476,31 @@ emblems.append("svg:image")
       if (d.DwD == 1) {
         bookval += " A Dance with Dragons"
       }
+      var firstBook = ""
+      if (d.GoT == 1) {
+        firstBook += "book 1, chapter "
+      }
+      else if (d.CoK == 1) {
+        firstBook += "book 2, chapter "
+      }
+      else if (d.SoS == 1) {
+        firstBook += "book 3, chapter "
+      }
+      else if (d.FfC == 1) {
+        firstBook += "book 4, chapter "
+      }
+      else if (d.DwD == 1) {
+        firstBook += "book 5, chapter"
+      } else { firstBook += "Opsie whoopsie! Something went fuckywucky (•ω•`)"}
         tooltip
             .style('top', e.clientY - 20 + 'px')
             .style('left', e.clientX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> Last appeared in book " + d.Book_of_Death + " chapter " + d.Death_Chapter + "<br> Appears in : " + "<br>" + bookval)
-    }
+            .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in book " + d.Book_of_Death + " chapter " + d.Death_Chapter + "<br> Appears in : " + "<br>" + bookval).fontsize(50)
     }
     var mouseleave = function(d) {
+        d3.select(this).attr('stroke', 'black')
         tooltip
             .style("visibility", "hidden")
     }
 
-
-   
+  

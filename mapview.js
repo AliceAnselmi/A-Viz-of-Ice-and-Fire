@@ -3,6 +3,8 @@ var map_img = "assets/speculative_map_cut.jpg"
 
 var selected_emblem = null;
 
+var forceSimulation = null;
+
 var location_to_deaths = {}
 var place_to_coordinate = {}
 var p = Promise.all([
@@ -121,9 +123,6 @@ function create_emblems(map)
             let coord = place_to_coordinate[d[0].Death_Location];
             return `translate(${coord.x_pixels},${coord.y_pixels})`
         })
-        //.on("mouseover", mouseover)
-        //.on("mousemove", mousemove)
-        //.on("mouseleave", mouseleave)
         .on("click", click)
     emblems
         .append('svg:image')
@@ -139,26 +138,6 @@ function create_emblems(map)
 
     map_image.on("click", function (e, d) { deselect_emblem(selected_emblem); selected_emblem = null; console.log("deselected") });
     return emblems
-
-    function mouseover(d)
-    {
-        // What odes this do?
-        d3.select(this.parentNode).raise();
-        tooltip.style("visibility", "visible");
-    }
-
-    function mousemove(e, d)
-    {
-        tooltip
-            .style('top', e.pageY - 20 + 'px')
-            .style('left', e.pageX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d[0].Death_Location)
-    }
-
-    function mouseleave(d)
-    {
-        tooltip.style("visibility", "hidden");
-    }
 
     function click(e, d)
     {
@@ -219,11 +198,15 @@ function select_emblem(emblem, data)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave);
     
-    d3.forceSimulation(nodes)
+    forceSimulation = d3.forceSimulation(nodes)
         .force("link", forceLink)
         .force("charge", forceNode)
         .force("center", d3.forceCenter())
         .on("tick", tick)
+
+    emblem.select(".emblem").attr("visibility", "hidden");
+
+    return
 
     function tick()
     {
@@ -264,6 +247,8 @@ function select_emblem(emblem, data)
 function deselect_emblem(emblem)
 {
     if (emblem == null) return;
+    forceSimulation.stop();
+
     emblem.select(".emblem").attr("visibility", "visible")
 
     emblem.selectAll(".popup").remove();

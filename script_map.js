@@ -285,11 +285,20 @@ slider_info_bg_img = "assets/slider_info_bg.png"
 
     //ATTENTION: cannot append "select" element on observable, gotta use the Observable Inputs -> gotta change when hosting on webpage
    const view_selector = slider.append("rect")
+                            .attr("id", "view_selector_rect")
                             .attr('width', 200)
                               .attr('height', 40)
                               .attr('stroke', 'black')
                               .attr('fill', 'white')
-                              .attr("cursor", "pointer");      
+                              .attr("cursor", "pointer")
+                              .on("mouseover", function(d){
+                                d3.select(this)
+                                .attr("stroke", "#493521")
+                                .attr("stroke-width", "3px")})
+                            .on("mouseleave", function(d){
+                                d3.select(this)
+                                .attr("stroke-width", "1px")
+                                .attr("stroke", "black")})    
     view_selector.attr("x", -width/5)
                     .attr("y", -height/120)        
   
@@ -299,7 +308,15 @@ slider_info_bg_img = "assets/slider_info_bg.png"
           .attr("font-size","25px")
           .attr("cursor", "pointer")
           .text(views[currview] + " view");
-        slider_selector_text.on("click",updateView);
+        slider_selector_text.on("click",updateView)
+        .on("mouseover", function(d){
+            d3.select("#view_selector_rect")
+            .attr("stroke", "#493521")
+            .attr("stroke-width", "3px")})
+        .on("mouseleave", function(d){
+            d3.select("#view_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", "black")})    
         view_selector.on("click", updateView);
   
     function updateView() {
@@ -435,15 +452,15 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     // --------------------------// 
 
 
-        const g_filter = svg.append("g")
+        const g_filter = svg.append("g").style("position", "sticky")
 
 
         var filter_menu = g_filter.append("svg:image")
-            .attr("xlink:href", "assets/allegiance_rect.png")
+            .attr("xlink:href", "assets/menu_rect.png")
             .style('width', "12%")
             .style("height", "auto")
-            .attr('x',-200)
-            .attr('y',  height/6)
+            .attr('x',-180)
+            .attr('y', height/20)
 
 
         var filter_button=g_filter.append("svg:image")
@@ -451,17 +468,17 @@ slider_info_bg_img = "assets/slider_info_bg.png"
             .style('width', "5%")
             .style("height", "auto")
             .attr('x',0)
-            .attr('y',  height/6)
+            .attr('y',  height/20)
 
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x",-140)
-        .attr("y",height/6+50)
+        .attr("x",-120)
+        .attr("y",height/20+50)
         .html("Filter by")
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x",-120)
-        .attr("y",height/6+90)
+        .attr("x",-100)
+        .attr("y",height/20+90)
         .html("house")
 
          var filter_menu_open = false;
@@ -483,8 +500,8 @@ slider_info_bg_img = "assets/slider_info_bg.png"
 
         var allegiances = ["Arryn", "Baratheon", "Greyjoy", "Lannister", "Martell", "Night's Watch", "Stark", "Targaryen", "Tully", "Tyrell", "Wildling", "None"]
     
-        var emblemX=-115;
-        var emblemY=height/6 + 150;
+        var emblemX=-95;
+        var emblemY=height/20 + 150;
         var filters = g_filter.selectAll('.filters')
                                 .data(allegiances)
                                 .enter()
@@ -493,16 +510,19 @@ slider_info_bg_img = "assets/slider_info_bg.png"
              filters.append("pattern")
                                 .attr("id", (d,i) =>{
                                     return "pattern"+i})
-                                .attr("width", 50)
-                                .attr("height", 50)
+                                .attr("width", 1)
+                                .attr("height", 1)
                                 .append("svg:image")
                                 .attr("xlink:href",(d) => {
                                     return "assets/emblems/" + d +".PNG"
                                 })
-                                .attr("width", "4%")
-                                .attr("x", -1.5)
+                                .attr("width", "3.7%")
+                                .attr("x", -1.2)
+                                .attr("y", -1.5)
             filters
                     .append("circle")
+                    .attr("stroke-width", "1px")
+                    .attr("stroke", "black")
                     .attr('cx',(d,i)=>{
                             if(i%2 == 0)
                                 return emblemX
@@ -515,6 +535,17 @@ slider_info_bg_img = "assets/slider_info_bg.png"
                     .style("fill",  (d,i) =>{
                         return "url(#pattern"+i+")"})
                     .style("cursor", "pointer")
+                    .on("mouseover",function(d){
+                        d3.select(this)
+                        .attr("stroke-width", "4px")
+                        .attr("stroke", "#493521")
+                    })
+                    .on("mouseleave", function(d){
+                        d3.select(this)
+                        .attr("stroke-width", "1px")
+                        .attr("stroke", "black")
+                    })
+
                     .on("click", (e,d) => {filter_allegiance(d)})
 
 
@@ -539,19 +570,29 @@ slider_info_bg_img = "assets/slider_info_bg.png"
             .on("click", display_filter_menu)
 
             var g_reset = g_filter.append("g")
-                        .attr("cursor", "pointer");   
+                        .attr("cursor", "pointer")
+                        .on("mouseover", function(d){
+                            d3.select("#reset_rect")
+                            .attr("stroke", "#493521")
+                            .attr("stroke-width", "3px")})
+                        .on("mouseleave", function(d){
+                            d3.select("#reset_rect")
+                            .attr("stroke-width", "1px")
+                            .attr("stroke", "black")})
+                            
             g_reset.append("rect")
+                        .attr("id", "reset_rect")
                         .attr('width', 120)
                         .attr('height', 30)
-                        .attr("x",-140)
-                        .attr("y",height/6 + 550)
+                        .attr("x",-120)
+                        .attr("y",height/20 + 550)
                         .attr('stroke', 'black')
                         .attr('fill', 'white')
                          
             g_reset.append("text")
                         .attr("font-size","28px")
-                        .attr("x",-120)
-                        .attr("y",height/6 + 575)
+                        .attr("x",-100)
+                        .attr("y",height/20 + 575)
                         .text("Reset")    
                         .attr("cursor", "pointer");     
 
@@ -561,6 +602,8 @@ slider_info_bg_img = "assets/slider_info_bg.png"
                 .attr("pointer-events", "all");
             })
             
+
+    
 
     // ---------------------------//
     //           Emblems          //
@@ -599,6 +642,8 @@ emblems.append("svg:image")
         // handle error here
     })
 
+    
+
     //-----------------------------//
     //Emblems mouse hover functions//
     // ---------------------------//
@@ -628,4 +673,69 @@ emblems.append("svg:image")
     }
 
 
-   
+     // ---------------------------//
+    //     Credits Menu           //
+    // --------------------------// 
+   var g_credits = svg.append("g")
+    var credits_button = g_credits.style("position", "sticky").append("svg:image")
+    .attr("xlink:href", "assets/credits_menu_button.png")
+    .style("position", "sticky")
+            .style('width', "4%")
+            .style("height", "auto")
+            .attr('x',width-150)
+            .attr('y',  height/20)
+            .style("position", "sticky")
+            .style("cursor", "pointer")
+            .on("click", ()=> {display_credits_menu()})
+
+    var credits_rect = g_credits.append("svg:image")
+    .attr("xlink:href", "assets/menu_rect.png")
+    .attr("class", "credits_menu")
+    .style('width', "12%")
+    .style("height", "auto")
+    .attr('x',width)
+    .attr('y', height/20)
+    
+    g_credits.append("svg:image")
+    .attr("xlink:href", "assets/credits_menu_close_button.png")
+    .attr("class", "credits_menu")
+    .style('width', "4%")
+    .style("height", "auto")
+    .attr('x',width)
+    .attr('y', height/20)
+    .style("cursor", "pointer")
+    .on("click", ()=> {display_credits_menu()})
+
+    g_credits.append("text")
+    .attr("class", "credits_menu")
+        .attr("font-size","33px")
+        .attr("x",width+20)
+        .attr("y",height/20+120)
+        .text("Instructions")
+    
+    g_credits.append("text")
+    .attr("class", "credits_menu")
+        .attr("font-size","33px")
+        .attr("x",width+20)
+        .attr("y",height/20+600)
+        .text("Credits")
+
+    var credits_menu_open = false;
+    var display_credits_menu = function(d) {
+    if(credits_menu_open == false){
+        credits_menu_open = true;
+    d3.selectAll(".credits_menu")
+        .transition()
+        .attr("transform","translate(-200,0)");
+    }
+
+    else{
+        credits_menu_open = false;
+        d3.selectAll(".credits_menu")
+            .transition()
+            .attr("transform","translate(0,0)");
+
+        }
+     
+    }
+    

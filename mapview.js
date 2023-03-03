@@ -1,9 +1,11 @@
 
-map_img = "assets/speculative_map_cut.jpg"
+var map_img = "assets/speculative_map_cut.jpg"
 
-location_to_deaths = {}
-place_to_coordinate = {}
-p = Promise.all([
+var selected_emblem = null;
+
+var location_to_deaths = {}
+var place_to_coordinate = {}
+var p = Promise.all([
     d3.csv("data/character-deaths.csv"),
     d3.csv("data/locations-coordinates.csv"),
 ])
@@ -71,6 +73,7 @@ function create_mapview()
     min_scale = Math.max(min_scale_x, min_scale_y);
 
     let zoom = d3.zoom()
+        .touchable(true)
         .scaleExtent([min_scale, 8])
         .translateExtent([[0,0], [map_width, map_height]])
         .on("zoom", handleZoom)
@@ -113,7 +116,16 @@ function create_emblems(map)
     // FIXME: Make a parent element to all emblems
     const emblems = emblem_g.selectAll('.emblem')
         .data(Object.values(location_to_deaths))
-        .enter()
+        .join('g')
+        .attr('transform', (d) => {
+            let coord = place_to_coordinate[d[0].Death_Location];
+            return `translate(${coord.x_pixels},${coord.y_pixels})`
+        })
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+        .on("click", click)
+    emblems
         .append('svg:image')
         .attr('class', 'emblem')
         .attr("xlink:href", (d) => {
@@ -122,19 +134,10 @@ function create_emblems(map)
             //var allegiance = d.Allegiances
             return "assets/emblems/" + allegiance +".PNG"
         })
-        .style('width', "1%")
+        .style('width', "2%")
         .style("height", "auto")
-        .attr('x', (d) => {
-            let coord = place_to_coordinate[d[0].Death_Location];
-            return (coord.x_pixels / 4641.0) * map_width;
-        })
-        .attr('y', (d) => {
-            let coord = place_to_coordinate[d[0].Death_Location];
-            return (coord.y_pixels / 4032.0) * map_height;
-        })
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
+
+    map_image.on("click", function (e, d) { deselect_emblem(selected_emblem); selected_emblem = null; console.log("deselected") });
     return emblems
 
     function mouseover(d)
@@ -156,6 +159,91 @@ function create_emblems(map)
     {
         tooltip.style("visibility", "hidden");
     }
+
+    function click(e, d)
+    {
+        emblem = d3.select(this)
+        deselect_emblem(selected_emblem, d)
+        selected_emblem = emblem;
+        select_emblem(emblem, d)
+    }
+}
+
+function select_emblem(emblem, data)
+{
+    center = ({id: 0, data: data, x: 0, y: 0, fx: 0, fy: 0})
+    function intern(value) {
+        return value !== null && typeof value === "object" ? value.valueOf() : value;
+    }
+
+    nodes = [center]
+    map = d3.map(data, (d, i) => ({id: i, data: d, x: 0, y: 0})).map(intern);
+    nodes = nodes.concat(map)
+    //nodes = map
+    links = d3.map(map, (d, i) => ({source: center, target: d}));
+
+    //console.log(nodes)
+    //console.log(links)
+    const forceNode = d3.forceManyBody()
+        //.distanceMax(10)
+        .distanceMin(40)
+    const forceLink = d3.forceLink(links)
+        .id(({index: i}) => i)
+        .distance((d) => Math.random() * 70 + 35)
+
+    link = emblem.append("g")
+        .attr("class", "lines")
+        .attr("stroke", "black")
+        .attr("stroke-opacity", 1)
+        .attr("stroke-width", 1)
+        //.attr("stroke-linecap", linkStrokeLinecap)
+        .selectAll("line")
+        .data(links)
+        .join("line");
+
+    node = emblem.selectAll(".popup")
+        .data(map)
+        .join("svg:image")
+        .attr("class", "popup")
+        .attr("xlink:href", (d) => {
+            // FIXME: We want to display all allegiances here...
+            var allegiance = d.data.Allegiances;
+            //var allegiance = d.Allegiances
+            return "assets/emblems/" + allegiance +".PNG"
+        })
+        .attr('width', "3%")
+        .attr("height", "3%")
+        .attr('x', 0)
+        .attr('y', 0);
+    
+    d3.forceSimulation(nodes)
+        .force("link", forceLink)
+        .force("charge", forceNode)
+        .force("center", d3.forceCenter())
+        .on("tick", tick)
+
+    function tick()
+    {
+        link
+            .attr("x1", function (d) { return d.source.x; })
+            .attr("y1", function (d) { return d.source.y; })
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+        node
+            .attr("x", function (d) { return d.x - (this.width.animVal.value / 2); })
+            .attr("y", function (d) { return d.y - (this.height.animVal.value / 2); });
+    }
+}
+
+function deselect_emblem(emblem)
+{
+    if (emblem == null) return;
+    emblem.select(".emblem").attr("visibility", "visible")
+
+    emblem.selectAll(".popup").remove();
+    // FIXME: remove the <g> tags
+    emblem.selectAll(".lines").remove();
 }
 
 // This function takes care of filtering the elements that are visible

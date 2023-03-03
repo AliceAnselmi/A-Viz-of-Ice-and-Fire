@@ -2,7 +2,7 @@ map_img = "assets/speculative_map_cut.jpg"
 slider_bg_img = "assets/slider_bg.png"
 range_button_high_img = "assets/range_button_high.png"
 range_button_low_img ="assets/range_button_low.png"
-slider_books_bar_img = "assets/slider_bar_5.png"
+slider_books_bar_img = "assets/slider_bar_6.png"
 slider_years_bar_img = "assets/slider_bar_4.png"
 slider_info_bg_img = "assets/slider_info_bg.png"
 
@@ -66,19 +66,19 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         }
         else if(chapter_tot >=73 && chapter_tot <=142){
             book=2;
-            chapter=chapter_tot-72;
+            chapter=chapter_tot-73;
         }
         else if(chapter_tot >=143 && chapter_tot <=224){
             book=3;
-            chapter=chapter_tot-142;
+            chapter=chapter_tot-143;
         }
         else if(chapter_tot >=225 && chapter_tot <=271){
              book=4;
-            chapter=chapter_tot-224;
+            chapter=chapter_tot-225;
         }
         else if(chapter_tot >=272 && chapter_tot <=343){
                 book=5;
-                chapter=chapter_tot-271;
+                chapter=chapter_tot-272;
             }
         return [book, chapter];
 
@@ -129,14 +129,14 @@ slider_info_bg_img = "assets/slider_info_bg.png"
 
    var slider_image= slider.append("svg:image")
         .attr("xlink:href", d => slider_imgs[currview] )
-        .attr("transform", "translate(15,0)")
+        .attr("transform", "translate(-85,0)")
         .style("height", "1.5%")
 
 
 
     var x_slider = d3.scaleLinear()
         .domain([0, 343]) 
-        .range([width/50+30,width/2.95+30])
+        .range([-width/30+30,width/2.61+30])
         .clamp(true);
     var xMin = x_slider(0),
         xMax = x_slider(343)
@@ -145,23 +145,42 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     range_button_imgs[0] = range_button_low_img;
     range_button_imgs[1] = range_button_high_img;
 
+    // 1 -> GOT -> #0066cc
+    // 2 -> COK -> #ffcc00
+    // 3 -> SOS -> #34933f
+    // 4 -> FOC -> #990000
+    // 5 -> DWD -> #cfcfab
+
+
+    
+    var selRange_colours = d3.scaleLinear()
+    .domain([0, 343]) 
+    .range( ["#0066cc", "#ffcc00", "#34933f", "#990000", "#cfcfab"])
+   //Append multiple color stops by using D3's data/enter step
+   
     var selRange = slider.append("line")
             .attr("class", "sel-range")
-            .style("stroke" , "#94C2ED")
-             .attr("transform", "translate(0,"+ height/130+")")
+            .style("stroke", "#94C2ED")
+            .attr("transform", "translate(0,"+ height/130+")")
             .style("opacity", 0.6)
             .style("stroke-width",  height/65+"px")
-            .attr("x1", 20+x_slider(sliderVals[0]))
-            .attr("x2", 20+x_slider(sliderVals[1]))
+            .attr("x1", x_slider(sliderVals[0]))
+            .attr("x2", x_slider(sliderVals[1]))
             
-  
+
+            
     var handle = slider.selectAll("rect")
         .data([0, 1])
         .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
         .attr("class", "handle")
         .attr("x", d => x_slider(sliderVals[d])-30)
-        .attr('y', -25)
-        .style("width", "5%")
+        .attr('y', (d)=>{
+            if(d == 0)
+                return -5;
+            else
+                return -150;
+        })
+        .style("width", "4%")
         .style("height", "auto")
         .style("cursor", "pointer")
         .call(
@@ -202,8 +221,8 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         d3.select(this).attr("x", x_cursor-30)
 
             selRange
-             .attr("x1", 20+x_cursor)
-              .attr("x2", 20+x_other_handle)
+             .attr("x1",x_cursor)
+              .attr("x2", x_other_handle)
       var v= Math.round(x_slider.invert(x_cursor))
       if(d==0){ //if moving lower handle
         update_slider_infos(v, sliderVals[1]);
@@ -251,8 +270,8 @@ slider_info_bg_img = "assets/slider_info_bg.png"
             .style("cursor", "pointer")
 
       selRange
-             .attr("x1", 20+x_slider(v1))
-              .attr("x2", 20+x_slider(v2))
+             .attr("x1", x_slider(v1))
+              .attr("x2", x_slider(v2))
       slider_infos_text.text(  views[currview] +" " + sliderVals[0]  + " - " +sliderVals[1])
       update_slider_infos(sliderVals[0], sliderVals[1]);
         updateMap(v1, v2, currview);
@@ -295,12 +314,12 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         sliderVals=[v1,v2];
          x_slider = d3.scaleLinear()
          .domain([0, 343]) 
-         .range([width/50,width/2.95])
+         .range([-width/30+30,width/2.61+30])
          .clamp(true);
         xMin = x_slider(0);
         xMax = x_slider(343);
        
-          slider_image.attr("transform", "translate(10,0)")
+          slider_image.attr("transform", "translate(-85,0)")
         
       }
       else{
@@ -309,19 +328,19 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         sliderVals=[v1,v2];
         x_slider = d3.scaleLinear()
         .domain([297, 300]) 
-        .range([width/15,width/3.22])
+        .range([width/15+10,width/3.22+10])
         .clamp(true);
 
         xMin = x_slider(297);
         xMax = x_slider(300);
-        slider_image.attr("transform", "translate(90,0)")
+        slider_image.attr("transform", "translate(80,0)")
 
       }
       selRange
-        .attr("x1", 20+x_slider(sliderVals[0]))
-        .attr("x2", 20+x_slider(sliderVals[1]))
+        .attr("x1", x_slider(sliderVals[0]))
+        .attr("x2", x_slider(sliderVals[1]))
      
-       handle.attr("x", d => x_slider(sliderVals[d]))
+       handle.attr("x", d => x_slider(sliderVals[d])-30)
       slider_selector_text.text(views[currview] + " view")
       update_slider_infos(sliderVals[0], sliderVals[1]);
       updateMap(v1, v2, currview);
@@ -423,7 +442,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
             .attr("xlink:href", "assets/allegiance_rect.png")
             .style('width', "12%")
             .style("height", "auto")
-            .attr('x',-170)
+            .attr('x',-200)
             .attr('y',  height/6)
 
 
@@ -449,8 +468,6 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         var display_filter_menu = function(d) {
         if(filter_menu_open == false){
          filter_menu_open = true;
-        // filter_button.transition()
-        // .attr("transform","translate(145,0)");
 
         g_filter.transition()
         .attr("transform","translate(150,0)");
@@ -548,8 +565,6 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     // ---------------------------//
     //           Emblems          //
     // --------------------------// 
-    
-
 
 
     var emblems = g.selectAll('.emblems')

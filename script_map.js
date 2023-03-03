@@ -7,7 +7,6 @@ slider_years_bar_img = "assets/slider_bar_4.png"
 slider_info_bg_img = "assets/slider_info_bg.png"
 
 
-//TODO: CENTER CURSOR IN HANDLE
     const width = window.innerWidth;
     const height = width
 
@@ -30,7 +29,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     // ---------------------------//
     //       Tooltip              //
     // ---------------------------//
-    const tooltip = d3.select("body").append("div")
+    const tooltip = d3.select("body").append("g")
         .attr("class", "tooltip")
         .style("position", "absolute")
         .style("visibility", "hidden")
@@ -137,7 +136,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
 
     var x_slider = d3.scaleLinear()
         .domain([0, 343]) 
-        .range([width/50,width/2.95])
+        .range([width/50+30,width/2.95+30])
         .clamp(true);
     var xMin = x_slider(0),
         xMax = x_slider(343)
@@ -160,7 +159,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         .data([0, 1])
         .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
         .attr("class", "handle")
-        .attr("x", d => x_slider(sliderVals[d]))
+        .attr("x", d => x_slider(sliderVals[d])-30)
         .attr('y', -25)
         .style("width", "5%")
         .style("height", "auto")
@@ -172,15 +171,18 @@ slider_info_bg_img = "assets/slider_info_bg.png"
             .on("end", endDrag)
         );
 
-    function startDrag() {
-        d3.select(this).raise().classed("active", true);
+    function startDrag(event) {
+        var x_cursor = event.x;
+        d3.select(this).raise().classed("active", true)
+        .style("cursor", "grabbing")
+                                
     }
 
     function onDrag(event, d) {
-        //handle.attr("x, ")
+       
         //positioning of button
-        var x_cursor = event.x;
-         var x_other_handle=x_slider(sliderVals[d==0?1:0])
+        var x_cursor = event.x;         
+        var x_other_handle=x_slider(sliderVals[d==0?1:0])
       //handle overlap
       if(d==0){ //if lower handle
       if(x_cursor >= x_other_handle-40){
@@ -197,8 +199,8 @@ slider_info_bg_img = "assets/slider_info_bg.png"
       else if(x_cursor > xMax && x_cursor >= x_other_handle-40)
         x_cursor= xMax;
 
-        d3.select(this).attr("x", x_cursor);
-      
+        d3.select(this).attr("x", x_cursor-30)
+
             selRange
              .attr("x1", 20+x_cursor)
               .attr("x2", 20+x_other_handle)
@@ -245,7 +247,8 @@ slider_info_bg_img = "assets/slider_info_bg.png"
        
         d3.select(this)
             .classed("active", false)
-            .attr("x", x_slider(v));
+            .attr("x", x_slider(v)-30)
+            .style("cursor", "pointer")
 
       selRange
              .attr("x1", 20+x_slider(v1))
@@ -408,8 +411,139 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     }
 
 
-    
+    // ---------------------------//
+    //     Allegiance Filter      //
+    // --------------------------// 
 
+
+        const g_filter = svg.append("g")
+
+
+        var filter_menu = g_filter.append("svg:image")
+            .attr("xlink:href", "assets/allegiance_rect.png")
+            .style('width', "12%")
+            .style("height", "auto")
+            .attr('x',-170)
+            .attr('y',  height/6)
+
+
+        var filter_button=g_filter.append("svg:image")
+            .attr("xlink:href", "assets/allegiance_button.png")
+            .style('width', "5%")
+            .style("height", "auto")
+            .attr('x',0)
+            .attr('y',  height/6)
+
+        g_filter.append("text")
+        .attr("font-size","33px")
+        .attr("x",-140)
+        .attr("y",height/6+50)
+        .html("Filter by")
+        g_filter.append("text")
+        .attr("font-size","33px")
+        .attr("x",-120)
+        .attr("y",height/6+90)
+        .html("house")
+
+         var filter_menu_open = false;
+        var display_filter_menu = function(d) {
+        if(filter_menu_open == false){
+         filter_menu_open = true;
+        // filter_button.transition()
+        // .attr("transform","translate(145,0)");
+
+        g_filter.transition()
+        .attr("transform","translate(150,0)");
+        }
+
+        else{
+            filter_menu_open = false;
+            g_filter.transition()
+            .attr("transform","translate(0,0)");
+            }
+         
+        }
+
+        var allegiances = ["Arryn", "Baratheon", "Greyjoy", "Lannister", "Martell", "Night's Watch", "Stark", "Targaryen", "Tully", "Tyrell", "Wildling", "None"]
+    
+        var emblemX=-115;
+        var emblemY=height/6 + 150;
+        var filters = g_filter.selectAll('.filters')
+                                .data(allegiances)
+                                .enter()
+                                .append('g')
+                                .attr('class', 'filters')
+             filters.append("pattern")
+                                .attr("id", (d,i) =>{
+                                    return "pattern"+i})
+                                .attr("width", 50)
+                                .attr("height", 50)
+                                .append("svg:image")
+                                .attr("xlink:href",(d) => {
+                                    return "assets/emblems/" + d +".PNG"
+                                })
+                                .attr("width", "4%")
+                                .attr("x", -1.5)
+            filters
+                    .append("circle")
+                    .attr('cx',(d,i)=>{
+                            if(i%2 == 0)
+                                return emblemX
+                            else
+                                return emblemX +80
+                        })
+                    .attr('cy',(d,i)=>{
+                        return emblemY + 65*(parseInt(i/2))})
+                    .attr("r", 30)
+                    .style("fill",  (d,i) =>{
+                        return "url(#pattern"+i+")"})
+                    .style("cursor", "pointer")
+                    .on("click", (e,d) => {filter_allegiance(d)})
+
+
+            var filter_allegiance = function(allegiance){
+                d3.selectAll(".emblems")
+                    .filter((d) => {
+                        return d.Allegiances == allegiance;
+                    })
+                    .attr("opacity", 1)
+                    .attr("pointer-events", "all");
+    
+                    d3.selectAll(".emblems")
+                    .filter((d) => {
+                        return d.Allegiances != allegiance;
+                    })
+                    .attr("opacity", 0)
+                    .attr("pointer-events", "none");
+            }
+       
+            filter_button
+            .attr("cursor", "pointer")
+            .on("click", display_filter_menu)
+
+            var g_reset = g_filter.append("g")
+                        .attr("cursor", "pointer");   
+            g_reset.append("rect")
+                        .attr('width', 120)
+                        .attr('height', 30)
+                        .attr("x",-140)
+                        .attr("y",height/6 + 550)
+                        .attr('stroke', 'black')
+                        .attr('fill', 'white')
+                         
+            g_reset.append("text")
+                        .attr("font-size","28px")
+                        .attr("x",-120)
+                        .attr("y",height/6 + 575)
+                        .text("Reset")    
+                        .attr("cursor", "pointer");     
+
+            g_reset.on("click", ()=>{
+                d3.selectAll(".emblems")
+                .attr("opacity", 1)
+                .attr("pointer-events", "all");
+            })
+            
 
     // ---------------------------//
     //           Emblems          //
@@ -445,10 +579,9 @@ emblems.append("svg:image")
     .on("mouseover", mouseover)
     .on("mousemove", mousemove)
     .on("mouseleave", mouseleave)
-
+    .on("click", mouseclick)
     }).catch(function(err) {
         // handle error here
-        alert(alert_var)
     })
 
     //-----------------------------//
@@ -470,6 +603,13 @@ emblems.append("svg:image")
     var mouseleave = function(d) {
         tooltip
             .style("visibility", "hidden")
+    }
+
+    var mouseclick = function(e,d) {
+
+        //tooltip's position is now fixed
+
+            
     }
 
 

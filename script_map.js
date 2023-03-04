@@ -499,13 +499,14 @@ var forward_button = g_slider.append("svg:image")
             .attr('x',-180)
             .attr('y', height/20)
 
-
+        
         var filter_button=g_filter.append("svg:image")
             .attr("xlink:href", "assets/allegiance_button.png")
             .style('width', "5%")
             .style("height", "auto")
             .attr('x',0)
             .attr('y',  height/20)
+            
 
         g_filter.append("text")
         .attr("font-size","33px")
@@ -684,64 +685,15 @@ emblems.append("svg:image")
     //-----------------------------//
     //Emblems mouse hover functions//
     // ---------------------------//
+
+
     var mouseover = function(d) {
+        d3.select(this.parentNode).raise();
         d3.select(this.parentNode).raise();
         tooltip
             .style("visibility", "visible")
     }
     var mousemove = function(e, d) {
-      var bookval = " "
-      if (d.GoT == 1) {
-        bookval += "Game of thrones,"
-      }
-      if (d.CoK == 1) {
-        bookval += " A Clash of Kings,"
-      }
-      if (d.SoS == 1) {
-        bookval += " A Storm of Swords,"
-      }
-      if (d.FfC == 1) {
-        bookval += " A Feast for Crows,"
-      }
-      if (d.DwD == 1) {
-        bookval += " A Dance with Dragons"
-      }
-      var firstBook = ""
-      if (d.GoT == 1) {
-        firstBook += "Game of thrones, chapter "
-      }
-      else if (d.CoK == 1) {
-        firstBook += "A Clash of Kings, chapter "
-      }
-      else if (d.SoS == 1) {
-        firstBook += "A Storm of Swords, chapter "
-      }
-      else if (d.FfC == 1) {
-        firstBook += "A Feast for Crows, chapter "
-      }
-      else if (d.DwD == 1) {
-        firstBook += "A Dance with Dragons, chapter "
-      } else { 
-        firstBook += "Opsie whoopsie! Something went fuckywucky (•ω•`)"}
-      
-      var lastBook = ""
-      if (d.Book_of_Death == 1) {
-        lastBook += "Game of thrones"
-      }
-      else if (d.Book_of_Death == 2) {
-        lastBook += "A Clash of Kings"
-      }
-      else if (d.Book_of_Death == 3) {
-        lastBook += "A Storm of Swords"
-      }
-      else if (d.Book_of_Death == 4) {
-        lastBook += "A Feast for Crows"
-      }
-      else if (d.Book_of_Death == 5) {
-        lastBook += "A Dance with Dragons"
-      } else { 
-        lastBook += "(`•ω•) γʞɔυwγʞɔυʇ Ɉnǝw ϱniʜɈǝmoƧ !ǝiƨqooʜw ǝiƨqO"
-      }
         tooltip
             .style('top', e.clientY - 20 + 'px')
             .style('left', e.clientX + 20 + 'px')

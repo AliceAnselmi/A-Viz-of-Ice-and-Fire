@@ -460,22 +460,6 @@ emblems.append("svg:image")
             .style("visibility", "visible")
     }
     var mousemove = function(e, d) {
-      var bookval = " "
-      if (d.GoT == 1) {
-        bookval += "Game of thrones,"
-      }
-      if (d.CoK == 1) {
-        bookval += " A Clash of Kings,"
-      }
-      if (d.SoS == 1) {
-        bookval += " A Storm of Swords,"
-      }
-      if (d.FfC == 1) {
-        bookval += " A Feast for Crows,"
-      }
-      if (d.DwD == 1) {
-        bookval += " A Dance with Dragons"
-      }
       var firstBook = ""
       if (d.GoT == 1) {
         firstBook += "Game of thrones, chapter "
@@ -515,7 +499,7 @@ emblems.append("svg:image")
         tooltip
             .style('top', e.clientY - 20 + 'px')
             .style('left', e.clientX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in  " + lastBook + " chapter " + d.Death_Chapter + "<br> Appears in : " + "<br>" + bookval)
+            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in  " + lastBook + " chapter " + d.Death_Chapter + "<br>)
     }
     var mouseleave = function(d) {
         d3.select(this).attr('stroke', 'black')

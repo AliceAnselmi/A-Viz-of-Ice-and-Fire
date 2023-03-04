@@ -52,6 +52,9 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         const slider_imgs = []
         slider_imgs[0] = slider_books_bar_img;
         slider_imgs[1] = slider_years_bar_img;
+
+
+
       
   
    // ---------------------------//
@@ -120,6 +123,34 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         .style("height", "auto")
         .attr('y', 60)
 
+    // ---------------------------//
+    //      Slider - buttons      // 
+    // --------------------------// 
+
+    var clickedhandle;
+    var back_button = g_slider.append("svg:image")
+    .attr("xlink:href", "assets/back_button.png")
+    .style("width", "3%")
+    .style("height", "auto")
+    .attr("x",width/1.2)
+    .attr("y",height/21)
+    .attr("cursor", "pointer")
+    .on("click", movesliderbackward)
+ 
+var forward_button = g_slider.append("svg:image")
+    .attr("xlink:href", "assets/forward_button.png")
+    .style("width", "3%")
+    .style("height", "auto")
+    .attr("x",width/1.2+50)
+    .attr("y",height/21)
+    .attr("cursor", "pointer")
+    .on("click", movesliderforward)
+
+    var movesliderbackward = function(){
+    }
+    var movesliderforward = function(){
+    }
+
   // ----------------------------//
     //  Slider - handles+bar     // 
     // --------------------------// 
@@ -153,12 +184,11 @@ slider_info_bg_img = "assets/slider_info_bg.png"
 
 
     
-    var selRange_colours = d3.scaleLinear()
-    .domain([0, 343]) 
-    .range( ["#0066cc", "#ffcc00", "#34933f", "#990000", "#cfcfab"])
+    var selRange_colours =["#0066cc", "#ffcc00", "#34933f", "#990000", "#cfcfab"]
    //Append multiple color stops by using D3's data/enter step
    
     var selRange = slider.append("line")
+            .data(x_slider.range())
             .attr("class", "sel-range")
             .style("stroke", "#94C2ED")
             .attr("transform", "translate(0,"+ height/130+")")
@@ -183,6 +213,13 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         .style("width", "4%")
         .style("height", "auto")
         .style("cursor", "pointer")
+        .on("click", ()=> {
+            if(clickedhandle!=d){
+                clickedhandle = d;
+            }else{
+                clickedhandle = null;
+            }
+        })
         .call(
             d3.drag()
             .on("start", startDrag)

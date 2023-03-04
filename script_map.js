@@ -499,13 +499,14 @@ var forward_button = g_slider.append("svg:image")
             .attr('x',-180)
             .attr('y', height/20)
 
-
+        
         var filter_button=g_filter.append("svg:image")
             .attr("xlink:href", "assets/allegiance_button.png")
             .style('width', "5%")
             .style("height", "auto")
             .attr('x',0)
             .attr('y',  height/20)
+            
 
         g_filter.append("text")
         .attr("font-size","33px")

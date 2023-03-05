@@ -694,13 +694,46 @@ emblems.append("svg:image")
             .style("visibility", "visible")
     }
     var mousemove = function(e, d) {
+      var firstBook = ""
+      if (d.GoT == 1) {
+        firstBook += "Game of thrones, chapter "
+      }
+      else if (d.CoK == 1) {
+        firstBook += "A Clash of Kings, chapter "
+      }
+      else if (d.SoS == 1) {
+        firstBook += "A Storm of Swords, chapter "
+      }
+      else if (d.FfC == 1) {
+        firstBook += "A Feast for Crows, chapter "
+      }
+      else if (d.DwD == 1) {
+        firstBook += "A Dance with Dragons, chapter "
+      } else { 
+        firstBook += "Opsie whoopsie! Something went fuckywucky (•ω•`)"}
+      
+      var lastBook = ""
+      if (d.Book_of_Death == 1) {
+        lastBook += "Game of thrones"
+      }
+      else if (d.Book_of_Death == 2) {
+        lastBook += "A Clash of Kings"
+      }
+      else if (d.Book_of_Death == 3) {
+        lastBook += "A Storm of Swords"
+      }
+      else if (d.Book_of_Death == 4) {
+        lastBook += "A Feast for Crows"
+      }
+      else if (d.Book_of_Death == 5) {
+        lastBook += "A Dance with Dragons"
+      } else { 
+        lastBook += "(`•ω•) γʞɔυwγʞɔυʇ Ɉnǝw ϱniʜɈǝmoƧ !ǝiƨqooʜw ǝiƨqO"
+      }
         tooltip
             .style('top', e.clientY - 20 + 'px')
             .style('left', e.clientX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + 
-            "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location +
-             "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in  " + lastBook 
-             + " chapter " + d.Death_Chapter + "<br> Appears in : " + "<br>" + bookval)
+            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in  " + lastBook + " chapter " + d.Death_Chapter + "<br>)
     }
     var mouseleave = function(d) {
        

@@ -5,6 +5,9 @@ range_button_low_img ="assets/range_button_low.png"
 slider_books_bar_img = "assets/slider_bar_6.png"
 slider_years_bar_img = "assets/slider_bar_4.png"
 slider_info_bg_img = "assets/slider_info_bg.png"
+back_button_img = "assets/back_button.png"
+forward_button_img = "assets/forward_button.png"
+
 
 
     const width = window.innerWidth;
@@ -63,7 +66,7 @@ slider_info_bg_img = "assets/slider_info_bg.png"
 
     function calculate_book_and_chapter(chapter_tot){
         var book, chapter;
-        if(chapter_tot >=0 && chapter_tot <=72){
+        if(chapter_tot >=0 && chapter_tot <=72){ 
             book=1;
             chapter=chapter_tot;
         }
@@ -75,11 +78,11 @@ slider_info_bg_img = "assets/slider_info_bg.png"
             book=3;
             chapter=chapter_tot-143;
         }
-        else if(chapter_tot >=225 && chapter_tot <=271){
+        else if(chapter_tot >=225 && chapter_tot <=271){ 
              book=4;
             chapter=chapter_tot-225;
         }
-        else if(chapter_tot >=272 && chapter_tot <=343){
+        else if(chapter_tot >=272 && chapter_tot <=343){ 
                 book=5;
                 chapter=chapter_tot-272;
             }
@@ -127,28 +130,64 @@ slider_info_bg_img = "assets/slider_info_bg.png"
     //      Slider - buttons      // 
     // --------------------------// 
 
-    var clickedhandle;
-    var back_button = g_slider.append("svg:image")
-    .attr("xlink:href", "assets/back_button.png")
+var slider_button = g_slider.selectAll("rect")
+        .data([0, 1])
+        .enter().append("svg:image")
+    .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
     .style("width", "3%")
     .style("height", "auto")
-    .attr("x",width/1.2)
+    .attr("x",d => width/1.2+ d*60)
     .attr("y",height/21)
     .attr("cursor", "pointer")
-    .on("click", movesliderbackward)
- 
-var forward_button = g_slider.append("svg:image")
-    .attr("xlink:href", "assets/forward_button.png")
-    .style("width", "3%")
-    .style("height", "auto")
-    .attr("x",width/1.2+50)
-    .attr("y",height/21)
-    .attr("cursor", "pointer")
-    .on("click", movesliderforward)
+    .on("click", (e,d) => {move_handle_one_tick(e,d)})
 
-    var movesliderbackward = function(){
+    var move_handle_one_tick= function(e,d){
+            if(clickedhandle!=null){
+           //positioning of button
+           var x_handle = x_slider(sliderVals[clickedhandle==0?0:1]);
+           
+           var curr_value= Math.round(x_slider.invert(x_handle));
+           var new_value = curr_value + (d==0?-1:1);
+           if(new_value >= x_slider.domain()[0] && new_value <= x_slider.domain()[1]){
+           x_handle= x_slider(new_value)       
+           var x_other_handle=x_slider(sliderVals[clickedhandle==0?1:0])
+         //handle overlap
+         if(clickedhandle==0){ //if lower handle
+         if(x_handle >= x_other_handle-40){
+            x_handle = x_other_handle
+         }
+         }else{ //otherwise
+           if(x_handle <= x_other_handle+40 ){
+            x_handle = x_other_handle
+           }
+         }
+   
+
+         if(x_handle < xMin && x_handle <= x_other_handle+40 )
+             x_handle= xMin;
+         else if(x_handle > xMax && x_handle >= x_other_handle-40)
+             x_handle= xMax;
+
+         d3.selectAll(".handle"+clickedhandle).attr("x", x_handle-30)
+   
+        selRange
+        .attr("x1",x_handle)
+            .attr("x2", x_other_handle)
+         sliderVals[clickedhandle] = new_value
+         if(clickedhandle==0){ //if moving lower handle
+           update_slider_infos(new_value, sliderVals[1]);
+           v1 = Math.min(new_value, sliderVals[1]);
+           v2 = Math.max(new_value, sliderVals[1]);
+   
+         }
+       else{ //otherwise
+           update_slider_infos(sliderVals[0], new_value);
+           v1 = Math.min(sliderVals[0], new_value);
+           v2 = Math.max(sliderVals[0], new_value);
+        }
+        updateMap(v1, v2, currview);
     }
-    var movesliderforward = function(){
+    }
     }
 
   // ----------------------------//
@@ -183,14 +222,30 @@ var forward_button = g_slider.append("svg:image")
     // 5 -> DWD -> #cfcfab
 
 
-    
-    var selRange_colours =["#0066cc", "#ffcc00", "#34933f", "#990000", "#cfcfab"]
-   //Append multiple color stops by using D3's data/enter step
-   
+    var defs = svg.append("defs");
+
+    var linearGradient = defs.append("linearGradient")
+    .attr("id", "linear-gradient")
+   .attr("gradientUnits", "userSpaceOnUse")
+   .attr("x1", xMin)
+    .attr("x2", xMax)
+    .selectAll("stop")
+    .data([
+        {offset: "0%", color: "#0066cc"},
+        {offset: "33%", color: "#ffcc00"},
+        {offset: "55%", color: "#34933f"},
+        {offset: "73%", color: "#990000"},
+        {offset: "100%", color: "#cfcfab"},
+    ])
+    .enter().append("stop")
+    .attr("offset", function(d) { return d.offset; })
+    .attr("stop-color", function(d) { return d.color; });
+
+
     var selRange = slider.append("line")
             .data(x_slider.range())
             .attr("class", "sel-range")
-            .style("stroke", "#94C2ED")
+            .style("stroke", "url(#linear-gradient)")
             .attr("transform", "translate(0,"+ height/130+")")
             .style("opacity", 0.6)
             .style("stroke-width",  height/65+"px")
@@ -198,11 +253,12 @@ var forward_button = g_slider.append("svg:image")
             .attr("x2", x_slider(sliderVals[1]))
             
 
-            
+    var clickedhandle;
+    var clickedhandle_node;
     var handle = slider.selectAll("rect")
         .data([0, 1])
         .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
-        .attr("class", "handle")
+        .attr("class", d=> "handle"+d)
         .attr("x", d => x_slider(sliderVals[d])-30)
         .attr('y', (d)=>{
             if(d == 0)
@@ -213,12 +269,9 @@ var forward_button = g_slider.append("svg:image")
         .style("width", "4%")
         .style("height", "auto")
         .style("cursor", "pointer")
-        .on("click", ()=> {
-            if(clickedhandle!=d){
-                clickedhandle = d;
-            }else{
-                clickedhandle = null;
-            }
+        .on("click", (e,d)=> {
+            clickedhandle == d ? clickedhandle = null : clickedhandle = d;
+
         })
         .call(
             d3.drag()
@@ -374,6 +427,7 @@ var forward_button = g_slider.append("svg:image")
         xMax = x_slider(343);
        
           slider_image.attr("transform", "translate(-85,0)")
+          selRange.style("stroke", "url(#linear-gradient)")
         
       }
       else{
@@ -388,7 +442,7 @@ var forward_button = g_slider.append("svg:image")
         xMin = x_slider(297);
         xMax = x_slider(300);
         slider_image.attr("transform", "translate(80,0)")
-
+        selRange.style("stroke", "#94C2ED")
       }
       selRange
         .attr("x1", x_slider(sliderVals[0]))

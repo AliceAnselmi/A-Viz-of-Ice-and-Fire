@@ -688,7 +688,7 @@ emblems.append("svg:image")
 
 
     var mouseover = function(d) {
-        d3.select(this.parentNode).raise();
+        
         d3.select(this.parentNode).raise();
         tooltip
             .style("visibility", "visible")
@@ -733,7 +733,7 @@ emblems.append("svg:image")
         tooltip
             .style('top', e.clientY - 20 + 'px')
             .style('left', e.clientX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in  " + lastBook + " chapter " + d.Death_Chapter + "<br>)
+            .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in " + lastBook + ", chapter " + d.Death_Chapter + "<br>")
     }
     var mouseleave = function(d) {
        

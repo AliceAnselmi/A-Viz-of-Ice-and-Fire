@@ -616,8 +616,10 @@ var slider_button = g_slider.selectAll("rect")
                                 .attr("width", "3.7%")
                                 .attr("x", -1.2)
                                 .attr("y", -1.5)
-            filters
+            var selected_allegiances=[];
+                filters
                     .append("circle")
+                    .attr("class", "filter_circle")
                     .attr("stroke-width", "1px")
                     .attr("stroke", "black")
                     .attr('cx',(d,i)=>{
@@ -637,30 +639,19 @@ var slider_button = g_slider.selectAll("rect")
                         .attr("stroke-width", "4px")
                         .attr("stroke", "#493521")
                     })
-                    .on("mouseleave", function(d){
+                    .on("mouseleave", function(e,d){
+                        if(!selected_allegiances.includes(d)){
                         d3.select(this)
                         .attr("stroke-width", "1px")
                         .attr("stroke", "black")
+                        }
                     })
 
-                    .on("click", (e,d) => {filter_allegiance(d)})
-
-
-            var filter_allegiance = function(allegiance){
-                d3.selectAll(".emblems")
-                    .filter((d) => {
-                        return d.Allegiances == allegiance;
-                    })
-                    .attr("opacity", 1)
-                    .attr("pointer-events", "all");
-    
-                    d3.selectAll(".emblems")
-                    .filter((d) => {
-                        return d.Allegiances != allegiance;
-                    })
-                    .attr("opacity", 0)
-                    .attr("pointer-events", "none");
-            }
+                    .on("click", (e,d) => {
+                        if(!selected_allegiances.includes(d))
+                            selected_allegiances.push(d)
+                        console.log(selected_allegiances)
+                        updateMap(v1,v2,currview)})
        
             filter_button
             .attr("cursor", "pointer")
@@ -694,9 +685,22 @@ var slider_button = g_slider.selectAll("rect")
                         .attr("cursor", "pointer");     
 
             g_reset.on("click", ()=>{
-                d3.selectAll(".emblems")
+
+                selected_allegiances = [];
+                d3.selectAll(".filter_circle")
+                .attr("stroke-width", "1px")
+                .attr("stroke", "black")
+
+                d3.selectAll(".popup")
                 .attr("opacity", 1)
                 .attr("pointer-events", "all");
+                d3.selectAll(".line_link")
+                .attr("stroke-opacity", 1)
+                d3.selectAll(".filters")
+                .attr("stroke-width", "1px")
+                .attr("stroke", "black")
+                updateMap(v1,v2,currview)
+
             })
             
 
@@ -767,7 +771,7 @@ var slider_button = g_slider.selectAll("rect")
             .append('svg:image')
             .attr('class', 'emblem')
             .attr("xlink:href", (d) => {
-                console.log(d[0].Allegiances)
+                // console.log(d[0].Allegiances)
                 // FIXME: We want to display all allegiances here...
                 var allegiance = d[0].Allegiances;
                 //var allegiance = d.Allegiances
@@ -893,7 +897,7 @@ var slider_button = g_slider.selectAll("rect")
         function mousemove(e, d)
         {
             d = d.data
-            console.log(d)
+            // console.log(d)
             
             var firstBook = ""
             if (d.GoT == 1) {
@@ -972,8 +976,10 @@ var slider_button = g_slider.selectAll("rect")
                    filteredvalue= d.data.Timeline_Chapter_Death;
                  else
                    filteredvalue = d.data.Death_Year;
-                   
-                     return filteredvalue < min || filteredvalue > max
+                if(selected_allegiances.length > 0)
+                   return !selected_allegiances.includes(d.data.Allegiances) || filteredvalue < min || filteredvalue > max
+               else
+                   return filteredvalue < min || filteredvalue > max
                })
                .attr("visibility", "hidden")
                .attr("pointer-events", "none");
@@ -984,7 +990,10 @@ var slider_button = g_slider.selectAll("rect")
                        filteredvalue= d.data.Timeline_Chapter_Death
                     else
                        filteredvalue = d.data.Death_Year;
-                   return filteredvalue >= min && filteredvalue <= max
+                       if(selected_allegiances.length > 0)
+                        return selected_allegiances.includes(d.data.Allegiances)  && filteredvalue >= min && filteredvalue <= max;
+                    else
+                          return filteredvalue >= min && filteredvalue <= max;
                })
                .attr("visibility", "visible")
                .attr("pointer-events", "all");
@@ -994,8 +1003,12 @@ var slider_button = g_slider.selectAll("rect")
                  if(currview==0)
                    filteredvalue= d.target.data.Timeline_Chapter_Death;
                  else
-                   filteredvalue = d.target.data.Death_Year;   
-                return filteredvalue < min || filteredvalue > max
+                   filteredvalue = d.target.data.Death_Year;
+                   if(selected_allegiances.length > 0)
+                return !selected_allegiances.includes(d.target.data.Allegiances) || filteredvalue < min || filteredvalue > max
+                    else   
+                     return filteredvalue < min || filteredvalue > max
+
                })
                .attr("stroke-opacity", 0)
 
@@ -1005,8 +1018,12 @@ var slider_button = g_slider.selectAll("rect")
                        filteredvalue= d.target.data.Timeline_Chapter_Death;
                     else
                        filteredvalue =  d.target.data.Death_Year;   
-                   return filteredvalue >= min && filteredvalue <= max
-               })
+                    if(selected_allegiances.length > 0)
+                        return selected_allegiances.includes(d.target.data.Allegiances) && filteredvalue >= min && filteredvalue <= max;
+                    else
+                        return filteredvalue >= min && filteredvalue <= max;
+               
+                    })
             .attr("stroke-opacity", 1)
    
        }

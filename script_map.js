@@ -115,7 +115,7 @@ forward_button_img = "assets/forward_button.png"
         const g_slider=svg.append("g").style("position", "sticky")
           var v1 = 0, v2 = 343;
          var sliderVals = [v1, v2];
-        var views = ["Book", "Years"];
+        var views = ["Books", "Years"];
         var currview = 0; // 0 -> BOOKS, 1 -> YEARS
         const slider_imgs = []
         slider_imgs[0] = slider_books_bar_img;
@@ -190,19 +190,35 @@ forward_button_img = "assets/forward_button.png"
     // ---------------------------//
     //      Slider - buttons      // 
     // --------------------------// 
+    var clickedhandle;
 
-var slider_button = g_slider.selectAll("rect")
+var slider_button_upper = g_slider.selectAll("rect")
         .data([0, 1])
         .enter().append("svg:image")
     .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
     .style("width", "3%")
     .style("height", "auto")
-    .attr("x",d => width/1.2+ d*60)
-    .attr('y', height-60)
+    .attr("x",d => width/1.29+ d*60)
+    .attr('y', height-65)
     .attr("cursor", "pointer")
-    .on("click", (e,d) => {move_handle_one_tick(e,d)})
+    .on("click", (e,d) => {
+        clickedhandle = 1;
+        move_handle_one_tick(e,d)})
 
-    var move_handle_one_tick= function(e,d){
+        var slider_button_lower = g_slider.selectAll("rect")
+        .data([0, 1])
+        .enter().append("svg:image")
+    .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
+    .style("width", "3%")
+    .style("height", "auto")
+    .attr("x",d => width/4.6+ d*60)
+    .attr('y', height-65)
+    .attr("cursor", "pointer")
+    .on("click", (e,d) => {
+        clickedhandle = 0;
+        move_handle_one_tick(e,d)})
+
+    var move_handle_one_tick= function(e,d,){
             if(clickedhandle!=null){
            //positioning of button
            var x_handle = x_slider(sliderVals[clickedhandle==0?0:1]);
@@ -255,12 +271,12 @@ var slider_button = g_slider.selectAll("rect")
     //  Slider - handles+bar     // 
     // --------------------------// 
     const slider = g_slider.append("g")
-    .attr("transform", "translate(" + width/3 +"," + (height-50) + ")")
+    .attr("transform", "translate(" + width/3 +"," + (height-55) + ")")
         
 
    var slider_image= slider.append("svg:image")
         .attr("xlink:href", d => slider_imgs[currview] )
-        .attr("transform", "translate(-70,0)")
+        .attr("transform", "translate(-65,0)")
         .style("height", "3%")
 
 
@@ -309,14 +325,14 @@ var slider_button = g_slider.selectAll("rect")
             .style("stroke", "url(#linear-gradient)")
             .attr("transform", "translate(0,12)")
             .style("opacity", 0.6)
-            .style("stroke-width",  height/32+"px")
+            .style("stroke-width",  height/33+"px")
             .attr("x1", x_slider(sliderVals[0]))
             .attr("x2", x_slider(sliderVals[1]))
             
 
     var clickedhandle;
     var clickedhandle_node;
-    var handle = slider.selectAll("rect")
+    var handle = slider.selectAll("circle")
         .data([0, 1])
         .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
         .attr("class", d=> "handle"+d)
@@ -325,9 +341,9 @@ var slider_button = g_slider.selectAll("rect")
         .style("width", "4.5%")
         .style("height", "auto")
         .style("cursor", "pointer")
-        .on("click", (e,d)=> {
-            clickedhandle == d ? clickedhandle = null : clickedhandle = d;
-
+        .on("mouseover", ()=> {
+            d3.select(this).attr("stroke", "#493521")
+            .attr("stroke-width", "3px")
         })
         .call(
             d3.drag()
@@ -445,12 +461,12 @@ var slider_button = g_slider.selectAll("rect")
                                 d3.select(this)
                                 .attr("stroke-width", "1px")
                                 .attr("stroke", "black")})    
-    view_selector.attr("x", -width/5)
-                    .attr("y", -15)        
+    view_selector.attr("x", -width/3.4)
+                    .attr("y", -10)        
   
     var slider_selector_text = slider.append("text")
           .attr("x",view_selector.attr("x")*0.9)
-          .attr("y", -view_selector.attr("y"))
+          .attr("y", 20)
           .attr("font-size","25px")
           .attr("cursor", "pointer")
           .text(views[currview] + " view");
@@ -482,7 +498,7 @@ var slider_button = g_slider.selectAll("rect")
         xMin = x_slider(0);
         xMax = x_slider(343);
        
-          slider_image.attr("transform", "translate(-85,0)")
+          slider_image.attr("transform", "translate(-65,0)")
           selRange.style("stroke", "url(#linear-gradient)")
         
       }
@@ -492,12 +508,12 @@ var slider_button = g_slider.selectAll("rect")
         sliderVals=[v1,v2];
         x_slider = d3.scaleLinear()
         .domain([297, 300]) 
-        .range([width/15+10,width/3.22+10])
+        .range([width/15+10,width/3.3+10])
         .clamp(true);
 
         xMin = x_slider(297);
         xMax = x_slider(300);
-        slider_image.attr("transform", "translate(80,0)")
+        slider_image.attr("transform", "translate(90,0)")
         selRange.style("stroke", "#94C2ED")
       }
       selRange

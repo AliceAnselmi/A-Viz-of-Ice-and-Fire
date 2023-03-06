@@ -472,5 +472,34 @@ emblems.append("svg:image")
             .style("visibility", "hidden")
     }
 
+   // ---------------------------//
+    //      SFX - WebAudio API        // 
+    // --------------------------// 
+   const ctx = new AudioContext();
+   let audio;
 
-   
+   fetch ("./assets/sfx/bell edit.mp3")
+    .then(data => data.arrayBuffer()) // insert data from mp3 to an array (buffer)
+    .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+    .then(decodedAudio => {
+        audio = decodedAudio; // assign audio to decoded audio 
+    }); // can now be utilized with nodes
+
+    // play sound function
+
+    function playback(){
+        const playSound = ctx.createBufferSource();
+        playSound.buffer = audio;
+        playSound.connect(ctx.destination);
+        playSound.start(ctx.currentTime);
+
+    }
+
+    //event playbutton
+    window.addEventListener("keydown", playback); 
+
+
+
+
+
+ 

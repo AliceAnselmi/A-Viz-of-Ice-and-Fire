@@ -11,20 +11,85 @@ forward_button_img = "assets/forward_button.png"
 
 
     const width = window.innerWidth;
-    const height = width
+    const height = window.innerHeight;
 
 
-    const svg = d3.select("#main_svg")
-                    .attr("width", width)
-                    .attr("height", height)
-    const g = svg.append("g")
-
-
-    g.append("svg:image")
-        .attr("xlink:href", d => map_img)
-        .style('width', "100%")
-        .style("height", "auto")
-
+     
+    const svg = create_mapview();
+    var g;
+ 
+        function create_mapview()
+        {
+            const map_svg = d3.select("#main_svg")
+                //.attr("viewBox", "0 0 1000 1000")
+                .attr("preserveAspectRatio", "xMinYMin slice")
+        
+            g = map_svg.append("g")
+        
+            const map_image = g.append("svg:image")
+                .attr("href", d => map_img)
+                //.attr('width', "100%")
+                //.attr("height", "100%")
+                .attr('x', "0")
+                .attr('y', "0")
+                //.attr("preserveAspectRatio", "xMinYMin slice")
+        
+            map_width = parseInt(map_image.style("width"));
+            map_height = parseInt(map_image.style("height"));
+        
+            g.append("rect")
+                .attr("width", 10)
+                .attr("height", 10)
+                .attr("x", map_width/2 - 5)
+                .attr("y", map_height/2 - 5)
+                .attr("fill", "#ff00ff");
+        
+            // Zoom
+            function handleZoom(e) {
+                g.attr("transform", e.transform);
+                g.attr("scale", e.scale);
+            }
+        
+            // FIXME: Change these values when the viewport is resized!
+            viewport_width = parseInt(map_svg.style("width"))
+            viewport_height = parseInt(map_svg.style("height"))
+        
+            min_scale_x = viewport_width / map_width;
+            min_scale_y = viewport_height / map_height;
+            min_scale = Math.max(min_scale_x, min_scale_y);
+        
+            let zoom = d3.zoom()
+                .touchable(true)
+                .scaleExtent([min_scale, 8])
+                .translateExtent([[0,0], [map_width, map_height]])
+                .on("zoom", handleZoom)
+            map_svg.call(zoom);
+        
+            zoom.scaleBy(map_svg, min_scale);
+        
+            d3.select(window).on("resize", function() {
+                viewport_width = parseInt(map_svg.style("width"))
+                viewport_height = parseInt(map_svg.style("height"))
+            
+                min_scale_x = viewport_width / map_width;
+                min_scale_y = viewport_height / map_height;
+                min_scale = Math.max(min_scale_x, min_scale_y);
+        
+                console.log("resize")
+                console.log(viewport_width)
+                console.log(min_scale)
+        
+                zoom.scaleExtent([min_scale, 8])
+        
+                map_svg.node().dispatchEvent(new WheelEvent(1));
+        
+            });
+        
+            console.log(zoom)
+        
+            return map_svg
+        }
+        
 
 
 
@@ -47,7 +112,7 @@ forward_button_img = "assets/forward_button.png"
     // ---------------------------//
     //          Slider           // 
     // --------------------------// 
-        const g_slider=g.append("g").attr("transform", "translate(0," + (height/1.25) + ")")
+        const g_slider=svg.append("g").style("position", "sticky")
           var v1 = 0, v2 = 343;
          var sliderVals = [v1, v2];
         var views = ["Book", "Years"];
@@ -58,8 +123,6 @@ forward_button_img = "assets/forward_button.png"
 
 
 
-      
-  
    // ---------------------------//
     //      Slider - infos        // 
     // --------------------------// 
@@ -101,7 +164,7 @@ forward_button_img = "assets/forward_button.png"
             )  
     }
     var slider_infos =g_slider.append('g')
-      .attr("transform", "translate(" + width/3 +",0)")
+      .attr("transform", "translate(" + width/3 +"," + (height- 140)+")")
     slider_infos.append("svg:image")
         .attr("xlink:href", d => slider_info_bg_img)
         .style("width", "40%")
@@ -112,20 +175,18 @@ forward_button_img = "assets/forward_button.png"
             .attr("text-anchor", "middle")
               .attr("font-size","38px")
               .attr("x",width/5)
-              .attr("y",height/38)
+              .attr('y', 40)
    update_slider_infos(sliderVals[0], sliderVals[1]);
              
             
-
-    
-
-    //brown slider background
-    g_slider.append("svg:image")
+   
+            
+        //brown slider background
+        g_slider.append("svg:image")
         .attr("xlink:href", d => slider_bg_img)
         .style("width", "100%")
         .style("height", "auto")
-        .attr('y', 60)
-
+        .attr('y', height-80)
     // ---------------------------//
     //      Slider - buttons      // 
     // --------------------------// 
@@ -137,7 +198,7 @@ var slider_button = g_slider.selectAll("rect")
     .style("width", "3%")
     .style("height", "auto")
     .attr("x",d => width/1.2+ d*60)
-    .attr("y",height/21)
+    .attr('y', height-60)
     .attr("cursor", "pointer")
     .on("click", (e,d) => {move_handle_one_tick(e,d)})
 
@@ -194,13 +255,13 @@ var slider_button = g_slider.selectAll("rect")
     //  Slider - handles+bar     // 
     // --------------------------// 
     const slider = g_slider.append("g")
-    .attr("transform", "translate(" + width/3 +",90)")
+    .attr("transform", "translate(" + width/3 +"," + (height-50) + ")")
         
 
    var slider_image= slider.append("svg:image")
         .attr("xlink:href", d => slider_imgs[currview] )
-        .attr("transform", "translate(-85,0)")
-        .style("height", "1.5%")
+        .attr("transform", "translate(-70,0)")
+        .style("height", "3%")
 
 
 
@@ -246,9 +307,9 @@ var slider_button = g_slider.selectAll("rect")
             .data(x_slider.range())
             .attr("class", "sel-range")
             .style("stroke", "url(#linear-gradient)")
-            .attr("transform", "translate(0,"+ height/130+")")
+            .attr("transform", "translate(0,12)")
             .style("opacity", 0.6)
-            .style("stroke-width",  height/65+"px")
+            .style("stroke-width",  height/32+"px")
             .attr("x1", x_slider(sliderVals[0]))
             .attr("x2", x_slider(sliderVals[1]))
             
@@ -260,13 +321,8 @@ var slider_button = g_slider.selectAll("rect")
         .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
         .attr("class", d=> "handle"+d)
         .attr("x", d => x_slider(sliderVals[d])-30)
-        .attr('y', (d)=>{
-            if(d == 0)
-                return -5;
-            else
-                return -150;
-        })
-        .style("width", "4%")
+        .attr('y',-25)
+        .style("width", "4.5%")
         .style("height", "auto")
         .style("cursor", "pointer")
         .on("click", (e,d)=> {
@@ -390,7 +446,7 @@ var slider_button = g_slider.selectAll("rect")
                                 .attr("stroke-width", "1px")
                                 .attr("stroke", "black")})    
     view_selector.attr("x", -width/5)
-                    .attr("y", -height/120)        
+                    .attr("y", -15)        
   
     var slider_selector_text = slider.append("text")
           .attr("x",view_selector.attr("x")*0.9)
@@ -455,57 +511,6 @@ var slider_button = g_slider.selectAll("rect")
       
     }
 
-    // ---------------------------//
-    //            Zoom           //
-    // --------------------------// 
-    let zoom = d3.zoom()
-        .scaleExtent([0.8, 8])
-        .translateExtent([[0,0], [width, height]])
-        .on("zoom", handleZoom)
-
-    function handleZoom(e) {
-        g.attr("transform", e.transform)
-    }
-   svg.call(zoom);
-
-
-    function updateMap(min, max, currview) {
-     var filteredvalue;
-        d3.selectAll(".emblems")
-            .filter((d) => {
-              if(currview==0)
-                filteredvalue= d.Timeline_Chapter_Death;
-              else
-                filteredvalue = d.Death_Year;
-                
-                  return filteredvalue < min || filteredvalue > max
-            })
-            .attr("opacity", 0)
-            .attr("pointer-events", "none");
-
-        d3.selectAll(".emblems")
-            .filter((d) => {
-                if(currview==0)
-                    filteredvalue= d.Timeline_Chapter_Death
-                 else
-                    filteredvalue = d.Death_Year;
-                return filteredvalue >= min && filteredvalue <= max
-            })
-            .attr("opacity", 1)
-            .attr("pointer-events", "all");
-
-    }
-  
-
-
-
-    //CSV FUNCTIONS
-    Promise.all([
-        d3.csv("data/character-deaths.csv"),
-        d3.csv("data/locations-coordinates.csv"),
-    ]).then(function(files) {
-        const data = files[0];
-        const coordinates = files[1];
 
         
     // ---------------------------//
@@ -550,8 +555,8 @@ var slider_button = g_slider.selectAll("rect")
             .attr("xlink:href", "assets/menu_rect.png")
             .style('width', "12%")
             .style("height", "auto")
-            .attr('x',-180)
-            .attr('y', height/20)
+            .attr('x',-200)
+            .attr("y",20)
 
         
         var filter_button=g_filter.append("svg:image")
@@ -559,18 +564,18 @@ var slider_button = g_slider.selectAll("rect")
             .style('width', "5%")
             .style("height", "auto")
             .attr('x',0)
-            .attr('y',  height/20)
+            .attr("y",20)
             
 
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x",-120)
-        .attr("y",height/20+50)
+        .attr("x",-140)
+        .attr("y",80)
         .html("Filter by")
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x",-100)
-        .attr("y",height/20+90)
+        .attr("x",-120)
+        .attr("y",120)
         .html("house")
 
          var filter_menu_open = false;
@@ -592,7 +597,7 @@ var slider_button = g_slider.selectAll("rect")
 
         var allegiances = ["Arryn", "Baratheon", "Greyjoy", "Lannister", "Martell", "Night's Watch", "Stark", "Targaryen", "Tully", "Tyrell", "Wildling", "None"]
     
-        var emblemX=-95;
+        var emblemX=-115;
         var emblemY=height/20 + 150;
         var filters = g_filter.selectAll('.filters')
                                 .data(allegiances)
@@ -676,14 +681,14 @@ var slider_button = g_slider.selectAll("rect")
                         .attr("id", "reset_rect")
                         .attr('width', 120)
                         .attr('height', 30)
-                        .attr("x",-120)
+                        .attr("x",-140)
                         .attr("y",height/20 + 550)
                         .attr('stroke', 'black')
                         .attr('fill', 'white')
                          
             g_reset.append("text")
                         .attr("font-size","28px")
-                        .attr("x",-100)
+                        .attr("x",-110)
                         .attr("y",height/20 + 575)
                         .text("Reset")    
                         .attr("cursor", "pointer");     
@@ -702,105 +707,309 @@ var slider_button = g_slider.selectAll("rect")
     // --------------------------// 
 
 
-    var emblems = g.selectAll('.emblems')
-    .data(data)
-    .enter()
-    .append('g')
-    .attr('class', 'emblems')
+    var map_img = "assets/speculative_map_cut.jpg"
 
+    var selected_emblem = null;
+    
+    var forceSimulation = null;
+    
+    var location_to_deaths = {}
+    var place_to_coordinate = {}
+    var p = Promise.all([
+        d3.csv("data/character-deaths.csv"),
+        d3.csv("data/locations-coordinates.csv"),
+    ])
+    .then(function(files) {
+        const data = files[0];
+        const coordinates = files[1];
+        place_to_coordinate = Object.fromEntries(coordinates.map(x => [x.Location, x]));
+    
+        data.forEach(person => {
+            let location = person.Death_Location;
+            if (location in location_to_deaths)
+            {
+                location_to_deaths[location].push(person);
+            }
+            else 
+            {
+                location_to_deaths[location] = [person];
+            }
+        });
+    
+        emblems = create_emblems(svg);
+    })
+    .catch(function(err) {
+        alert(err);
+    });
+   
+    function create_emblems(map)
+    {
+        const emblem_g = map.select("g").append("g").attr("class", "emblems")
+        map_image = map.select("image")
+        map_width = parseInt(map_image.style("width"));
+        map_height = parseInt(map_image.style("height"));
+    
+        console.log(location_to_deaths)
+        // FIXME: Make a parent element to all emblems
+        const emblems = emblem_g.selectAll('.emblem')
+            .data(Object.values(location_to_deaths))
+            .join('g')
+            .attr('transform', (d) => {
+               
+                let coord = place_to_coordinate[d[0].Death_Location];
+                return `translate(${coord.x_pixels},${coord.y_pixels})`
+            })
+            .on("click", click)
+            
+    
+        
+        emblems
+            .append('svg:image')
+            .attr('class', 'emblem')
+            .attr("xlink:href", (d) => {
+                console.log(d[0].Allegiances)
+                // FIXME: We want to display all allegiances here...
+                var allegiance = d[0].Allegiances;
+                //var allegiance = d.Allegiances
+                return "assets/emblems/" + allegiance +".PNG"
+            })
+            .style('width', "2%")
+            .style("height", "auto")
+            .attr("cursor", "pointer");
+    
+        map_image.on("click", function (e, d) { deselect_emblem(selected_emblem); 
+        selected_emblem = null;  });
+        return emblems
+    
+        function click(e, d)
+        {
+            emblem = d3.select(this)
+            deselect_emblem(selected_emblem, d)
+            selected_emblem = emblem;
+            select_emblem(emblem, d)
+            updateMap(v1, v2, currview);
+        }
+    }
+    
+    function select_emblem(emblem, data)
+    {
+        
+        center = ({id: 0, data: data, x: 0, y: 0, fx: 0, fy: 0})
+        function intern(value) {
+            return value !== null && typeof value === "object" ? value.valueOf() : value;
+        }
+    
+        nodes = [center]
+        map = d3.map(data, (d, i) => ({id: i, data: d, x: 0, y: 0})).map(intern);
+        nodes = nodes.concat(map)
+        //nodes = map
+        links = d3.map(map, (d, i) => ({source: center, target: d}));
+    
+        //console.log(nodes)
+        //console.log(links)
+        const forceNode = d3.forceManyBody()
+            //.distanceMax(10)
+            .distanceMin(40)
+        const forceLink = d3.forceLink(links)
+            .id(({index: i}) => i)
+            .distance((d) => Math.random() * 70 + 35)
+    
+        link = emblem.append("g")
+            .attr("class", "lines")
+            .attr("stroke", "black")
+            .attr("stroke-opacity", 1)
+            .attr("stroke-width", 1)
+            //.attr("stroke-linecap", linkStrokeLinecap)
+            .selectAll("line")
+            .data(links)
+            .join("line")
+            .attr("class", "line_link")
+    
+        node = emblem.selectAll(".popup")
 
-emblems.append("svg:image")
-    .attr("xlink:href", (d) => {
-        var allegiance = d.Allegiances
-        return "assets/emblems/" + allegiance +".PNG"
-    })
-    .style('width', "1%")
-    .style("height", "auto")
-    .attr('x', (d) => {
-        var coords = process_coordinates(d)
-        var ranNum = Math.ceil(Math.random() * 12) * (Math.round(Math.random()) ? 1 : -1)
-        return coords[0] + ranNum;
-    })
-    .attr('y', (d) => {
-        var coords = process_coordinates(d)
-        var ranNum = Math.ceil(Math.random() * 12) * (Math.round(Math.random()) ? 1 : -1)
-        return coords[1] + ranNum;
-    })
-    .on("mouseover", mouseover)
-    .on("mousemove", mousemove)
-    .on("mouseleave", mouseleave)
-    .on("click", mouseclick)
-    }).catch(function(err) {
-        // handle error here
-    })
-
+            .data(map)
+            .join("svg:image")
+            .attr("class", "popup")
+            .attr("xlink:href", (d) => {
+                // FIXME: We want to display all allegiances here...
+                var allegiance = d.data.Allegiances;
+                //var allegiance = d.Allegiances
+                return "assets/emblems/" + allegiance +".PNG"
+            })
+            .attr('width', "3%")
+            .attr("height", "3%")
+            .attr('x', 0)
+            .attr('y', 0)
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
+            .on("click", mouseclick);
+        
+        forceSimulation = d3.forceSimulation(nodes)
+            .force("link", forceLink)
+            .force("charge", forceNode)
+            .force("center", d3.forceCenter())
+            .on("tick", tick)
+    
+        emblem.select(".emblem").attr("visibility", "hidden");
+    
+        return
+    
+        function tick()
+        {
+            link
+                .attr("x1", function (d) { return d.source.x; })
+                .attr("y1", function (d) { return d.source.y; })
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+    
+            node
+                .attr("x", function (d) { return d.x - (this.width.animVal.value / 2); })
+                .attr("y", function (d) { return d.y - (this.height.animVal.value / 2); });
+        }
+        
+         
     
 
     //-----------------------------//
-    //Emblems mouse hover functions//
+    //  Emblems mouse functions   //
     // ---------------------------//
 
 
-    var mouseover = function(d) {
-        
-        d3.select(this.parentNode).raise();
-        tooltip
-            .style("visibility", "visible")
-    }
-    var mousemove = function(e, d) {
-      var firstBook = ""
-      if (d.GoT == 1) {
-        firstBook += "Game of thrones, chapter "
-      }
-      else if (d.CoK == 1) {
-        firstBook += "A Clash of Kings, chapter "
-      }
-      else if (d.SoS == 1) {
-        firstBook += "A Storm of Swords, chapter "
-      }
-      else if (d.FfC == 1) {
-        firstBook += "A Feast for Crows, chapter "
-      }
-      else if (d.DwD == 1) {
-        firstBook += "A Dance with Dragons, chapter "
-      } else { 
-        firstBook += "Opsie whoopsie! Something went fuckywucky (•ω•`)"}
-      
-      var lastBook = ""
-      if (d.Book_of_Death == 1) {
-        lastBook += "Game of thrones"
-      }
-      else if (d.Book_of_Death == 2) {
-        lastBook += "A Clash of Kings"
-      }
-      else if (d.Book_of_Death == 3) {
-        lastBook += "A Storm of Swords"
-      }
-      else if (d.Book_of_Death == 4) {
-        lastBook += "A Feast for Crows"
-      }
-      else if (d.Book_of_Death == 5) {
-        lastBook += "A Dance with Dragons"
-      } else { 
-        lastBook += "(`•ω•) γʞɔυwγʞɔυʇ Ɉnǝw ϱniʜɈǝmoƧ !ǝiƨqooʜw ǝiƨqO"
-      }
-        tooltip
-            .style('top', e.clientY - 20 + 'px')
-            .style('left', e.clientX + 20 + 'px')
-            .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in " + lastBook + ", chapter " + d.Death_Chapter + "<br>")
-    }
-    var mouseleave = function(d) {
-       
-        tooltip
-            .style("visibility", "hidden")
-    }
 
     var mouseclick = function(e,d) {
 
         //tooltip's position is now fixed
-
-            
+       
     }
+
+        function mouseover(d)
+        {
+            // What odes this do?
+            d3.select(this.parentNode).raise();
+            tooltip.style("visibility", "visible");
+        }
+    
+        function mousemove(e, d)
+        {
+            d = d.data
+            console.log(d)
+            
+            var firstBook = ""
+            if (d.GoT == 1) {
+              firstBook += "Game of thrones, chapter "
+            }
+            else if (d.CoK == 1) {
+              firstBook += "A Clash of Kings, chapter "
+            }
+            else if (d.SoS == 1) {
+              firstBook += "A Storm of Swords, chapter "
+            }
+            else if (d.FfC == 1) {
+              firstBook += "A Feast for Crows, chapter "
+            }
+            else if (d.DwD == 1) {
+              firstBook += "A Dance with Dragons, chapter "
+            } else { 
+              firstBook += "Opsie whoopsie! Something went fuckywucky (•ω•`)"}
+            
+            var lastBook = ""
+            if (d.Book_of_Death == 1) {
+              lastBook += "Game of thrones"
+            }
+            else if (d.Book_of_Death == 2) {
+              lastBook += "A Clash of Kings"
+            }
+            else if (d.Book_of_Death == 3) {
+              lastBook += "A Storm of Swords"
+            }
+            else if (d.Book_of_Death == 4) {
+              lastBook += "A Feast for Crows"
+            }
+            else if (d.Book_of_Death == 5) {
+              lastBook += "A Dance with Dragons"
+            } else { 
+              lastBook += "(`•ω•) γʞɔυwγʞɔυʇ Ɉnǝw ϱniʜɈǝmoƧ !ǝiƨqooʜw ǝiƨqO"
+            }
+              tooltip
+                  .style('top', e.clientY - 20 + 'px')
+                  .style('left', e.clientX + 20 + 'px')
+                  .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in " + lastBook + ", chapter " + d.Death_Chapter + "<br>")
+         
+        
+        }
+    
+        function mouseleave(d)
+        {
+            tooltip.style("visibility", "hidden");
+        }
+    }
+    
+    function deselect_emblem(emblem)
+    {
+        if (emblem == null) return;
+        forceSimulation.stop();
+    
+        emblem.select(".emblem").attr("visibility", "visible")
+    
+        emblem.selectAll(".popup").remove();
+        // FIXME: remove the <g> tags
+        emblem.selectAll(".lines").remove();
+    }
+    
+    // This function takes care of filtering the elements that are visible
+    function update_timeperiod(emblems)
+    {
+    
+    }
+    
+    
+    function updateMap(min, max, currview) {
+        var filteredvalue;
+           d3.selectAll(".popup")
+               .filter((d) => {
+                 if(currview==0)
+                   filteredvalue= d.data.Timeline_Chapter_Death;
+                 else
+                   filteredvalue = d.data.Death_Year;
+                   
+                     return filteredvalue < min || filteredvalue > max
+               })
+               .attr("visibility", "hidden")
+               .attr("pointer-events", "none");
+   
+           d3.selectAll(".popup")
+               .filter((d) => {
+                   if(currview==0)
+                       filteredvalue= d.data.Timeline_Chapter_Death
+                    else
+                       filteredvalue = d.data.Death_Year;
+                   return filteredvalue >= min && filteredvalue <= max
+               })
+               .attr("visibility", "visible")
+               .attr("pointer-events", "all");
+
+               d3.selectAll(".line_link")
+               .filter((d) => {
+                 if(currview==0)
+                   filteredvalue= d.target.data.Timeline_Chapter_Death;
+                 else
+                   filteredvalue = d.target.data.Death_Year;   
+                return filteredvalue < min || filteredvalue > max
+               })
+               .attr("stroke-opacity", 0)
+
+               d3.selectAll(".line_link")
+               .filter((d) => {
+                   if(currview==0)
+                       filteredvalue= d.target.data.Timeline_Chapter_Death;
+                    else
+                       filteredvalue =  d.target.data.Death_Year;   
+                   return filteredvalue >= min && filteredvalue <= max
+               })
+            .attr("stroke-opacity", 1)
+   
+       }
 
 
      // ---------------------------//
@@ -868,4 +1077,4 @@ emblems.append("svg:image")
         }
      
     }
-    
+

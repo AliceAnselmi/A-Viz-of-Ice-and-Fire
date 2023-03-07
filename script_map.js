@@ -63,7 +63,8 @@ forward_button_img = "assets/forward_button.png"
                 .scaleExtent([min_scale, 8])
                 .translateExtent([[0,0], [map_width, map_height]])
                 .on("zoom", handleZoom)
-            map_svg.call(zoom);
+                
+            map_svg.call(zoom).on("dblclick.zoom", null);
         
             zoom.scaleBy(map_svg, min_scale);
         
@@ -917,25 +918,25 @@ var slider_button_upper = g_slider.selectAll("rect")
             
             var firstBook = ""
             if (d.GoT == 1) {
-              firstBook += "Game of thrones, chapter "
+              firstBook += "A Game of Thrones "
             }
             else if (d.CoK == 1) {
-              firstBook += "A Clash of Kings, chapter "
+              firstBook += "A Clash of Kings"
             }
             else if (d.SoS == 1) {
-              firstBook += "A Storm of Swords, chapter "
+              firstBook += "A Storm of Swords"
             }
             else if (d.FfC == 1) {
-              firstBook += "A Feast for Crows, chapter "
+              firstBook += "A Feast for Crows"
             }
             else if (d.DwD == 1) {
-              firstBook += "A Dance with Dragons, chapter "
+              firstBook += "A Dance with Dragons,"
             } else { 
               firstBook += "Opsie whoopsie! Something went fuckywucky (•ω•`)"}
             
             var lastBook = ""
             if (d.Book_of_Death == 1) {
-              lastBook += "Game of thrones"
+              lastBook += "A Game of thrones"
             }
             else if (d.Book_of_Death == 2) {
               lastBook += "A Clash of Kings"
@@ -954,7 +955,9 @@ var slider_button_upper = g_slider.selectAll("rect")
               tooltip
                   .style('top', e.clientY - 20 + 'px')
                   .style('left', e.clientX + 20 + 'px')
-                  .html("Name: " + d.Name + "<br> Allegiance: " + d.Allegiances + "<br> Year of death: " + d.Death_Year + " AC <br> Death location: " + d.Death_Location + "<br> First appeared in " + firstBook + d.Book_Intro_Chapter + "<br> Last appeared in " + lastBook + ", chapter " + d.Death_Chapter + "<br>")
+                  .html("<b>Name: </b>" + d.Name + "<br> <b> Allegiance: </b>" + d.Allegiances + "<br> <b> Year of death: </b>" + d.Death_Year + 
+                  " AC <br><b> Death location: </b>" + d.Death_Location + "<br> <b>First appeared in: </b> " + firstBook+", chapter " + d.Book_Intro_Chapter + 
+                  "<br> <b> Last appeared in: </b>" + lastBook + ", chapter " + d.Death_Chapter + "<br>")
          
         
         }

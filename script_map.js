@@ -12,8 +12,6 @@ forward_button_img = "assets/forward_button.png"
 
     const width = window.innerWidth;
     const height = window.innerHeight;
-
-
      
     const svg = create_mapview();
     var g;
@@ -785,15 +783,21 @@ var slider_button_upper = g_slider.selectAll("rect")
     
         
         emblems
-            .append('svg:image')
+            // .append('svg:image')
+            .append("circle")
+            .attr("r", 15)
+            .attr("fill", "blue")
+            .attr("stroke", "black")
+            .attr("stroke-width", "1px")
+            .attr("opacity", 0.7)
             .attr('class', 'emblem')
-            .attr("xlink:href", (d) => {
-                // console.log(d[0].Allegiances)
-                // FIXME: We want to display all allegiances here...
-                var allegiance = d[0].Allegiances;
-                //var allegiance = d.Allegiances
-                return "assets/emblems/" + allegiance +".PNG"
-            })
+            // .attr("xlink:href", (d) => {
+            //     // console.log(d[0].Allegiances)
+            //     // FIXME: We want to display all allegiances here...
+            //     var allegiance = d[0].Allegiances;
+            //     //var allegiance = d.Allegiances
+            //     return "assets/emblems/" + allegiance +".PNG"
+            // })
             .style('width', "2%")
             .style("height", "auto")
             .attr("cursor", "pointer");

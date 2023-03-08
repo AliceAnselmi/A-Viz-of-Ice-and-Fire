@@ -1104,16 +1104,16 @@ var g;
     .style("position", "sticky")
             .style('width', "4%")
             .style("height", "auto")
-            .attr('x',width-150)
+            .attr('x',width*0.92)
             .attr('y',  height/20)
             .style("position", "sticky")
             .style("cursor", "pointer")
             .on("click", ()=> {display_credits_menu()})
 
     var credits_rect = g_credits.append("svg:image")
-    .attr("xlink:href", "assets/menu_rect.png")
+    .attr("xlink:href", "assets/credits_rect.png")
     .attr("class", "credits_menu")
-    .style('width', "11.5%")
+    .style('width', "16%")
     .style("height", "auto")
     .attr('x',width)
     .attr('y', height/20)
@@ -1128,24 +1128,33 @@ var g;
     .style("cursor", "pointer")
     .on("click", ()=> {display_credits_menu()})
 
+
     g_credits.append("text")
     .attr("class", "credits_menu")
         .attr("font-size","33px")
         .attr("x",width+20)
-        .attr("y",height/20+120)
-        .text("Instructions")
+        .attr("y", height/20+120)
+        .text("Known bugs")
+
+    function append_text_to_credits(text, offset){
         g_credits.append("text")
         .attr("class", "credits_menu")
             .attr("font-size","20px")
             .attr("x",width+20)
-            .attr("y",height/20+180)
-            .text("Reload the page :)")
-    
+            .attr("y",height/20+offset)
+            .text(text)
+    }
+    append_text_to_credits("- Reload needed the first time", 160)
+    append_text_to_credits("- Circles don't disappear when", 200)
+    append_text_to_credits("  all people that died there have ", 230)
+    append_text_to_credits("  been filtered out",  260)
+    append_text_to_credits("- No rescale", 300)
+
     g_credits.append("text")
     .attr("class", "credits_menu")
         .attr("font-size","33px")
         .attr("x",width+20)
-        .attr("y",height/20+600)
+        .attr("y", height/20+600)
         .text("Credits")
 
     var credits_menu_open = false;
@@ -1154,7 +1163,7 @@ var g;
         credits_menu_open = true;
     d3.selectAll(".credits_menu")
         .transition()
-        .attr("transform","translate(-200,0)");
+        .attr("transform","translate("+ (-width/6) +",0)");
     }
 
     else{

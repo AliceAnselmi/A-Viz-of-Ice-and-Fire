@@ -13,8 +13,8 @@ forward_button_img = "assets/forward_button.png"
    
      
 const svg = create_mapview();
-const width =  svg.node().getBoundingClientRect().width
-const height =  svg.node().getBoundingClientRect().height
+const width =  window.innerWidth
+const height =  window.innerHeight
 var g;
 
     function create_mapview()
@@ -601,7 +601,7 @@ var g;
             .attr("xlink:href", "assets/menu_rect.png")
             .style('width', "12%")
             .style("height", "auto")
-            .attr('x',-200)
+            .attr('x', -width/9)
             .attr("y",20)
 
         
@@ -659,8 +659,8 @@ var g;
                                 .attr("xlink:href",(d) => {
                                     return "assets/emblems/" + d +".PNG"
                                 })
-                                .attr("width", "3.7%")
-                                .attr("x", -1.2)
+                                .attr("width", "3.6%")
+                                .attr("x", 0)
                                 .attr("y", -1.5)
             var selected_allegiances=[];
                 filters
@@ -1113,7 +1113,7 @@ var g;
     var credits_rect = g_credits.append("svg:image")
     .attr("xlink:href", "assets/menu_rect.png")
     .attr("class", "credits_menu")
-    .style('width', "12%")
+    .style('width', "11.5%")
     .style("height", "auto")
     .attr('x',width)
     .attr('y', height/20)

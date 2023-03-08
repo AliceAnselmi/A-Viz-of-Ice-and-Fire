@@ -659,8 +659,8 @@ var g;
                                 .attr("xlink:href",(d) => {
                                     return "assets/emblems/" + d +".PNG"
                                 })
-                                .attr("width", "3.6%")
-                                .attr("x", 0)
+                                .attr("width", "3.7%")
+                                .attr("x", -1)
                                 .attr("y", -1.5)
             var selected_allegiances=[];
                 filters

@@ -660,7 +660,7 @@ var g;
                                     return "assets/emblems/" + d +".PNG"
                                 })
                                 .attr("width", "3.7%")
-                                .attr("x", -width*0.0005)
+                                .attr("x", -0.5)
                                 .attr("y", -1.5)
             var selected_allegiances=[];
                 filters

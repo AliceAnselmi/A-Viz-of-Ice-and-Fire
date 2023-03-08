@@ -2,6 +2,9 @@
 html, body {
     margin: 0;
     background: #FFFFFF;
+    min-width: 600px;
+    min-height: 480px;
+
 }
 
 body, svg {
@@ -13,13 +16,43 @@ body, svg {
     flex-flow: column;
 }
 
+.ui{
+    display: inline-block;
+    position: sticky;
+    height: 0px;
+    width: 0px;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    color: transparent;
+    z-index: 10;
+}
+
+#sidebar_svg{
+    min-height: 500px;
+    object-position: center;
+
+
+}
+
+#bottombar_svg{
+    object-position: bottom center;
+
+    display: inline;
+    position: fixed;
+
+}
+
 #main_svg {
     display: inline-block;
-    /*overflow: hidden;*/
+    overflow: hidden;
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 98vh;
+    height: 100%;
+
+
 }
 
 #main_svg g image {

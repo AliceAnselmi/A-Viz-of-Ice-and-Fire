@@ -814,7 +814,7 @@ var slider_button_upper = g_slider.selectAll("rect")
             select_emblem(emblem, d)
             updateMap(v1, v2, currview);
 
-            
+            //window.alert("in click function")
 
         }
     }
@@ -896,8 +896,37 @@ var slider_button_upper = g_slider.selectAll("rect")
                 .attr("y", function (d) { return d.y - (this.height.animVal.value / 2); });
         }
         
-         
-    
+     
+      //-----------------------------//
+    //  play sound template   //
+    // ---------------------------//
+
+    /*
+
+    const ctx = new AudioContext();
+    let audio;
+
+    fetch ("./assets/sfx/bell edit.mp3")
+        .then(data => data.arrayBuffer()) // insert data from mp3 to an array (buffer)
+        .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+        .then(decodedAudio => {
+            audio = decodedAudio; // assign audio to decoded audio 
+        }); // can now be utilized with nodes
+
+    // play sound function
+    function playback(){
+        const playSound = ctx.createBufferSource();
+        playSound.buffer = audio;
+        playSound.connect(ctx.destination);
+        playSound.start(ctx.currentTime);
+
+    }
+
+    //event playbutton
+    window.addEventListener("keydown", playback);
+
+    */
+
 
     //-----------------------------//
     //  Emblems mouse functions   //

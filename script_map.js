@@ -693,11 +693,21 @@ var g;
                         }
                     })
 
-                    .on("click", (e,d) => {
+                    .on("click", function(e,d){
                         if(!selected_allegiances.includes(d))
                             selected_allegiances.push(d)
+                        else{
+                            var index = selected_allegiances.indexOf(d);
+                            if (index > -1) {
+                                selected_allegiances.splice(index, 1);
+                            }
+                            d3.select(this)
+                            .attr("stroke-width", "1px")
+                            .attr("stroke", "black")
+                        }
                         console.log(selected_allegiances)
-                        updateMap(v1,v2,currview)})
+                        updateMap(v1,v2,currview)
+                    })
        
             filter_button
             .attr("cursor", "pointer")

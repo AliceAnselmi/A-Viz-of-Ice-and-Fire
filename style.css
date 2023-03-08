@@ -1,0 +1,33 @@
+
+html, body {
+    margin: 0;
+    background: #FFFFFF;
+}
+
+body, svg {
+    font-family: 'Quintessential', serif;
+}
+
+.layout {
+    display: flex;
+    flex-flow: column;
+}
+
+#main_svg {
+    display: inline-block;
+    /*overflow: hidden;*/
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 95vh;
+}
+
+#main_svg g image {
+    margin: 0;
+    padding: 0;
+}
+
+.slider {
+    display: inline-block;
+    background: #000;
+}

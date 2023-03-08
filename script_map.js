@@ -595,33 +595,33 @@ var g;
 
 
         const g_filter = svg.append("g").style("position", "sticky")
-
+        .attr("transform", "translate("+ (-width/9) +", " +height/20+")")
 
         var filter_menu = g_filter.append("svg:image")
             .attr("xlink:href", "assets/menu_rect.png")
             .style('width', "12%")
             .style("height", "auto")
-            .attr('x', -width/9)
-            .attr("y",20)
+            // .attr('x', -width/9)
+            // .attr("y",20)
 
         
         var filter_button=g_filter.append("svg:image")
             .attr("xlink:href", "assets/allegiance_button.png")
             .style('width', "5%")
             .style("height", "auto")
-            .attr('x',0)
+            .attr('x',width/9)
             .attr("y",20)
             
 
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x",-140)
-        .attr("y",80)
+        .attr("x",30)
+        .attr("y",70)
         .html("Filter by")
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x",-120)
-        .attr("y",120)
+        .attr("x",50)
+        .attr("y",110)
         .html("house")
 
          var filter_menu_open = false;
@@ -630,21 +630,21 @@ var g;
          filter_menu_open = true;
 
         g_filter.transition()
-        .attr("transform","translate(150,0)");
+        .attr("transform","translate(0,"+height/20+")");
         }
 
         else{
             filter_menu_open = false;
             g_filter.transition()
-            .attr("transform","translate(0,0)");
+            .attr("transform","translate("+ (-width/9) +", " +height/20+")");
             }
          
         }
 
         var allegiances = ["Arryn", "Baratheon", "Greyjoy", "Lannister", "Martell", "Night's Watch", "Stark", "Targaryen", "Tully", "Tyrell", "Wildling", "None"]
     
-        var emblemX=-115;
-        var emblemY=height/20 + 150;
+        var emblemX=50;
+        var emblemY=height/20 + 130;
         var filters = g_filter.selectAll('.filters')
                                 .data(allegiances)
                                 .enter()
@@ -672,11 +672,11 @@ var g;
                             if(i%2 == 0)
                                 return emblemX
                             else
-                                return emblemX +80
+                                return emblemX + width/20
                         })
                     .attr('cy',(d,i)=>{
-                        return emblemY + 65*(parseInt(i/2))})
-                    .attr("r", 30)
+                        return emblemY + width/25*(parseInt(i/2))})
+                    .attr("r", width*0.018)
                     .style("fill",  (d,i) =>{
                         return "url(#pattern"+i+")"})
                     .style("cursor", "pointer")
@@ -728,15 +728,15 @@ var g;
                         .attr("id", "reset_rect")
                         .attr('width', 120)
                         .attr('height', 30)
-                        .attr("x",-140)
-                        .attr("y",height/20 + 550)
+                        .attr("x", 30)
+                        .attr("y",height*0.75)
                         .attr('stroke', 'black')
                         .attr('fill', 'white')
                          
             g_reset.append("text")
                         .attr("font-size","28px")
-                        .attr("x",-110)
-                        .attr("y",height/20 + 575)
+                        .attr("x",60)
+                        .attr("y",height*0.75 + 25)
                         .text("Reset")    
                         .attr("cursor", "pointer");     
 

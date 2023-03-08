@@ -35,13 +35,6 @@ forward_button_img = "assets/forward_button.png"
             map_width = parseInt(map_image.style("width"));
             map_height = parseInt(map_image.style("height"));
         
-            g.append("rect")
-                .attr("width", 10)
-                .attr("height", 10)
-                .attr("x", map_width/2 - 5)
-                .attr("y", map_height/2 - 5)
-                .attr("fill", "#ff00ff");
-        
             // Zoom
             function handleZoom(e) {
                 g.attr("transform", e.transform);

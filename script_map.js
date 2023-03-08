@@ -10,84 +10,86 @@ forward_button_img = "assets/forward_button.png"
 
 
 
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+   
      
-    const svg = create_mapview();
-    var g;
- 
-        function create_mapview()
-        {
-            const map_svg = d3.select("#main_svg")
-                //.attr("viewBox", "0 0 1000 1000")
-                .attr("preserveAspectRatio", "xMinYMin slice")
-        
-            g = map_svg.append("g")
-        
-            const map_image = g.append("svg:image")
-                .attr("href", d => map_img)
-                //.attr('width', "100%")
-                //.attr("height", "100%")
-                .attr('x', "0")
-                .attr('y', "0")
-                //.attr("preserveAspectRatio", "xMinYMin slice")
-        
-            map_width = parseInt(map_image.style("width"));
-            map_height = parseInt(map_image.style("height"));
-        
-            g.append("rect")
-                .attr("width", 10)
-                .attr("height", 10)
-                .attr("x", map_width/2 - 5)
-                .attr("y", map_height/2 - 5)
-                .attr("fill", "#ff00ff");
-        
-            // Zoom
-            function handleZoom(e) {
-                g.attr("transform", e.transform);
-                g.attr("scale", e.scale);
-            }
-        
-            // FIXME: Change these values when the viewport is resized!
+const svg = create_mapview();
+const width =  svg.node().getBoundingClientRect().width
+const height =  svg.node().getBoundingClientRect().height
+var g;
+
+    function create_mapview()
+    {
+        const map_svg = d3.select("#main_svg")
+            //.attr("viewBox", "0 0 1000 1000")
+            .attr("preserveAspectRatio", "xMinYMin slice")
+    
+        g = map_svg.append("g")
+    
+        const map_image = g.append("svg:image")
+            .attr("href", d => map_img)
+            //.attr('width', "100%")
+            //.attr("height", "100%")
+            .attr('x', "0")
+            .attr('y', "0")
+            //.attr("preserveAspectRatio", "xMinYMin slice")
+    
+        map_width = parseInt(map_image.style("width"));
+        map_height = parseInt(map_image.style("height"));
+    
+        g.append("rect")
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("x", map_width/2 - 5)
+            .attr("y", map_height/2 - 5)
+            .attr("fill", "#ff00ff");
+    
+        // Zoom
+        function handleZoom(e) {
+            g.attr("transform", e.transform);
+            g.attr("scale", e.scale);
+        }
+    
+        // FIXME: Change these values when the viewport is resized!
+        viewport_width = parseInt(map_svg.style("width"))
+        viewport_height = parseInt(map_svg.style("height"))
+    
+        min_scale_x = viewport_width / map_width;
+        min_scale_y = viewport_height / map_height;
+        min_scale = Math.max(min_scale_x, min_scale_y);
+    
+        let zoom = d3.zoom()
+            .touchable(true)
+            .scaleExtent([min_scale, 8])
+            .translateExtent([[0,0], [map_width, map_height]])
+            .on("zoom", handleZoom)
+            
+        map_svg.call(zoom).on("dblclick.zoom", null);
+    
+        zoom.scaleBy(map_svg, min_scale);
+    
+        d3.select(window).on("resize", function() {
             viewport_width = parseInt(map_svg.style("width"))
             viewport_height = parseInt(map_svg.style("height"))
         
             min_scale_x = viewport_width / map_width;
             min_scale_y = viewport_height / map_height;
             min_scale = Math.max(min_scale_x, min_scale_y);
-        
-            let zoom = d3.zoom()
-                .touchable(true)
-                .scaleExtent([min_scale, 8])
-                .translateExtent([[0,0], [map_width, map_height]])
-                .on("zoom", handleZoom)
-                
-            map_svg.call(zoom).on("dblclick.zoom", null);
-        
-            zoom.scaleBy(map_svg, min_scale);
-        
-            d3.select(window).on("resize", function() {
-                viewport_width = parseInt(map_svg.style("width"))
-                viewport_height = parseInt(map_svg.style("height"))
-            
-                min_scale_x = viewport_width / map_width;
-                min_scale_y = viewport_height / map_height;
-                min_scale = Math.max(min_scale_x, min_scale_y);
-        
-                console.log("resize")
-                console.log(viewport_width)
-                console.log(min_scale)
-        
-                zoom.scaleExtent([min_scale, 8])
-        
-                map_svg.node().dispatchEvent(new WheelEvent(1));
-        
-            });
-        
-            console.log(zoom)
-        
-            return map_svg
-        }
+    
+            console.log("resize")
+            console.log(viewport_width)
+            console.log(min_scale)
+    
+            zoom.scaleExtent([min_scale, 8])
+    
+            map_svg.node().dispatchEvent(new WheelEvent(1));
+    
+        });
+    
+        console.log(zoom)
+    
+        return map_svg
+    }
+    
         
 
 
@@ -112,6 +114,8 @@ forward_button_img = "assets/forward_button.png"
     //          Slider           // 
     // --------------------------// 
         const g_slider=svg.append("g").style("position", "sticky")
+        .attr("transform", "translate(0," +height*0.94+")")
+
           var v1 = 0, v2 = 343;
          var sliderVals = [v1, v2];
         var views = ["Books", "Years"];
@@ -162,134 +166,359 @@ forward_button_img = "assets/forward_button.png"
                 }
             )  
     }
-    var slider_infos =g_slider.append('g')
-      .attr("transform", "translate(" + width/3 +"," + (height- 140)+")")
-    slider_infos.append("svg:image")
-        .attr("xlink:href", d => slider_info_bg_img)
-        .style("width", "40%")
-        .style("height", "auto")
-  
 
-   var slider_infos_text = slider_infos.append("text")
-            .attr("text-anchor", "middle")
-              .attr("font-size","38px")
-              .attr("x",width/5)
-              .attr('y', 40)
-   update_slider_infos(sliderVals[0], sliderVals[1]);
-             
-            
-   
-            
+
         //brown slider background
-        g_slider.append("svg:image")
+    var slider_background = g_slider.append("svg:image")
         .attr("xlink:href", d => slider_bg_img)
         .style("width", "100%")
-        .style("height", "auto")
-        .attr('y', height-80)
-    // ---------------------------//
-    //      Slider - buttons      // 
-    // --------------------------// 
-    var clickedhandle;
+        .style("height", "13%")
+        // .attr('x', - width/3)
+        .attr('y', -height*0.04)
 
-var slider_button_upper = g_slider.selectAll("rect")
+
+       
+   
+    slider_info_translate_x = width/3;
+    slider_info_translate_y=  - 80;
+       var slider_infos =g_slider.append('g')
+         .attr("transform", "translate(" + slider_info_translate_x+"," + slider_info_translate_y+")")
+
+       slider_infos.append("svg:image")
+           .attr("xlink:href", d => slider_info_bg_img)
+           .style("width", "35%")
+           .style("height", "auto")
+
+        slider_background.raise();
+
+        slider_bar_image = g_slider.append("svg:image")
+        .attr("xlink:href", d => slider_imgs[currview] )
+        .attr("x", width/3.9)
+        .style("width", "50%")
+        .style("height","3%")
+
+    function create_slider_elems(){
+        
+        slider_bar_x = slider_bar_image.attr("x")
+        slider_bar_width = slider_bar_image.node().getBoundingClientRect().width;
+        slider_bar_height = slider_bar_image.node().getBoundingClientRect().height;
+       
+        slider_infos_text = slider_infos.append("text")
+                   .attr("text-anchor","center")
+                     .attr("font-size",height/26+"px")
+                     .attr("x", width*0.07)
+                     .attr('y', slider_infos.node().getBoundingClientRect().height/2)
+          update_slider_infos(sliderVals[0], sliderVals[1]);
+
+            // ----------------------------//
+            //  Slider - handles+bar     // 
+            // --------------------------// 
+
+  
+        x_slider = d3.scaleLinear()
+          .domain([0, 343]) 
+          .range([slider_bar_x*1.12+30,slider_bar_width*1.36+30])
+          .clamp(true);
+         xMin = x_slider(0),
+          xMax = x_slider(343)
+
+
+          var selRange = g_slider.append("line")
+          .data(x_slider.range())
+          .attr("class", "sel-range")
+          .style("stroke", "url(#linear-gradient)")
+          .attr("transform", "translate(0," + height/66 +")")
+          .style("opacity", 0.6)
+          .style("stroke-width",  height/33+"px")
+          .attr("x1", x_slider(sliderVals[0]))
+          .attr("x2", x_slider(sliderVals[1]))
+          
+          
+        var range_button_imgs = []
+        range_button_imgs[0] = range_button_low_img;
+        range_button_imgs[1] = range_button_high_img;
+        var clickedhandle;
+        var handle = g_slider.selectAll("circle")
         .data([0, 1])
-        .enter().append("svg:image")
-    .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
-    .style("width", "3%")
-    .style("height", "auto")
-    .attr("x",d => width/1.29+ d*60)
-    .attr('y', height-65)
-    .attr("cursor", "pointer")
-    .on("click", (e,d) => {
-        clickedhandle = 1;
-        move_handle_one_tick(e,d)})
+        .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
+        .attr("class", d=> "handle"+d)
+        .attr("x", d => x_slider(sliderVals[d])-30)
+        .attr('y',-25)
+        .style("width", "4.5%")
+        .style("height", "auto")
+        .style("cursor", "pointer")
+        .on("mouseover", ()=> {
+            // d3.select(this).attr("stroke", "#493521")
+            // .attr("stroke-width", "3px")
+        })
+        .call(
+            d3.drag()
+            .on("start", startDrag)
+            .on("drag", onDrag)
+            .on("end", endDrag)
+        );
+
+        function startDrag(event) {
+            d3.select(this).raise().classed("active", true)
+            .style("cursor", "grabbing")
+                                    
+        }
+
+        function onDrag(event, d) {
+            
+            //positioning of button
+            var x_cursor = event.x;         
+            var x_other_handle=x_slider(sliderVals[d==0?1:0])
+            //handle overlap
+            if(d==0){ //if lower handle
+            if(x_cursor >= x_other_handle-40){
+            x_cursor = x_other_handle
+            }
+            }else{ //otherwise
+            if(x_cursor <= x_other_handle+40 ){
+            x_cursor = x_other_handle
+            }
+            }
+
+            if(x_cursor < xMin && x_cursor <= x_other_handle+40 )
+            x_cursor= xMin;
+            else if(x_cursor > xMax && x_cursor >= x_other_handle-40)
+            x_cursor= xMax;
+
+            d3.select(this).attr("x", x_cursor-30)
+
+                selRange
+                .attr("x1",x_cursor)
+                    .attr("x2", x_other_handle)
+            var v= Math.round(x_slider.invert(x_cursor))
+            if(d==0){ //if moving lower handle
+            update_slider_infos(v, sliderVals[1]);
+            v1 = Math.min(v, sliderVals[1]);
+            v2 = Math.max(v, sliderVals[1]);
+
+            }
+        else{ //otherwise
+            update_slider_infos(sliderVals[0], v);
+            v1 = Math.min(sliderVals[0], v);
+            v2 = Math.max(sliderVals[0], v);
+        }
+            updateMap(v1, v2, currview);
+        }
+
+        function endDrag(event, d) {
+            var v;
+            var x_cursor = event.x;
+            var x_other_handle=x_slider(sliderVals[d==0?1:0])
+
+            //handle overlap
+            if(d == 0){ //if lower handle
+            if(x_cursor >= x_other_handle-40 ){
+                v=  sliderVals[1] //value of the other handle
+            }else{
+            v= Math.round(x_slider.invert(x_cursor))
+            }
+            }
+            else{ //otherwise
+            if(x_cursor <= x_other_handle+40 ){
+                v= sliderVals[0] //value of the other handle
+            }else{
+            v= Math.round(x_slider.invert(x_cursor))
+            }
+            
+            }
+            sliderVals[d] = v
+            v1 = Math.min(sliderVals[0], sliderVals[1]);
+            v2 = Math.max(sliderVals[0], sliderVals[1]);
+            
+            
+            d3.select(this)
+                .classed("active", false)
+                .attr("x", x_slider(v)-30)
+                .style("cursor", "pointer")
+
+            selRange
+                .attr("x1", x_slider(v1))
+                    .attr("x2", x_slider(v2))
+            slider_infos_text.text(  views[currview] +" " + sliderVals[0]  + " - " +sliderVals[1])
+            update_slider_infos(sliderVals[0], sliderVals[1]);
+            updateMap(v1, v2, currview);
+
+        }
+
+        // ---------------------------//
+        //      Slider - buttons      // 
+        // --------------------------// 
+        var clickedhandle;
 
         var slider_button_lower = g_slider.selectAll("rect")
-        .data([0, 1])
-        .enter().append("svg:image")
-    .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
-    .style("width", "3%")
-    .style("height", "auto")
-    .attr("x",d => width/4.6+ d*60)
-    .attr('y', height-65)
-    .attr("cursor", "pointer")
-    .on("click", (e,d) => {
-        clickedhandle = 0;
-        move_handle_one_tick(e,d)})
+            .data([0, 1])
+            .enter().append("svg:image")
+        .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
+        .style("width", "3%")
+        .style("height", "auto")
+        .attr("x",d => slider_bar_image.attr("x")*0.78 + d*60)
+        .attr('y', -10)
+        .attr("cursor", "pointer")
+        .on("click", (e,d) => {
+            clickedhandle = 0;
+            move_handle_one_tick(e,d)})
 
-    var move_handle_one_tick= function(e,d,){
-            if(clickedhandle!=null){
-           //positioning of button
-           var x_handle = x_slider(sliderVals[clickedhandle==0?0:1]);
-           
-           var curr_value= Math.round(x_slider.invert(x_handle));
-           var new_value = curr_value + (d==0?-1:1);
-           if(new_value >= x_slider.domain()[0] && new_value <= x_slider.domain()[1]){
-           x_handle= x_slider(new_value)       
-           var x_other_handle=x_slider(sliderVals[clickedhandle==0?1:0])
-         //handle overlap
-         if(clickedhandle==0){ //if lower handle
-         if(x_handle >= x_other_handle-40){
-            x_handle = x_other_handle
+
+        var slider_button_upper = g_slider.selectAll("rect")
+            .data([0, 1])
+            .enter().append("svg:image")
+        .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
+        .style("width", "3%")
+        .style("height", "auto")
+        .attr("x",d => width - slider_bar_image.attr("x")*0.95 +d*60)
+        .attr('y', -10)
+        .attr("cursor", "pointer")
+        .on("click", (e,d) => {
+            clickedhandle = 1;
+            move_handle_one_tick(e,d)})
+
+  var move_handle_one_tick= function(e,d,){
+          if(clickedhandle!=null){
+         //positioning of button
+         var x_handle = x_slider(sliderVals[clickedhandle==0?0:1]);
+         
+         var curr_value= Math.round(x_slider.invert(x_handle));
+         var new_value = curr_value + (d==0?-1:1);
+         if(new_value >= x_slider.domain()[0] && new_value <= x_slider.domain()[1]){
+         x_handle= x_slider(new_value)       
+         var x_other_handle=x_slider(sliderVals[clickedhandle==0?1:0])
+       //handle overlap
+       if(clickedhandle==0){ //if lower handle
+       if(x_handle >= x_other_handle-40){
+          x_handle = x_other_handle
+       }
+       }else{ //otherwise
+         if(x_handle <= x_other_handle+40 ){
+          x_handle = x_other_handle
          }
-         }else{ //otherwise
-           if(x_handle <= x_other_handle+40 ){
-            x_handle = x_other_handle
-           }
+       }
+ 
+
+       if(x_handle < xMin && x_handle <= x_other_handle+40 )
+           x_handle= xMin;
+       else if(x_handle > xMax && x_handle >= x_other_handle-40)
+           x_handle= xMax;
+
+       d3.selectAll(".handle"+clickedhandle).attr("x", x_handle-30)
+ 
+      selRange
+      .attr("x1",x_handle)
+          .attr("x2", x_other_handle)
+       sliderVals[clickedhandle] = new_value
+       if(clickedhandle==0){ //if moving lower handle
+         update_slider_infos(new_value, sliderVals[1]);
+         v1 = Math.min(new_value, sliderVals[1]);
+         v2 = Math.max(new_value, sliderVals[1]);
+ 
+       }
+     else{ //otherwise
+         update_slider_infos(sliderVals[0], new_value);
+         v1 = Math.min(sliderVals[0], new_value);
+         v2 = Math.max(sliderVals[0], new_value);
+      }
+      updateMap(v1, v2, currview);
+  }
+  }
+  }
+
+
+
+ 
+  // ---------------------------//
+  //      View     selector     // 
+  // --------------------------// 
+
+  //ATTENTION: cannot append "select" element on observable, gotta use the Observable Inputs -> gotta change when hosting on webpage
+ const view_selector = g_slider.append("rect")
+                          .attr("id", "view_selector_rect")
+                          .attr('width', 200)
+                            .attr('height', 40)
+                            .attr('stroke', 'black')
+                            .attr('fill', 'white')
+                            .attr("cursor", "pointer")
+                            .on("mouseover", function(d){
+                              d3.select(this)
+                              .attr("stroke", "#493521")
+                              .attr("stroke-width", "3px")})
+                          .on("mouseleave", function(d){
+                              d3.select(this)
+                              .attr("stroke-width", "1px")
+                              .attr("stroke", "black")})    
+  view_selector.attr("x",80)
+                  .attr("y", -10)        
+
+  var slider_selector_text = g_slider.append("text")
+        .attr("x",view_selector.attr("x")*1.5)
+        .attr("y", 20)
+        .attr("font-size","25px")
+        .attr("cursor", "pointer")
+        .text(views[currview] + " view");
+      slider_selector_text.on("click",updateView)
+      .on("mouseover", function(d){
+          d3.select("#view_selector_rect")
+          .attr("stroke", "#493521")
+          .attr("stroke-width", "3px")})
+      .on("mouseleave", function(d){
+          d3.select("#view_selector_rect")
+          .attr("stroke-width", "1px")
+          .attr("stroke", "black")})    
+      view_selector.on("click", updateView);
+
+  function updateView() {
+      console.log("alfeofh")
+      currview = 1-currview;
+      slider_bar_image.attr("xlink:href", d => slider_imgs[currview] )
+     
+   
+    if(currview == 0){
+      v1=0;
+      v2=343;
+      sliderVals=[v1,v2];
+      x_slider = d3.scaleLinear()
+      .domain([0, 343]) 
+      .range([slider_bar_x*1.12+30,slider_bar_width*1.36+30])
+      .clamp(true);
+      xMin = x_slider(0);
+      xMax = x_slider(343);
+     
+      slider_infos_text.attr("transform", "translate(0,0)")
+      slider_bar_image.attr("transform", "translate(0,0)")
+        selRange.style("stroke", "url(#linear-gradient)")
+      
+    }
+    else{
+      v1=297;
+      v2=300;
+      sliderVals=[v1,v2];
+      x_slider = d3.scaleLinear()
+      .domain([297, 300]) 
+      .range([width/2.7+30,width/1.65+30])
+      .clamp(true);
+
+      xMin = x_slider(297);
+      xMax = x_slider(300);
+      slider_infos_text.attr("transform", "translate(" + slider_bar_width*0.1+",0)")
+      slider_bar_image.attr("transform", "translate(" + slider_bar_width*0.01+",0)")
+      selRange.style("stroke", "#94C2ED")
+    }
+    selRange
+      .attr("x1", x_slider(sliderVals[0]))
+      .attr("x2", x_slider(sliderVals[1]))
+   
+     handle.attr("x", d => x_slider(sliderVals[d])-30)
+    slider_selector_text.text(views[currview] + " view")
+    update_slider_infos(sliderVals[0], sliderVals[1]);
+    updateMap(v1, v2, currview);
+    
          }
-   
 
-         if(x_handle < xMin && x_handle <= x_other_handle+40 )
-             x_handle= xMin;
-         else if(x_handle > xMax && x_handle >= x_other_handle-40)
-             x_handle= xMax;
+         
 
-         d3.selectAll(".handle"+clickedhandle).attr("x", x_handle-30)
-   
-        selRange
-        .attr("x1",x_handle)
-            .attr("x2", x_other_handle)
-         sliderVals[clickedhandle] = new_value
-         if(clickedhandle==0){ //if moving lower handle
-           update_slider_infos(new_value, sliderVals[1]);
-           v1 = Math.min(new_value, sliderVals[1]);
-           v2 = Math.max(new_value, sliderVals[1]);
-   
-         }
-       else{ //otherwise
-           update_slider_infos(sliderVals[0], new_value);
-           v1 = Math.min(sliderVals[0], new_value);
-           v2 = Math.max(sliderVals[0], new_value);
-        }
-        updateMap(v1, v2, currview);
-    }
-    }
-    }
-
-  // ----------------------------//
-    //  Slider - handles+bar     // 
-    // --------------------------// 
-    const slider = g_slider.append("g")
-    .attr("transform", "translate(" + width/3 +"," + (height-55) + ")")
-        
-
-   var slider_image= slider.append("svg:image")
-        .attr("xlink:href", d => slider_imgs[currview] )
-        .attr("transform", "translate(-65,0)")
-        .style("height", "3%")
-
-
-
-    var x_slider = d3.scaleLinear()
-        .domain([0, 343]) 
-        .range([-width/30+30,width/2.61+30])
-        .clamp(true);
-    var xMin = x_slider(0),
-        xMax = x_slider(343)
-
-    var range_button_imgs = []
-    range_button_imgs[0] = range_button_low_img;
-    range_button_imgs[1] = range_button_high_img;
 
     // 1 -> GOT -> #0066cc
     // 2 -> COK -> #ffcc00
@@ -318,216 +547,18 @@ var slider_button_upper = g_slider.selectAll("rect")
     .attr("stop-color", function(d) { return d.color; });
 
 
-    var selRange = slider.append("line")
-            .data(x_slider.range())
-            .attr("class", "sel-range")
-            .style("stroke", "url(#linear-gradient)")
-            .attr("transform", "translate(0,12)")
-            .style("opacity", 0.6)
-            .style("stroke-width",  height/33+"px")
-            .attr("x1", x_slider(sliderVals[0]))
-            .attr("x2", x_slider(sliderVals[1]))
-            
+ 
 
-    var clickedhandle;
-    var clickedhandle_node;
-    var handle = slider.selectAll("circle")
-        .data([0, 1])
-        .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
-        .attr("class", d=> "handle"+d)
-        .attr("x", d => x_slider(sliderVals[d])-30)
-        .attr('y',-25)
-        .style("width", "4.5%")
-        .style("height", "auto")
-        .style("cursor", "pointer")
-        .on("mouseover", ()=> {
-            d3.select(this).attr("stroke", "#493521")
-            .attr("stroke-width", "3px")
-        })
-        .call(
-            d3.drag()
-            .on("start", startDrag)
-            .on("drag", onDrag)
-            .on("end", endDrag)
-        );
+     }
 
-    function startDrag(event) {
-        var x_cursor = event.x;
-        d3.select(this).raise().classed("active", true)
-        .style("cursor", "grabbing")
-                                
-    }
-
-    function onDrag(event, d) {
-       
-        //positioning of button
-        var x_cursor = event.x;         
-        var x_other_handle=x_slider(sliderVals[d==0?1:0])
-      //handle overlap
-      if(d==0){ //if lower handle
-      if(x_cursor >= x_other_handle-40){
-        x_cursor = x_other_handle
-      }
-      }else{ //otherwise
-        if(x_cursor <= x_other_handle+40 ){
-         x_cursor = x_other_handle
-        }
-      }
-
-      if(x_cursor < xMin && x_cursor <= x_other_handle+40 )
-        x_cursor= xMin;
-      else if(x_cursor > xMax && x_cursor >= x_other_handle-40)
-        x_cursor= xMax;
-
-        d3.select(this).attr("x", x_cursor-30)
-
-            selRange
-             .attr("x1",x_cursor)
-              .attr("x2", x_other_handle)
-      var v= Math.round(x_slider.invert(x_cursor))
-      if(d==0){ //if moving lower handle
-        update_slider_infos(v, sliderVals[1]);
-        v1 = Math.min(v, sliderVals[1]);
-        v2 = Math.max(v, sliderVals[1]);
-
-      }
-    else{ //otherwise
-        update_slider_infos(sliderVals[0], v);
-        v1 = Math.min(sliderVals[0], v);
-        v2 = Math.max(sliderVals[0], v);
-    }
-        updateMap(v1, v2, currview);
-    }
-
-    function endDrag(event, d) {
-        var v;
-       var x_cursor = event.x;
-       var x_other_handle=x_slider(sliderVals[d==0?1:0])
-
-      //handle overlap
-      if(d == 0){ //if lower handle
-      if(x_cursor >= x_other_handle-40 ){
-          v=  sliderVals[1] //value of the other handle
-        }else{
-         v= Math.round(x_slider.invert(x_cursor))
-        }
-      }
-      else{ //otherwise
-      if(x_cursor <= x_other_handle+40 ){
-          v= sliderVals[0] //value of the other handle
-        }else{
-         v= Math.round(x_slider.invert(x_cursor))
-        }
-        
-      }
-      sliderVals[d] = v
-        v1 = Math.min(sliderVals[0], sliderVals[1]);
-        v2 = Math.max(sliderVals[0], sliderVals[1]);
-        
-       
-        d3.select(this)
-            .classed("active", false)
-            .attr("x", x_slider(v)-30)
-            .style("cursor", "pointer")
-
-      selRange
-             .attr("x1", x_slider(v1))
-              .attr("x2", x_slider(v2))
-      slider_infos_text.text(  views[currview] +" " + sliderVals[0]  + " - " +sliderVals[1])
-      update_slider_infos(sliderVals[0], sliderVals[1]);
-        updateMap(v1, v2, currview);
-
-    }
-
-   
-    // ---------------------------//
-    //      View     selector     // 
-    // --------------------------// 
-
-    //ATTENTION: cannot append "select" element on observable, gotta use the Observable Inputs -> gotta change when hosting on webpage
-   const view_selector = slider.append("rect")
-                            .attr("id", "view_selector_rect")
-                            .attr('width', 200)
-                              .attr('height', 40)
-                              .attr('stroke', 'black')
-                              .attr('fill', 'white')
-                              .attr("cursor", "pointer")
-                              .on("mouseover", function(d){
-                                d3.select(this)
-                                .attr("stroke", "#493521")
-                                .attr("stroke-width", "3px")})
-                            .on("mouseleave", function(d){
-                                d3.select(this)
-                                .attr("stroke-width", "1px")
-                                .attr("stroke", "black")})    
-    view_selector.attr("x", -width/3.4)
-                    .attr("y", -10)        
-  
-    var slider_selector_text = slider.append("text")
-          .attr("x",view_selector.attr("x")*0.9)
-          .attr("y", 20)
-          .attr("font-size","25px")
-          .attr("cursor", "pointer")
-          .text(views[currview] + " view");
-        slider_selector_text.on("click",updateView)
-        .on("mouseover", function(d){
-            d3.select("#view_selector_rect")
-            .attr("stroke", "#493521")
-            .attr("stroke-width", "3px")})
-        .on("mouseleave", function(d){
-            d3.select("#view_selector_rect")
-            .attr("stroke-width", "1px")
-            .attr("stroke", "black")})    
-        view_selector.on("click", updateView);
-  
-    function updateView() {
-        
-        currview = 1-currview;
-      slider_image.attr("xlink:href", d => slider_imgs[currview] )
-       
      
-      if(currview == 0){
-        v1=0;
-        v2=343;
-        sliderVals=[v1,v2];
-         x_slider = d3.scaleLinear()
-         .domain([0, 343]) 
-         .range([-width/30+30,width/2.61+30])
-         .clamp(true);
-        xMin = x_slider(0);
-        xMax = x_slider(343);
-       
-          slider_image.attr("transform", "translate(-65,0)")
-          selRange.style("stroke", "url(#linear-gradient)")
-        
-      }
-      else{
-        v1=297;
-        v2=300;
-        sliderVals=[v1,v2];
-        x_slider = d3.scaleLinear()
-        .domain([297, 300]) 
-        .range([width/15+10,width/3.3+10])
-        .clamp(true);
-
-        xMin = x_slider(297);
-        xMax = x_slider(300);
-        slider_image.attr("transform", "translate(90,0)")
-        selRange.style("stroke", "#94C2ED")
-      }
-      selRange
-        .attr("x1", x_slider(sliderVals[0]))
-        .attr("x2", x_slider(sliderVals[1]))
-     
-       handle.attr("x", d => x_slider(sliderVals[d])-30)
-      slider_selector_text.text(views[currview] + " view")
-      update_slider_infos(sliderVals[0], sliderVals[1]);
-      updateMap(v1, v2, currview);
-      
-    }
+     document.addEventListener('DOMContentLoaded', (event) => {
+        // put code that needs to wait for DOM to load here
+        // console.log(slider_bar_image.node().getBoundingClientRect().width)
+        create_slider_elems();
+      })
 
 
-        
     // ---------------------------//
     //  Coordinates calculation  //
     // --------------------------//
@@ -1091,6 +1122,12 @@ var slider_button_upper = g_slider.selectAll("rect")
         .attr("x",width+20)
         .attr("y",height/20+120)
         .text("Instructions")
+        g_credits.append("text")
+        .attr("class", "credits_menu")
+            .attr("font-size","20px")
+            .attr("x",width+20)
+            .attr("y",height/20+180)
+            .text("Reload the page :)")
     
     g_credits.append("text")
     .attr("class", "credits_menu")

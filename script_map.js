@@ -781,14 +781,14 @@ var display_filter_menu = function (d) {
                         .attr('width', 120)
                         .attr('height', 30)
                         .attr("x", sidebar_width/10)
-                        .attr("y", sidebar_height*0.9)
+                        .attr("y", sidebar_height*0.95)
                         .attr('stroke', 'black')
                         .attr('fill', 'white')
                          
             g_reset.append("text")
                         .attr("font-size","28px")
                         .attr("x", sidebar_width/4)
-                        .attr("y", sidebar_height*0.9 +22)
+                        .attr("y", sidebar_height*0.95 +22)
                         .text("Reset")    
                         .attr("cursor", "pointer");     
 

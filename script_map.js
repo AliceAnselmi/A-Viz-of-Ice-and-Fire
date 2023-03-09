@@ -597,12 +597,6 @@ var g;
         const g_filter = svg.append("g").style("position", "sticky")
         .attr("transform", "translate("+ (-width/9) +", " +height/20+")")
 
-        var filter_menu = g_filter.append("svg:image")
-            .attr("xlink:href", "assets/menu_rect.png")
-            .style('width', "12%")
-            .style("height", "auto")
-            // .attr('x', -width/9)
-            // .attr("y",20)
 
         
         var filter_button=g_filter.append("svg:image")

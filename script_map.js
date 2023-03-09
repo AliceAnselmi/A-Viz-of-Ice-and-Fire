@@ -1140,84 +1140,77 @@ var display_filter_menu = function (d) {
        }
 
 
-//      // ---------------------------//
-//     //     Credits Menu           //
-//     // --------------------------// 
-//    var g_credits = svg.append("g")
-//     var credits_button = g_credits.style("position", "sticky").append("svg:image")
-//     .attr("xlink:href", "assets/credits_menu_button.png")
-//     .style("position", "sticky")
-//             .style('width', "4%")
-//             .style("height", "auto")
-//             .attr('x',width*0.92)
-//             .attr('y',  height/20)
-//             .style("position", "sticky")
-//             .style("cursor", "pointer")
-//             .on("click", ()=> {display_credits_menu()})
+// ---------------------------//
+//      Credits     button     //
+// --------------------------//
 
-//     var credits_rect = g_credits.append("svg:image")
-//     .attr("xlink:href", "assets/credits_rect.png")
-//     .attr("class", "credits_menu")
-//     .style('width', "16%")
-//     .style("height", "auto")
-//     .attr('x',width)
-//     .attr('y', height/20)
+const credits_button = slider.append("rect")
+    .attr("id", "credits_selector_rect")
+    .attr('width', bottombar_width/8)
+    .attr('height', bottombar_height/3)
+    .attr('stroke', 'black')
+    .attr('fill', 'white')
+    .attr("cursor", "pointer")
+    .on("mouseover", function (d) {
+        d3.select(this)
+            .attr("stroke", "#493521")
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select(this)
+            .attr("stroke-width", "1px")
+            .attr("stroke", "black")
+    })
+    credits_button.attr("x", bottombar_width*0.55)
+    .attr("y",-10)
+
+const credits_buttons_text = slider.append("text")
+    .attr("x",   bottombar_width*0.58)
+    .attr("y", -credits_button.attr("y")+5)
+    //.attr("font-size", "25px")
+    .attr("font-size", (bottombar_height/5 + "px"))
+    .attr("cursor", "pointer")
+    .text("Credits");
+    credits_buttons_text.on("click",  () => { g_credits.attr('visibility', 'visible')})
+    .on("mouseover", function (d) {
+        d3.select("#credits_selector_rect")
+            .attr("stroke", "#493521")
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select("#credits_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", "black")
+    })
+    credits_button.on("click", () => { g_credits.attr('visibility', 'visible')});
+
+const g_credits = svg.append("g")
+.attr("visibility", "hidden")
+var credits_menu = g_credits.append("rect")
+    .attr('height', height/1.5 )
+    .attr('width', width/1.5)
+    .attr('x', width/6)
+    .attr('y', height/6)
+    .attr('stroke', '#000000')
+    .attr('stroke-width', 2)
+    .attr('fill', 'rgba(194,176,149,0.8)')
+
+g_credits.append("text")
+    .attr('x',width/2)
+    .attr('y', height/4.2)
+    .attr('font-size', '40px')
+    .attr('font-weight', 'bold')
+    .attr("text-anchor", "middle")
+    .text("Credits")
+
+    g_credits.append("svg:image")
+    .attr("xlink:href", "assets/close_button.png")
+    .attr('x',width*0.18)
+    .attr('y', height*0.18)
+    .attr('width', "3.5%")
+    .attr("cursor", "pointer")
+    .on("click", () => { g_credits.attr('visibility', 'hidden')})
     
-//     g_credits.append("svg:image")
-//     .attr("xlink:href", "assets/credits_menu_close_button.png")
-//     .attr("class", "credits_menu")
-//     .style('width', "4%")
-//     .style("height", "auto")
-//     .attr('x',width)
-//     .attr('y', height/20)
-//     .style("cursor", "pointer")
-//     .on("click", ()=> {display_credits_menu()})
-
-
-//     g_credits.append("text")
-//     .attr("class", "credits_menu")
-//         .attr("font-size","33px")
-//         .attr("x",width+20)
-//         .attr("y", height/20+120)
-//         .text("Known bugs")
-
-//     function append_text_to_credits(text, offset){
-//         g_credits.append("text")
-//         .attr("class", "credits_menu")
-//             .attr("font-size","20px")
-//             .attr("x",width+20)
-//             .attr("y",height/20+offset)
-//             .text(text)
-//     }
-//     append_text_to_credits("- Reload needed the first time", 160)
-//     append_text_to_credits("- Circles don't disappear when", 200)
-//     append_text_to_credits("  all people that died there have ", 230)
-//     append_text_to_credits("  been filtered out",  260)
-//     append_text_to_credits("- No rescale", 300)
-
-//     g_credits.append("text")
-//     .attr("class", "credits_menu")
-//         .attr("font-size","33px")
-//         .attr("x",width+20)
-//         .attr("y", height/20+600)
-//         .text("Credits")
-
-//     var credits_menu_open = false;
-//     var display_credits_menu = function(d) {
-//     if(credits_menu_open == false){
-//         credits_menu_open = true;
-//     d3.selectAll(".credits_menu")
-//         .transition()
-//         .attr("transform","translate("+ (-width/6) +",0)");
-//     }
-
-//     else{
-//         credits_menu_open = false;
-//         d3.selectAll(".credits_menu")
-//             .transition()
-//             .attr("transform","translate(0,0)");
-
-//         }
-     
-//     }
-
+function showcredits() {
+   
+}

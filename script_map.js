@@ -13,9 +13,57 @@ forward_button_img = "assets/forward_button.png"
    
      
 const svg = create_mapview();
-const width =  window.innerWidth
-const height =  window.innerHeight
+var width = window.innerWidth;
+var height = window.innerHeight;
 var g;
+
+const bottombar_width = 1200;
+const bottombar_height = 120;
+const sidebar_width = 200;
+const sidebar_height = height-bottombar_height;
+const sidebar_limit = 500;
+var Ytranslation_rescale = 0;
+
+var slider_length = bottombar_width*0.4
+const emblem_size = 2 //Determines the size of the emblems
+
+
+var ui_side_svg = d3.select("#sidebar_svg")
+    .attr('width', sidebar_width+ 100)
+    .attr('height', sidebar_height)
+    .attr('transform', "translate(" +  -sidebar_width*0.75 + " ,0)")
+
+
+var ui_bottom_svg = d3.select('#bottombar_svg')
+    .attr('width', bottombar_width)
+    .attr('height', bottombar_height)
+    .attr("transform", "translate(" + ((width-bottombar_width)/2) + ","+ -Ytranslation_rescale + ")");
+
+
+    window.onresize = function(){
+        var height_diff = height-window.innerHeight;
+        Ytranslation_rescale = Ytranslation_rescale + height_diff
+    
+        width = window.innerWidth
+        height = window.innerHeight;
+        if (window.innerHeight > sidebar_limit) {
+            ui_side_svg.attr('height', height - bottombar_height)
+        }
+    
+        if(window.innerWidth < sidebar_limit || window.innerWidth < bottombar_width){
+            window.resizeTo(bottombar_width + "px", sidebar_limit + "px");
+            console.log("Resize" + " to " + bottombar_width + " x " + sidebar_limit)
+        };
+     //       .attr("preserveAspectRatio", "xMinYMin slice")
+    /*    ui_bottom_svg.attr('width', width)
+            .attr("preserveAspectRatio", "xMinYMin slice")*/
+        //create_mapview();
+    
+        ui_bottom_svg.attr("transform", "translate(" + ((width-bottombar_width)/2) + ","+ /*-Ytranslation_rescale*/ 0 + ")");
+
+        console.log(Ytranslation_rescale)
+    };
+
 
     function create_mapview()
     {
@@ -67,23 +115,23 @@ var g;
     
         zoom.scaleBy(map_svg, min_scale);
     
-        d3.select(window).on("resize", function() {
-            viewport_width = parseInt(map_svg.style("width"))
-            viewport_height = parseInt(map_svg.style("height"))
+        // d3.select(window).on("resize", function() {
+        //     viewport_width = parseInt(map_svg.style("width"))
+        //     viewport_height = parseInt(map_svg.style("height"))
         
-            min_scale_x = viewport_width / map_width;
-            min_scale_y = viewport_height / map_height;
-            min_scale = Math.max(min_scale_x, min_scale_y);
+        //     min_scale_x = viewport_width / map_width;
+        //     min_scale_y = viewport_height / map_height;
+        //     min_scale = Math.max(min_scale_x, min_scale_y);
     
-            console.log("resize")
-            console.log(viewport_width)
-            console.log(min_scale)
+        //     console.log("resize")
+        //     console.log(viewport_width)
+        //     console.log(min_scale)
     
-            zoom.scaleExtent([min_scale, 8])
+        //     zoom.scaleExtent([min_scale, 8])
     
-            map_svg.node().dispatchEvent(new WheelEvent(1));
+        //     map_svg.node().dispatchEvent(new WheelEvent(1));
     
-        });
+        // });
     
         console.log(zoom)
     
@@ -111,428 +159,219 @@ var g;
   
 
     // ---------------------------//
-    //          Slider           // 
-    // --------------------------// 
-        const g_slider=svg.append("g").style("position", "sticky")
-        .attr("transform", "translate(0," +height*0.94+")")
-
-          var v1 = 0, v2 = 343;
-         var sliderVals = [v1, v2];
-        var views = ["Books", "Years"];
-        var currview = 0; // 0 -> BOOKS, 1 -> YEARS
-        const slider_imgs = []
-        slider_imgs[0] = slider_books_bar_img;
-        slider_imgs[1] = slider_years_bar_img;
+//          Slider           //
+// --------------------------//
+const g_slider = ui_bottom_svg.append("g")
+var v1 = 0, v2 = 343;
+var sliderVals = [v1, v2];
+var views = ["Books", "Years"];
+var currview = 0; // 0 -> BOOKS, 1 -> YEARS
+const slider_imgs = []
+slider_imgs[0] = slider_books_bar_img;
+slider_imgs[1] = slider_years_bar_img;
 
 
+// ---------------------------//
+//      Slider - infos        //
+// --------------------------//
 
-   // ---------------------------//
-    //      Slider - infos        // 
-    // --------------------------// 
-
-    function calculate_book_and_chapter(chapter_tot){
-        var book, chapter;
-        if(chapter_tot >=0 && chapter_tot <=72){ 
-            book=1;
-            chapter=chapter_tot;
-        }
-        else if(chapter_tot >=73 && chapter_tot <=142){
-            book=2;
-            chapter=chapter_tot-73;
-        }
-        else if(chapter_tot >=143 && chapter_tot <=224){
-            book=3;
-            chapter=chapter_tot-143;
-        }
-        else if(chapter_tot >=225 && chapter_tot <=271){ 
-             book=4;
-            chapter=chapter_tot-225;
-        }
-        else if(chapter_tot >=272 && chapter_tot <=343){ 
-                book=5;
-                chapter=chapter_tot-272;
-            }
-        return [book, chapter];
-
+function calculate_book_and_chapter(chapter_tot) {
+    var book, chapter;
+    if (chapter_tot >= 0 && chapter_tot <= 72) {
+        book = 1;
+        chapter = chapter_tot;
+    } else if (chapter_tot >= 73 && chapter_tot <= 142) {
+        book = 2;
+        chapter = chapter_tot - 73;
+    } else if (chapter_tot >= 143 && chapter_tot <= 224) {
+        book = 3;
+        chapter = chapter_tot - 143;
+    } else if (chapter_tot >= 225 && chapter_tot <= 271) {
+        book = 4;
+        chapter = chapter_tot - 225;
+    } else if (chapter_tot >= 272 && chapter_tot <= 343) {
+        book = 5;
+        chapter = chapter_tot - 272;
     }
+    return [book, chapter];
 
-    function update_slider_infos(v1,v2){
-        slider_infos_text.text( 
-            () =>{
-                if(currview == 0)
-                    return "Book " + calculate_book_and_chapter(v1)[0] + " Ch " + calculate_book_and_chapter(v1)[1] + " - Book " + calculate_book_and_chapter(v2)[0] + " Ch " + calculate_book_and_chapter(v2)[1];
-                else
-                    return "Years " +  v1 + " - " + v2;
+}
+
+function update_slider_infos(v1, v2) {
+    slider_infos_text.text(
+        () => {
+            if (currview == 0)
+                return "Book " + calculate_book_and_chapter(v1)[0] + " Ch " + calculate_book_and_chapter(v1)[1] + " - Book " + calculate_book_and_chapter(v2)[0] + " Ch " + calculate_book_and_chapter(v2)[1];
+            else
+                return "Years " + v1 + " - " + v2;
+        }
+    )
+}
+
+//brown slider background
+slider_background = g_slider.append("svg:image")
+    .attr("xlink:href", d => slider_bg_img)
+    .attr("height", bottombar_height)
+    .attr("width", bottombar_width)
+//.attr('y', height - 80)
+
+// g_slider.append("rect")
+//     .attr("height", bottombar_height)
+//     .attr("width", bottombar_width)
+//     .attr("rx", 10)
+//     .attr("ry", 10)
+//     .attr("fill", "rgba(0,162,162,0.07)")
+
+var slider_infos = g_slider.append('g')
+    //.attr("transform", "translate(" + width / 3 + "," + (height - 140) + ")")
+
+
+slider_infos.append("rect")
+    .attr("height", bottombar_height/2)
+    .attr("width", bottombar_width/3)
+    .attr("rx", 10)
+    .attr("ry", 10)
+    .attr("x",  (bottombar_width/3) +25 )
+    .attr("fill", "#c3b7a0")
+    slider_background.raise();
+
+var slider_infos_text = slider_infos.append("text")
+    .attr("text-anchor", "middle")
+    .attr("font-size", "20px")
+    .attr("x", bottombar_width/2 +10)
+    .attr('y', 25)
+update_slider_infos(sliderVals[0], sliderVals[1]);
+
+
+
+// ---------------------------//
+//      Slider - buttons      //
+// --------------------------//
+var clickedhandle;
+
+var slider_button_upper = g_slider.selectAll("circle")
+    .data([0, 1])
+    .enter().append("svg:image")
+    .attr("xlink:href", d => d == 0 ? back_button_img : forward_button_img)
+    .style("width", "3%")
+    .style("height", "auto")
+    .attr("x", d => bottombar_width*0.75+ d * 30)
+    .attr('y', bottombar_height/2.5)
+    .attr('object-position', 'center')
+    .attr("cursor", "pointer")
+    .on("click", (e, d) => {
+        clickedhandle = 1;
+        move_handle_one_tick(e, d)
+    })
+
+var slider_button_lower = g_slider.selectAll("circle")
+    .data([0, 1])
+    .enter().append("svg:image")
+    .attr("xlink:href", d => d == 0 ? back_button_img : forward_button_img)
+    .style("width", "3%")
+    .style("height", "auto")
+    .attr("x", d => bottombar_width*0.25 + d * 30)
+    //.attr('y', g_slider.attr('height')/3)
+    .attr('y', bottombar_height/2.5)
+    .attr('object-position', 'center')
+    .attr("cursor", "pointer")
+    .on("click", (e, d) => {
+        clickedhandle = 0;
+        move_handle_one_tick(e, d)
+    })
+
+var move_handle_one_tick = function (e, d,) {
+    if (clickedhandle != null) {
+        //positioning of button
+        var x_handle = x_slider(sliderVals[clickedhandle == 0 ? 0 : 1]);
+
+        var curr_value = Math.round(x_slider.invert(x_handle));
+        var new_value = curr_value + (d == 0 ? -1 : 1);
+        if (new_value >= x_slider.domain()[0] && new_value <= x_slider.domain()[1]) {
+            x_handle = x_slider(new_value)
+            var x_other_handle = x_slider(sliderVals[clickedhandle == 0 ? 1 : 0])
+            //handle overlap
+            if (clickedhandle == 0) { //if lower handle
+                if (x_handle >= x_other_handle - 40) {
+                    x_handle = x_other_handle
                 }
-            )  
-    }
-
-
-        //brown slider background
-    var slider_background = g_slider.append("svg:image")
-        .attr("xlink:href", d => slider_bg_img)
-        .style("width", "100%")
-        .style("height", "13%")
-        // .attr('x', - width/3)
-        .attr('y', -height*0.04)
-
-
-       
-   
-    slider_info_translate_x = width/3;
-    slider_info_translate_y=  - 80;
-       var slider_infos =g_slider.append('g')
-         .attr("transform", "translate(" + slider_info_translate_x+"," + slider_info_translate_y+")")
-
-       slider_infos.append("svg:image")
-           .attr("xlink:href", d => slider_info_bg_img)
-           .style("width", "35%")
-           .style("height", "auto")
-
-        slider_background.raise();
-
-        slider_bar_image = g_slider.append("svg:image")
-        .attr("xlink:href", d => slider_imgs[currview] )
-        .attr("x", width/3.9)
-        .style("width", "50%")
-        .style("height","3%")
-
-    function create_slider_elems(){
-        
-        slider_bar_x = slider_bar_image.attr("x")
-        slider_bar_width = slider_bar_image.node().getBoundingClientRect().width;
-        slider_bar_height = slider_bar_image.node().getBoundingClientRect().height;
-       
-        slider_infos_text = slider_infos.append("text")
-                   .attr("text-anchor","center")
-                     .attr("font-size",height/26+"px")
-                     .attr("x", width*0.07)
-                     .attr('y', slider_infos.node().getBoundingClientRect().height/2)
-          update_slider_infos(sliderVals[0], sliderVals[1]);
-
-            // ----------------------------//
-            //  Slider - handles+bar     // 
-            // --------------------------// 
-
-  
-        x_slider = d3.scaleLinear()
-          .domain([0, 343]) 
-          .range([slider_bar_x*1.12+30,slider_bar_width*1.36+30])
-          .clamp(true);
-         xMin = x_slider(0),
-          xMax = x_slider(343)
-
-
-          var selRange = g_slider.append("line")
-          .data(x_slider.range())
-          .attr("class", "sel-range")
-          .style("stroke", "url(#linear-gradient)")
-          .attr("transform", "translate(0," + height/66 +")")
-          .style("opacity", 0.6)
-          .style("stroke-width",  height/33+"px")
-          .attr("x1", x_slider(sliderVals[0]))
-          .attr("x2", x_slider(sliderVals[1]))
-          
-          
-        var range_button_imgs = []
-        range_button_imgs[0] = range_button_low_img;
-        range_button_imgs[1] = range_button_high_img;
-        var clickedhandle;
-        var handle = g_slider.selectAll("circle")
-        .data([0, 1])
-        .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
-        .attr("class", d=> "handle"+d)
-        .attr("x", d => x_slider(sliderVals[d])-30)
-        .attr('y',-25)
-        .style("width", "4.5%")
-        .style("height", "auto")
-        .style("cursor", "pointer")
-        .on("mouseover", ()=> {
-            // d3.select(this).attr("stroke", "#493521")
-            // .attr("stroke-width", "3px")
-        })
-        .call(
-            d3.drag()
-            .on("start", startDrag)
-            .on("drag", onDrag)
-            .on("end", endDrag)
-        );
-
-        function startDrag(event) {
-            d3.select(this).raise().classed("active", true)
-            .style("cursor", "grabbing")
-                                    
-        }
-
-        function onDrag(event, d) {
-            
-            //positioning of button
-            var x_cursor = event.x;         
-            var x_other_handle=x_slider(sliderVals[d==0?1:0])
-            //handle overlap
-            if(d==0){ //if lower handle
-            if(x_cursor >= x_other_handle-40){
-            x_cursor = x_other_handle
-            }
-            }else{ //otherwise
-            if(x_cursor <= x_other_handle+40 ){
-            x_cursor = x_other_handle
-            }
+            } else { //otherwise
+                if (x_handle <= x_other_handle + 40) {
+                    x_handle = x_other_handle
+                }
             }
 
-            if(x_cursor < xMin && x_cursor <= x_other_handle+40 )
-            x_cursor= xMin;
-            else if(x_cursor > xMax && x_cursor >= x_other_handle-40)
-            x_cursor= xMax;
 
-            d3.select(this).attr("x", x_cursor-30)
+            if (x_handle < xMin && x_handle <= x_other_handle + 40)
+                x_handle = xMin;
+            else if (x_handle > xMax && x_handle >= x_other_handle - 40)
+                x_handle = xMax;
 
-                selRange
-                .attr("x1",x_cursor)
-                    .attr("x2", x_other_handle)
-            var v= Math.round(x_slider.invert(x_cursor))
-            if(d==0){ //if moving lower handle
-            update_slider_infos(v, sliderVals[1]);
-            v1 = Math.min(v, sliderVals[1]);
-            v2 = Math.max(v, sliderVals[1]);
-
-            }
-        else{ //otherwise
-            update_slider_infos(sliderVals[0], v);
-            v1 = Math.min(sliderVals[0], v);
-            v2 = Math.max(sliderVals[0], v);
-        }
-            updateMap(v1, v2, currview);
-        }
-
-        function endDrag(event, d) {
-            var v;
-            var x_cursor = event.x;
-            var x_other_handle=x_slider(sliderVals[d==0?1:0])
-
-            //handle overlap
-            if(d == 0){ //if lower handle
-            if(x_cursor >= x_other_handle-40 ){
-                v=  sliderVals[1] //value of the other handle
-            }else{
-            v= Math.round(x_slider.invert(x_cursor))
-            }
-            }
-            else{ //otherwise
-            if(x_cursor <= x_other_handle+40 ){
-                v= sliderVals[0] //value of the other handle
-            }else{
-            v= Math.round(x_slider.invert(x_cursor))
-            }
-            
-            }
-            sliderVals[d] = v
-            v1 = Math.min(sliderVals[0], sliderVals[1]);
-            v2 = Math.max(sliderVals[0], sliderVals[1]);
-            
-            
-            d3.select(this)
-                .classed("active", false)
-                .attr("x", x_slider(v)-30)
-                .style("cursor", "pointer")
+            d3.selectAll(".handle" + clickedhandle).attr("x", x_handle - handle_offset)
 
             selRange
-                .attr("x1", x_slider(v1))
-                    .attr("x2", x_slider(v2))
-            slider_infos_text.text(  views[currview] +" " + sliderVals[0]  + " - " +sliderVals[1])
-            update_slider_infos(sliderVals[0], sliderVals[1]);
+                .attr("x1", x_handle)
+                .attr("x2", x_other_handle)
+            sliderVals[clickedhandle] = new_value
+            if (clickedhandle == 0) { //if moving lower handle
+                update_slider_infos(new_value, sliderVals[1]);
+                v1 = Math.min(new_value, sliderVals[1]);
+                v2 = Math.max(new_value, sliderVals[1]);
+
+            } else { //otherwise
+                update_slider_infos(sliderVals[0], new_value);
+                v1 = Math.min(sliderVals[0], new_value);
+                v2 = Math.max(sliderVals[0], new_value);
+            }
             updateMap(v1, v2, currview);
-
         }
-
-        // ---------------------------//
-        //      Slider - buttons      // 
-        // --------------------------// 
-        var clickedhandle;
-
-        var slider_button_lower = g_slider.selectAll("rect")
-            .data([0, 1])
-            .enter().append("svg:image")
-        .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
-        .style("width", "3%")
-        .style("height", "auto")
-        .attr("x",d => slider_bar_image.attr("x")*0.78 + d*60)
-        .attr('y', -10)
-        .attr("cursor", "pointer")
-        .on("click", (e,d) => {
-            clickedhandle = 0;
-            move_handle_one_tick(e,d)})
-
-
-        var slider_button_upper = g_slider.selectAll("rect")
-            .data([0, 1])
-            .enter().append("svg:image")
-        .attr("xlink:href", d => d==0?back_button_img:forward_button_img)
-        .style("width", "3%")
-        .style("height", "auto")
-        .attr("x",d => width - slider_bar_image.attr("x")*0.95 +d*60)
-        .attr('y', -10)
-        .attr("cursor", "pointer")
-        .on("click", (e,d) => {
-            clickedhandle = 1;
-            move_handle_one_tick(e,d)})
-
-  var move_handle_one_tick= function(e,d,){
-          if(clickedhandle!=null){
-         //positioning of button
-         var x_handle = x_slider(sliderVals[clickedhandle==0?0:1]);
-         
-         var curr_value= Math.round(x_slider.invert(x_handle));
-         var new_value = curr_value + (d==0?-1:1);
-         if(new_value >= x_slider.domain()[0] && new_value <= x_slider.domain()[1]){
-         x_handle= x_slider(new_value)       
-         var x_other_handle=x_slider(sliderVals[clickedhandle==0?1:0])
-       //handle overlap
-       if(clickedhandle==0){ //if lower handle
-       if(x_handle >= x_other_handle-40){
-          x_handle = x_other_handle
-       }
-       }else{ //otherwise
-         if(x_handle <= x_other_handle+40 ){
-          x_handle = x_other_handle
-         }
-       }
- 
-
-       if(x_handle < xMin && x_handle <= x_other_handle+40 )
-           x_handle= xMin;
-       else if(x_handle > xMax && x_handle >= x_other_handle-40)
-           x_handle= xMax;
-
-       d3.selectAll(".handle"+clickedhandle).attr("x", x_handle-30)
- 
-      selRange
-      .attr("x1",x_handle)
-          .attr("x2", x_other_handle)
-       sliderVals[clickedhandle] = new_value
-       if(clickedhandle==0){ //if moving lower handle
-         update_slider_infos(new_value, sliderVals[1]);
-         v1 = Math.min(new_value, sliderVals[1]);
-         v2 = Math.max(new_value, sliderVals[1]);
- 
-       }
-     else{ //otherwise
-         update_slider_infos(sliderVals[0], new_value);
-         v1 = Math.min(sliderVals[0], new_value);
-         v2 = Math.max(sliderVals[0], new_value);
-      }
-      updateMap(v1, v2, currview);
-  }
-  }
-  }
-
-
-
- 
-  // ---------------------------//
-  //      View     selector     // 
-  // --------------------------// 
-
-  //ATTENTION: cannot append "select" element on observable, gotta use the Observable Inputs -> gotta change when hosting on webpage
- const view_selector = g_slider.append("rect")
-                          .attr("id", "view_selector_rect")
-                          .attr('width', 200)
-                            .attr('height', 40)
-                            .attr('stroke', 'black')
-                            .attr('fill', 'white')
-                            .attr("cursor", "pointer")
-                            .on("mouseover", function(d){
-                              d3.select(this)
-                              .attr("stroke", "#493521")
-                              .attr("stroke-width", "3px")})
-                          .on("mouseleave", function(d){
-                              d3.select(this)
-                              .attr("stroke-width", "1px")
-                              .attr("stroke", "black")})    
-  view_selector.attr("x",80)
-                  .attr("y", -10)        
-
-  var slider_selector_text = g_slider.append("text")
-        .attr("x",view_selector.attr("x")*1.5)
-        .attr("y", 20)
-        .attr("font-size","25px")
-        .attr("cursor", "pointer")
-        .text(views[currview] + " view");
-      slider_selector_text.on("click",updateView)
-      .on("mouseover", function(d){
-          d3.select("#view_selector_rect")
-          .attr("stroke", "#493521")
-          .attr("stroke-width", "3px")})
-      .on("mouseleave", function(d){
-          d3.select("#view_selector_rect")
-          .attr("stroke-width", "1px")
-          .attr("stroke", "black")})    
-      view_selector.on("click", updateView);
-
-  function updateView() {
-      console.log("alfeofh")
-      currview = 1-currview;
-      slider_bar_image.attr("xlink:href", d => slider_imgs[currview] )
-     
-   
-    if(currview == 0){
-      v1=0;
-      v2=343;
-      sliderVals=[v1,v2];
-      x_slider = d3.scaleLinear()
-      .domain([0, 343]) 
-      .range([slider_bar_x*1.12+30,slider_bar_width*1.36+30])
-      .clamp(true);
-      xMin = x_slider(0);
-      xMax = x_slider(343);
-     
-      slider_infos_text.attr("transform", "translate(0,0)")
-      slider_bar_image.attr("transform", "translate(0,0)")
-        selRange.style("stroke", "url(#linear-gradient)")
-      
     }
-    else{
-      v1=297;
-      v2=300;
-      sliderVals=[v1,v2];
-      x_slider = d3.scaleLinear()
-      .domain([297, 300]) 
-      .range([width/2.7+30,width/1.65+30])
-      .clamp(true);
+}
 
-      xMin = x_slider(297);
-      xMax = x_slider(300);
-      slider_infos_text.attr("transform", "translate(" + slider_bar_width*0.1+",0)")
-      slider_bar_image.attr("transform", "translate(" + slider_bar_width*0.01+",0)")
-      selRange.style("stroke", "#94C2ED")
-    }
-    selRange
-      .attr("x1", x_slider(sliderVals[0]))
-      .attr("x2", x_slider(sliderVals[1]))
-   
-     handle.attr("x", d => x_slider(sliderVals[d])-30)
-    slider_selector_text.text(views[currview] + " view")
-    update_slider_infos(sliderVals[0], sliderVals[1]);
-    updateMap(v1, v2, currview);
-    
-         }
+// ----------------------------//
+//  Slider - handles+bar     //
+// --------------------------//
+var handle_offset = 20;
 
-         
+const slider = g_slider.append("g")
+    //.attr("transform", "translate(" + width / 3 + "," + (height - 55) + ")")
+    .attr("transform", "translate(" + (bottombar_width/3.2)  + "," + bottombar_height/2.5 + ")")
 
 
-    // 1 -> GOT -> #0066cc
-    // 2 -> COK -> #ffcc00
-    // 3 -> SOS -> #34933f
-    // 4 -> FOC -> #990000
-    // 5 -> DWD -> #cfcfab
+
+var slider_image = slider.append("svg:image")
+    .attr("xlink:href", d => slider_imgs[currview])
+    .attr('object-position', 'center')
+    .attr('width', slider_length)
+    .attr('y', 5)
+
+    //.attr("transform", "translate(-20,0)")
+    //.style("height", "17px")
+
+var x_slider = d3.scaleLinear()
+    .domain([0, 343])
+    .range([slider_length*0.04+handle_offset,slider_length*0.87+handle_offset])
+    .clamp(true);
+var xMin = x_slider(0),
+    xMax = x_slider(343)
+
+var range_button_imgs = []
+range_button_imgs[0] = range_button_low_img;
+range_button_imgs[1] = range_button_high_img;
+
+// 1 -> GOT -> #0066cc
+// 2 -> COK -> #ffcc00
+// 3 -> SOS -> #34933fs
+// 4 -> FOC -> #990000
+// 5 -> DWD -> #cfcfab
 
 
-    var defs = svg.append("defs");
+var defs = svg.append("defs");
 
-    var linearGradient = defs.append("linearGradient")
+var linearGradient = defs.append("linearGradient")
     .attr("id", "linear-gradient")
-   .attr("gradientUnits", "userSpaceOnUse")
-   .attr("x1", xMin)
+    .attr("gradientUnits", "userSpaceOnUse")
+    .attr("x1", xMin)
     .attr("x2", xMax)
     .selectAll("stop")
     .data([
@@ -543,20 +382,237 @@ var g;
         {offset: "100%", color: "#cfcfab"},
     ])
     .enter().append("stop")
-    .attr("offset", function(d) { return d.offset; })
-    .attr("stop-color", function(d) { return d.color; });
+    .attr("offset", function (d) {
+        return d.offset;
+    })
+    .attr("stop-color", function (d) {
+        return d.color;
+    });
 
 
- 
+var selRange = slider.append("line")
+    .data(x_slider.range())
+    .attr("class", "sel-range")
+    .style("stroke", "url(#linear-gradient)")
+    .attr("transform", "translate(0,12)")
+    .style("opacity", 0.6)
+    .style("stroke-width", bottombar_height / 8.4 + "px")
+    .attr("x1", x_slider(sliderVals[0]))
+    .attr("x2", x_slider(sliderVals[1]))
 
-     }
 
-     
-     document.addEventListener('DOMContentLoaded', (event) => {
-        // put code that needs to wait for DOM to load here
-        // console.log(slider_bar_image.node().getBoundingClientRect().width)
-        create_slider_elems();
-      })
+var clickedhandle;
+var clickedhandle_node;
+var handle = slider.selectAll("circle")
+    .data([0, 1])
+    .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
+    .attr("class", d => "handle" + d)
+    .attr("x", d => x_slider(sliderVals[d]) - handle_offset)
+    .attr("y", -3)
+    .style("width", "3%")
+    .style("height", "auto")
+    .style("cursor", "pointer")
+    .on("mouseover", () => {
+        d3.select(this).attr("stroke", "#493521")
+            .attr("stroke-width", "3px")
+    })
+    .call(
+        d3.drag()
+            .on("start", startDrag)
+            .on("drag", onDrag)
+            .on("end", endDrag)
+    );
+
+function startDrag(event) {
+    var x_cursor = event.x;
+    d3.select(this).raise().classed("active", true)
+        .style("cursor", "grabbing")
+
+}
+
+function onDrag(event, d) {
+
+    //positioning of button
+    var x_cursor = event.x;
+    var x_other_handle = x_slider(sliderVals[d == 0 ? 1 : 0])
+    //handle overlap
+    if (d == 0) { //if lower handle
+        if (x_cursor >= x_other_handle - 40) {
+            x_cursor = x_other_handle
+        }
+    } else { //otherwise
+        if (x_cursor <= x_other_handle + 40) {
+            x_cursor = x_other_handle
+        }
+    }
+
+    if (x_cursor < xMin && x_cursor <= x_other_handle + 40)
+        x_cursor = xMin;
+    else if (x_cursor > xMax && x_cursor >= x_other_handle - 40)
+        x_cursor = xMax;
+
+    d3.select(this).attr("x", x_cursor - handle_offset)
+
+    selRange
+        .attr("x1", x_cursor)
+        .attr("x2", x_other_handle)
+    var v = Math.round(x_slider.invert(x_cursor))
+    if (d == 0) { //if moving lower handle
+        update_slider_infos(v, sliderVals[1]);
+        v1 = Math.min(v, sliderVals[1]);
+        v2 = Math.max(v, sliderVals[1]);
+
+    } else { //otherwise
+        update_slider_infos(sliderVals[0], v);
+        v1 = Math.min(sliderVals[0], v);
+        v2 = Math.max(sliderVals[0], v);
+    }
+    updateMap(v1, v2, currview);
+}
+
+function endDrag(event, d) {
+    var v;
+    var x_cursor = event.x;
+    var x_other_handle = x_slider(sliderVals[d == 0 ? 1 : 0])
+
+    //handle overlap
+    if (d == 0) { //if lower handle
+        if (x_cursor >= x_other_handle - 40) {
+            v = sliderVals[1] //value of the other handle
+        } else {
+            v = Math.round(x_slider.invert(x_cursor))
+        }
+    } else { //otherwise
+        if (x_cursor <= x_other_handle + 40) {
+            v = sliderVals[0] //value of the other handle
+        } else {
+            v = Math.round(x_slider.invert(x_cursor))
+        }
+
+    }
+    sliderVals[d] = v
+    v1 = Math.min(sliderVals[0], sliderVals[1]);
+    v2 = Math.max(sliderVals[0], sliderVals[1]);
+
+
+    d3.select(this)
+        .classed("active", false)
+        .attr("x", x_slider(v) - handle_offset)
+        .style("cursor", "pointer")
+
+    selRange
+        .attr("x1", x_slider(v1))
+        .attr("x2", x_slider(v2))
+    slider_infos_text.text(views[currview] + " " + sliderVals[0] + " - " + sliderVals[1])
+    update_slider_infos(sliderVals[0], sliderVals[1]);
+    updateMap(v1, v2, currview);
+
+}
+
+
+// ---------------------------//
+//      View     selector     //
+// --------------------------//
+
+const view_selector = slider.append("rect")
+    .attr("id", "view_selector_rect")
+    .attr('width', bottombar_width/8)
+    .attr('height', bottombar_height/3)
+    .attr('stroke', 'black')
+    .attr('fill', 'white')
+    .attr("cursor", "pointer")
+    .on("mouseover", function (d) {
+        d3.select(this)
+            .attr("stroke", "#493521")
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select(this)
+            .attr("stroke-width", "1px")
+            .attr("stroke", "black")
+    })
+view_selector.attr("x", -bottombar_width / 3.4)
+    .attr("y",-10)
+
+var slider_selector_text = slider.append("text")
+    .attr("x",  -bottombar_width / 3.6)
+    .attr("y", -view_selector.attr("y")+5)
+    //.attr("font-size", "25px")
+    .attr("font-size", (bottombar_height/5 + "px"))
+    .attr("cursor", "pointer")
+    .text(views[currview] + " view");
+slider_selector_text.on("click", updateView)
+    .on("mouseover", function (d) {
+        d3.select("#view_selector_rect")
+            .attr("stroke", "#493521")
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select("#view_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", "black")
+    })
+view_selector.on("click", updateView);
+
+function updateView() {
+
+
+
+    currview = 1 - currview;
+    slider_image.attr("xlink:href", d => slider_imgs[currview])
+        // .attr('object-position', 'center')
+        // .attr('width', slider_length)
+        // .attr('y', 5)
+
+
+
+    if (currview == 0) {
+        v1 = 0;
+        v2 = 343;
+        sliderVals = [v1, v2];
+        x_slider = d3.scaleLinear()
+            .domain([0, 343])
+            .range([slider_length*0.04+handle_offset,slider_length*0.87+handle_offset])
+            .clamp(true);
+        xMin = x_slider(0);
+        xMax = x_slider(343);
+
+        selRange.style("stroke", "url(#linear-gradient)")
+        .attr("transform", "translate(0,12)")
+        .style("stroke-width", bottombar_height / 8.4 + "px")
+        handle.style("width", "3%")
+
+    } else {
+        v1 = 297;
+        v2 = 300;
+        sliderVals = [v1, v2];
+        x_slider = d3.scaleLinear()
+            .domain([297, 300])
+            .range([slider_length*0.04+handle_offset,slider_length*0.87+handle_offset])
+            .clamp(true);
+
+        xMin = x_slider(297);
+        xMax = x_slider(300);
+        slider_image
+        //     .attr("height", bottombar_height/4 )
+            .attr("width", slider_length)
+        selRange.style("stroke", "#94C2ED")
+        .attr("transform", "translate(0,17)")
+        .style("stroke-width", bottombar_height / 5.1 + "px")
+        handle.style("width", "3.5%")
+    }
+    selRange
+        .attr("x1", x_slider(sliderVals[0]))
+        .attr("x2", x_slider(sliderVals[1]))
+
+    handle.attr("x", d => x_slider(sliderVals[d]) - handle_offset)
+    slider_selector_text.text(views[currview] + " view")
+    update_slider_infos(sliderVals[0], sliderVals[1]);
+    updateMap(v1, v2, currview);
+
+}
+
+
 
 
     // ---------------------------//
@@ -594,51 +650,55 @@ var g;
     // --------------------------// 
 
 
-        const g_filter = svg.append("g").style("position", "sticky")
-        .attr("transform", "translate("+ (-width/9) +", " +height/20+")")
+    const g_filter = ui_side_svg.append("g")
+
+    var filter_menu = g_filter.append('rect')
+    .attr('height', sidebar_height)
+    .attr('width', sidebar_width*0.75)
+    .attr('y', 20)
+    .attr('stroke', '#000000')
+    .attr('stroke-width', 2)
+    .attr('fill', 'rgba(194,176,149,0.32)')
 
 
         
         var filter_button=g_filter.append("svg:image")
             .attr("xlink:href", "assets/allegiance_button.png")
-            .style('width', "5%")
+            .style('width', sidebar_width/2.5)
             .style("height", "auto")
-            .attr('x',width/9)
-            .attr("y",20)
-            
+            .attr('x', sidebar_width*0.75)
+            .attr("y", 20)
 
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x",30)
-        .attr("y",70)
+        .attr("x", 25)
+        .attr("y", 80)
         .html("Filter by")
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x",50)
-        .attr("y",110)
+        .attr("x", 40)
+         .attr("y", 120)
         .html("house")
 
-         var filter_menu_open = false;
-        var display_filter_menu = function(d) {
-        if(filter_menu_open == false){
-         filter_menu_open = true;
+        var filter_menu_open = false;
+var display_filter_menu = function (d) {
+    if (filter_menu_open == false) {
+        filter_menu_open = true;
 
-        g_filter.transition()
-        .attr("transform","translate(0,"+height/20+")");
-        }
+        ui_side_svg.transition()
+            .attr("transform", "translate(0,0)");
+    } else {
+        filter_menu_open = false;
+        ui_side_svg.transition()
+            .attr("transform", "translate(" +  -sidebar_width*0.75 + " ,0)");
+    }
 
-        else{
-            filter_menu_open = false;
-            g_filter.transition()
-            .attr("transform","translate("+ (-width/9) +", " +height/20+")");
-            }
-         
-        }
+}
 
         var allegiances = ["Arryn", "Baratheon", "Greyjoy", "Lannister", "Martell", "Night's Watch", "Stark", "Targaryen", "Tully", "Tyrell", "Wildling", "None"]
     
-        var emblemX=50;
-        var emblemY=height/20 + 130;
+        var emblemX = sidebar_width/6;
+        var emblemY = 170;
         var filters = g_filter.selectAll('.filters')
                                 .data(allegiances)
                                 .enter()
@@ -653,9 +713,7 @@ var g;
                                 .attr("xlink:href",(d) => {
                                     return "assets/emblems/" + d +".PNG"
                                 })
-                                .attr("width", "3.7%")
-                                .attr("x", -0.5)
-                                .attr("y", -1.5)
+                                .attr("width", sidebar_width/10+"%")
             var selected_allegiances=[];
                 filters
                     .append("circle")
@@ -666,11 +724,11 @@ var g;
                             if(i%2 == 0)
                                 return emblemX
                             else
-                                return emblemX + width/20
+                            return emblemX + 80
                         })
                     .attr('cy',(d,i)=>{
-                        return emblemY + width/25*(parseInt(i/2))})
-                    .attr("r", width*0.018)
+                        return emblemY + 70*(parseInt(i/2))})
+                        .attr("r", sidebar_width*0.15)
                     .style("fill",  (d,i) =>{
                         return "url(#pattern"+i+")"})
                     .style("cursor", "pointer")
@@ -722,15 +780,15 @@ var g;
                         .attr("id", "reset_rect")
                         .attr('width', 120)
                         .attr('height', 30)
-                        .attr("x", 30)
-                        .attr("y",height*0.75)
+                        .attr("x", sidebar_width/10)
+                        .attr("y", sidebar_height*0.9)
                         .attr('stroke', 'black')
                         .attr('fill', 'white')
                          
             g_reset.append("text")
                         .attr("font-size","28px")
-                        .attr("x",60)
-                        .attr("y",height*0.75 + 25)
+                        .attr("x", sidebar_width/4)
+                        .attr("y", sidebar_height*0.9 +22)
                         .text("Reset")    
                         .attr("cursor", "pointer");     
 
@@ -896,8 +954,8 @@ var g;
                 //var allegiance = d.Allegiances
                 return "assets/emblems/" + allegiance +".PNG"
             })
-            .attr('width', "3%")
-            .attr("height", "3%")
+            .attr('width', emblem_size + "%")
+            // .attr("height", "3%")
             .attr('x', 0)
             .attr('y', 0)
             .on("mouseover", mouseover)
@@ -945,7 +1003,6 @@ var g;
 
         function mouseover(d)
         {
-            // What odes this do?
             d3.select(this.parentNode).raise();
             tooltip.style("visibility", "visible");
         }
@@ -1019,12 +1076,6 @@ var g;
         emblem.selectAll(".lines").remove();
     }
     
-    // This function takes care of filtering the elements that are visible
-    function update_timeperiod(emblems)
-    {
-    
-    }
-    
     
     function updateMap(min, max, currview) {
         var filteredvalue;
@@ -1089,84 +1140,84 @@ var g;
        }
 
 
-     // ---------------------------//
-    //     Credits Menu           //
-    // --------------------------// 
-   var g_credits = svg.append("g")
-    var credits_button = g_credits.style("position", "sticky").append("svg:image")
-    .attr("xlink:href", "assets/credits_menu_button.png")
-    .style("position", "sticky")
-            .style('width', "4%")
-            .style("height", "auto")
-            .attr('x',width*0.92)
-            .attr('y',  height/20)
-            .style("position", "sticky")
-            .style("cursor", "pointer")
-            .on("click", ()=> {display_credits_menu()})
+//      // ---------------------------//
+//     //     Credits Menu           //
+//     // --------------------------// 
+//    var g_credits = svg.append("g")
+//     var credits_button = g_credits.style("position", "sticky").append("svg:image")
+//     .attr("xlink:href", "assets/credits_menu_button.png")
+//     .style("position", "sticky")
+//             .style('width', "4%")
+//             .style("height", "auto")
+//             .attr('x',width*0.92)
+//             .attr('y',  height/20)
+//             .style("position", "sticky")
+//             .style("cursor", "pointer")
+//             .on("click", ()=> {display_credits_menu()})
 
-    var credits_rect = g_credits.append("svg:image")
-    .attr("xlink:href", "assets/credits_rect.png")
-    .attr("class", "credits_menu")
-    .style('width', "16%")
-    .style("height", "auto")
-    .attr('x',width)
-    .attr('y', height/20)
+//     var credits_rect = g_credits.append("svg:image")
+//     .attr("xlink:href", "assets/credits_rect.png")
+//     .attr("class", "credits_menu")
+//     .style('width', "16%")
+//     .style("height", "auto")
+//     .attr('x',width)
+//     .attr('y', height/20)
     
-    g_credits.append("svg:image")
-    .attr("xlink:href", "assets/credits_menu_close_button.png")
-    .attr("class", "credits_menu")
-    .style('width', "4%")
-    .style("height", "auto")
-    .attr('x',width)
-    .attr('y', height/20)
-    .style("cursor", "pointer")
-    .on("click", ()=> {display_credits_menu()})
+//     g_credits.append("svg:image")
+//     .attr("xlink:href", "assets/credits_menu_close_button.png")
+//     .attr("class", "credits_menu")
+//     .style('width', "4%")
+//     .style("height", "auto")
+//     .attr('x',width)
+//     .attr('y', height/20)
+//     .style("cursor", "pointer")
+//     .on("click", ()=> {display_credits_menu()})
 
 
-    g_credits.append("text")
-    .attr("class", "credits_menu")
-        .attr("font-size","33px")
-        .attr("x",width+20)
-        .attr("y", height/20+120)
-        .text("Known bugs")
+//     g_credits.append("text")
+//     .attr("class", "credits_menu")
+//         .attr("font-size","33px")
+//         .attr("x",width+20)
+//         .attr("y", height/20+120)
+//         .text("Known bugs")
 
-    function append_text_to_credits(text, offset){
-        g_credits.append("text")
-        .attr("class", "credits_menu")
-            .attr("font-size","20px")
-            .attr("x",width+20)
-            .attr("y",height/20+offset)
-            .text(text)
-    }
-    append_text_to_credits("- Reload needed the first time", 160)
-    append_text_to_credits("- Circles don't disappear when", 200)
-    append_text_to_credits("  all people that died there have ", 230)
-    append_text_to_credits("  been filtered out",  260)
-    append_text_to_credits("- No rescale", 300)
+//     function append_text_to_credits(text, offset){
+//         g_credits.append("text")
+//         .attr("class", "credits_menu")
+//             .attr("font-size","20px")
+//             .attr("x",width+20)
+//             .attr("y",height/20+offset)
+//             .text(text)
+//     }
+//     append_text_to_credits("- Reload needed the first time", 160)
+//     append_text_to_credits("- Circles don't disappear when", 200)
+//     append_text_to_credits("  all people that died there have ", 230)
+//     append_text_to_credits("  been filtered out",  260)
+//     append_text_to_credits("- No rescale", 300)
 
-    g_credits.append("text")
-    .attr("class", "credits_menu")
-        .attr("font-size","33px")
-        .attr("x",width+20)
-        .attr("y", height/20+600)
-        .text("Credits")
+//     g_credits.append("text")
+//     .attr("class", "credits_menu")
+//         .attr("font-size","33px")
+//         .attr("x",width+20)
+//         .attr("y", height/20+600)
+//         .text("Credits")
 
-    var credits_menu_open = false;
-    var display_credits_menu = function(d) {
-    if(credits_menu_open == false){
-        credits_menu_open = true;
-    d3.selectAll(".credits_menu")
-        .transition()
-        .attr("transform","translate("+ (-width/6) +",0)");
-    }
+//     var credits_menu_open = false;
+//     var display_credits_menu = function(d) {
+//     if(credits_menu_open == false){
+//         credits_menu_open = true;
+//     d3.selectAll(".credits_menu")
+//         .transition()
+//         .attr("transform","translate("+ (-width/6) +",0)");
+//     }
 
-    else{
-        credits_menu_open = false;
-        d3.selectAll(".credits_menu")
-            .transition()
-            .attr("transform","translate(0,0)");
+//     else{
+//         credits_menu_open = false;
+//         d3.selectAll(".credits_menu")
+//             .transition()
+//             .attr("transform","translate(0,0)");
 
-        }
+//         }
      
-    }
+//     }
 

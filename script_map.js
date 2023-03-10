@@ -31,13 +31,13 @@ const emblem_size = 2 //Determines the size of the emblems
 var ui_side_svg = d3.select("#sidebar_svg")
     .attr('width', sidebar_width+ 100)
     .attr('height', sidebar_height)
-    .attr('transform', "translate(" +  -sidebar_width*0.75 + " ,0)")
+    // .attr('transform', "translate(" +  -sidebar_width*0.75 + " ,0)")
 
 
 var ui_bottom_svg = d3.select('#bottombar_svg')
     .attr('width', bottombar_width)
     .attr('height', bottombar_height)
-    .attr("transform", "translate(" + ((width-bottombar_width)/2) + ","+ -Ytranslation_rescale + ")");
+    .attr("transform", "translate(" + ((width-bottombar_width)/2) + ","+ (-Ytranslation_rescale) + ")");
 
 
     window.onresize = function(){
@@ -59,7 +59,7 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
             .attr("preserveAspectRatio", "xMinYMin slice")*/
         //create_mapview();
     
-        ui_bottom_svg.attr("transform", "translate(" + ((width-bottombar_width)/2) + ","+ /*-Ytranslation_rescale*/ 0 + ")");
+        ui_bottom_svg.attr("transform", "translate(" + ((width-bottombar_width)/2) + ",0)");
 
         console.log(Ytranslation_rescale)
     };
@@ -68,65 +68,52 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
     function create_mapview()
     {
         const map_svg = d3.select("#main_svg")
-            //.attr("viewBox", "0 0 1000 1000")
-            .attr("preserveAspectRatio", "xMinYMin slice")
-    
-        g = map_svg.append("g")
-    
-        const map_image = g.append("svg:image")
-            .attr("href", d => map_img)
-            //.attr('width', "100%")
-            //.attr("height", "100%")
-            .attr('x', "0")
-            .attr('y', "0")
-            //.attr("preserveAspectRatio", "xMinYMin slice")
-    
-        map_width = parseInt(map_image.style("width"));
-        map_height = parseInt(map_image.style("height"));
-    
-        // Zoom
-        function handleZoom(e) {
-            g.attr("transform", e.transform);
-            g.attr("scale", e.scale);
-        }
-    
-        // FIXME: Change these values when the viewport is resized!
-        viewport_width = parseInt(map_svg.style("width"))
-        viewport_height = parseInt(map_svg.style("height"))
-    
-        min_scale_x = viewport_width / map_width;
-        min_scale_y = viewport_height / map_height;
-        min_scale = Math.max(min_scale_x, min_scale_y);
-    
-        let zoom = d3.zoom()
-            .touchable(true)
-            .scaleExtent([min_scale, 8])
-            .translateExtent([[0,0], [map_width, map_height]])
-            .on("zoom", handleZoom)
-            
-        map_svg.call(zoom).on("dblclick.zoom", null);
-    
-        zoom.scaleBy(map_svg, min_scale);
-    
-        // d3.select(window).on("resize", function() {
-        //     viewport_width = parseInt(map_svg.style("width"))
-        //     viewport_height = parseInt(map_svg.style("height"))
+                //.attr("viewBox", "0 0 1000 1000")
+                .attr("preserveAspectRatio", "xMinYMin slice")
         
-        //     min_scale_x = viewport_width / map_width;
-        //     min_scale_y = viewport_height / map_height;
-        //     min_scale = Math.max(min_scale_x, min_scale_y);
-    
-        //     console.log("resize")
-        //     console.log(viewport_width)
-        //     console.log(min_scale)
-    
-        //     zoom.scaleExtent([min_scale, 8])
-    
-        //     map_svg.node().dispatchEvent(new WheelEvent(1));
-    
-        // });
-    
-        console.log(zoom)
+            g = map_svg.append("g")
+        
+            const map_image = g.append("svg:image")
+                .attr("href", d => map_img)
+                //.attr('width', "100%")
+                //.attr("height", "100%")
+                .attr('x', "0")
+                .attr('y', "0")
+                //.attr("preserveAspectRatio", "xMinYMin slice")
+        
+                document.addEventListener('DOMContentLoaded', function(event) {
+                    //the event occurred
+                    map_width = parseInt(map_image.style("width"));
+                    map_height = parseInt(map_image.style("height"));
+                
+                    // Zoom
+                    function handleZoom(e) {
+                        g.attr("transform", e.transform);
+                        g.attr("scale", e.scale);
+                    }
+                
+                    // FIXME: Change these values when the viewport is resized!
+                    viewport_width = parseInt(map_svg.style("width"))
+                    viewport_height = parseInt(map_svg.style("height"))
+                
+                    min_scale_x = viewport_width / map_width;
+                    min_scale_y = viewport_height / map_height;
+                    min_scale = Math.max(min_scale_x, min_scale_y);
+                
+                    let zoom = d3.zoom()
+                        .touchable(true)
+                        .scaleExtent([min_scale, 8])
+                        .translateExtent([[0,0], [map_width, map_height]])
+                        .on("zoom", handleZoom)
+                        
+                    map_svg.call(zoom).on("dblclick.zoom", null);
+                
+                    zoom.scaleBy(map_svg, min_scale);
+                    
+                map_svg.call(zoom).on("dblclick.zoom", null);
+            
+                  })
+           
     
         return map_svg
     }
@@ -680,7 +667,7 @@ var display_filter_menu = function (d) {
     } else {
         filter_menu_open = false;
         ui_side_svg.transition()
-            .attr("transform", "translate(" +  -sidebar_width*0.75 + " ,0)");
+            .attr("transform", "translate(" +  (-sidebar_width*0.75) + " ,0)");
     }
 
 }
@@ -946,7 +933,6 @@ var display_filter_menu = function (d) {
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave)
-            .on("click", mouseclick);
         
         forceSimulation = d3.forceSimulation(nodes)
             .force("link", forceLink)
@@ -980,15 +966,8 @@ var display_filter_menu = function (d) {
 
 
 
-    var mouseclick = function(e,d) {
-
-        //tooltip's position is now fixed
-       
-    }
-
         function mouseover(d)
         {
-            d3.select(this.parentNode).raise();
             tooltip.style("visibility", "visible");
         }
     
@@ -1034,12 +1013,11 @@ var display_filter_menu = function (d) {
               lastBook += "(`•ω•) γʞɔυwγʞɔυʇ Ɉnǝw ϱniʜɈǝmoƧ !ǝiƨqooʜw ǝiƨqO"
             }
               tooltip
-                  .style('top', e.clientY - 20 + 'px')
-                  .style('left', e.clientX + 20 + 'px')
+                  .style('top', e.clientY - 30 + 'px')
+                  .style('left', e.clientX + 30 + 'px')
                   .html("<b>Name: </b>" + d.Name + "<br> <b> Allegiance: </b>" + d.Allegiances + "<br> <b> Year of death: </b>" + d.Death_Year + 
                   " AC <br><b> Death location: </b>" + d.Death_Location + "<br> <b>First appeared in: </b> " + firstBook+", chapter " + d.Book_Intro_Chapter + 
                   "<br> <b> Last appeared in: </b>" + lastBook + ", chapter " + d.Death_Chapter + "<br>")
-         
         
         }
     

@@ -683,7 +683,7 @@ var display_filter_menu = function (d) {
                                 .attr("height", 1)
                                 .append("svg:image")
                                 .attr("xlink:href",(d) => {
-                                    return "assets/emblems/" + d +".PNG"
+                                    return "assets/emblems/" + d +".png"
                                 })
                                 .attr("width", sidebar_width/10+"%")
             var selected_allegiances=[];
@@ -919,7 +919,7 @@ var display_filter_menu = function (d) {
                 // FIXME: We want to display all allegiances here...
                 var allegiance = d.data.Allegiances;
                 //var allegiance = d.Allegiances
-                return "assets/emblems/" + allegiance +".PNG"
+                return "assets/emblems/" + allegiance +".png"
             })
             .attr('width', emblem_size + "%")
             // .attr("height", "3%")

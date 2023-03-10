@@ -79,9 +79,8 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                 //.attr("height", "100%")
                 .attr('x', "0")
                 .attr('y', "0")
-                //.attr("preserveAspectRatio", "xMinYMin slice")
-        
-                document.addEventListener('DOMContentLoaded', function(event) {
+
+
                     //the event occurred
                     map_width = parseInt(map_image.style("width"));
                     map_height = parseInt(map_image.style("height"));
@@ -95,11 +94,15 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                     // FIXME: Change these values when the viewport is resized!
                     viewport_width = parseInt(map_svg.style("width"))
                     viewport_height = parseInt(map_svg.style("height"))
-                
+                    
+                    if(map_width==0)
+                        map_width = 4641
+                    if(map_height==0)
+                        map_height = 4032
                     min_scale_x = viewport_width / map_width;
                     min_scale_y = viewport_height / map_height;
                     min_scale = Math.max(min_scale_x, min_scale_y);
-                
+                    
                     let zoom = d3.zoom()
                         .touchable(true)
                         .scaleExtent([min_scale, 8])
@@ -108,11 +111,12 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                         
                     map_svg.call(zoom).on("dblclick.zoom", null);
                 
+                   
                     zoom.scaleBy(map_svg, min_scale);
                     
                 map_svg.call(zoom).on("dblclick.zoom", null);
             
-                  })
+
            
     
         return map_svg

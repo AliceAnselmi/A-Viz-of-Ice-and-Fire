@@ -209,18 +209,18 @@ function update_slider_infos(v1, v2) {
 }
 
 //brown slider background
-slider_background = g_slider.append("svg:image")
+/*slider_background = g_slider.append("svg:image")
     .attr("xlink:href", d => slider_bg_img)
     .attr("height", bottombar_height)
-    .attr("width", bottombar_width)
+    .attr("width", bottombar_width)*/
 //.attr('y', height - 80)
 
-// g_slider.append("rect")
-//     .attr("height", bottombar_height)
-//     .attr("width", bottombar_width)
-//     .attr("rx", 10)
-//     .attr("ry", 10)
-//     .attr("fill", "rgba(0,162,162,0.07)")
+slider_background = g_slider.append("rect")
+     .attr("height", bottombar_height)
+     .attr("width", bottombar_width)
+     .attr("rx", 10)
+     .attr("ry", 10)
+     .attr("fill", "rgba(0,162,162,0)")
 
 var slider_infos = g_slider.append('g')
     //.attr("transform", "translate(" + width / 3 + "," + (height - 140) + ")")
@@ -232,7 +232,8 @@ slider_infos.append("rect")
     .attr("rx", 10)
     .attr("ry", 10)
     .attr("x",  (bottombar_width/3) +25 )
-    .attr("fill", "#c3b7a0")
+    .attr("fill", "#fdfdfd")
+    .attr('stroke', '#000000')
     slider_background.raise();
 
 var slider_infos_text = slider_infos.append("text")

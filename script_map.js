@@ -849,8 +849,8 @@ var display_filter_menu = function (d) {
         emblems
             .append("circle")
             .attr("r", (d) => {
-                if(d.length < 8)
-                    return 8;
+                if(d.length < 10)
+                    return 10;
                 return d.length*1.5
             })
             .attr("fill", "blue")

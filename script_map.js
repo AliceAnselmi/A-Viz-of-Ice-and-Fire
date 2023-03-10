@@ -84,13 +84,6 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
         map_width = parseInt(map_image.style("width"));
         map_height = parseInt(map_image.style("height"));
     
-        g.append("rect")
-            .attr("width", 10)
-            .attr("height", 10)
-            .attr("x", map_width/2 - 5)
-            .attr("y", map_height/2 - 5)
-            .attr("fill", "#ff00ff");
-    
         // Zoom
         function handleZoom(e) {
             g.attr("transform", e.transform);
@@ -412,10 +405,6 @@ var handle = slider.selectAll("circle")
     .style("width", "3%")
     .style("height", "auto")
     .style("cursor", "pointer")
-    .on("mouseover", () => {
-        d3.select(this).attr("stroke", "#493521")
-            .attr("stroke-width", "3px")
-    })
     .call(
         d3.drag()
             .on("start", startDrag)
@@ -846,6 +835,7 @@ var display_filter_menu = function (d) {
             {
                 location_to_deaths[location] = [person];
             }
+            
         });
     
         emblems = create_emblems(svg);
@@ -861,8 +851,6 @@ var display_filter_menu = function (d) {
         map_width = parseInt(map_image.style("width"));
         map_height = parseInt(map_image.style("height"));
     
-        console.log(location_to_deaths)
-        // FIXME: Make a parent element to all emblems
         const emblems = emblem_g.selectAll('.emblem')
             .data(Object.values(location_to_deaths))
             .join('g')
@@ -876,21 +864,17 @@ var display_filter_menu = function (d) {
     
         
         emblems
-            // .append('svg:image')
             .append("circle")
-            .attr("r", 15)
+            .attr("r", (d) => {
+                if(d.length < 8)
+                    return 8;
+                return d.length*1.5
+            })
             .attr("fill", "blue")
             .attr("stroke", "black")
             .attr("stroke-width", "1px")
-            .attr("opacity", 0.7)
+            .attr("opacity", 0.6)
             .attr('class', 'emblem')
-            // .attr("xlink:href", (d) => {
-            //     // console.log(d[0].Allegiances)
-            //     // FIXME: We want to display all allegiances here...
-            //     var allegiance = d[0].Allegiances;
-            //     //var allegiance = d.Allegiances
-            //     return "assets/emblems/" + allegiance +".PNG"
-            // })
             .style('width', "2%")
             .style("height", "auto")
             .attr("cursor", "pointer");
@@ -1069,7 +1053,9 @@ var display_filter_menu = function (d) {
         if (emblem == null) return;
         forceSimulation.stop();
     
-        emblem.select(".emblem").attr("visibility", "visible")
+        emblem.select(".emblem")
+        .attr("visibility", "visible")
+        .attr("pointer-events", "all");
     
         emblem.selectAll(".popup").remove();
         // FIXME: remove the <g> tags
@@ -1081,6 +1067,7 @@ var display_filter_menu = function (d) {
         var filteredvalue;
            d3.selectAll(".popup")
                .filter((d) => {
+               
                  if(currview==0)
                    filteredvalue= d.data.Timeline_Chapter_Death;
                  else
@@ -1092,7 +1079,6 @@ var display_filter_menu = function (d) {
                })
                .attr("visibility", "hidden")
                .attr("pointer-events", "none");
-   
            d3.selectAll(".popup")
                .filter((d) => {
                    if(currview==0)
@@ -1135,9 +1121,75 @@ var display_filter_menu = function (d) {
                     })
             .attr("stroke-opacity", 1)
 
-            
-   
-       }
+                d3.selectAll(".emblem")
+                .filter((d) => {
+                    var location = d[0].Death_Location;
+                    return location_to_deaths[location].length == 0
+                })
+                .attr("visibility", "hidden")
+                .attr("pointer-events", "none");
+
+
+                var filtered_counter = {}
+
+                d3.selectAll(".emblem")
+                .each(function(d) {
+                    for(var i = 0 ; i<d.length; i++){
+                        var person = d[i]; 
+                        if(currview==0)
+                        filteredvalue= d[i].Timeline_Chapter_Death;
+                    else
+                        filteredvalue = d[i].Death_Year;
+                    if(((selected_allegiances.length > 0)&& (!selected_allegiances.includes(d[i].Allegiances) || filteredvalue < min || filteredvalue > max)) ||
+                          (filteredvalue < min || filteredvalue > max)){
+                            if(d[0].Death_Location in filtered_counter)
+                                filtered_counter[d[i].Death_Location] += 1;
+                            else
+                                filtered_counter[d[i].Death_Location] = 1;
+                          }
+                    }
+                    })
+                    .attr("r", function(d){
+                        if(d[0].Death_Location in filtered_counter){
+                        num_dead_not_filtered = location_to_deaths[d[0].Death_Location].length - filtered_counter[d[0].Death_Location]
+                        if(num_dead_not_filtered< 8)
+                            return 8;
+                        return num_dead_not_filtered*1.5
+                        }
+                        else
+                            return d3.select(this).attr("r")
+                    })
+                    .filter(function(d) {
+                        var location = d[0].Death_Location;
+                        if(selected_emblem != null)
+                            return filtered_counter[location] == location_to_deaths[location].length || selected_emblem.data()[0][0].Death_Location ==location
+                        else
+                             return filtered_counter[location] == location_to_deaths[location].length 
+                        })
+                .attr("visibility", "hidden")
+                .attr("pointer-events", "none");
+
+                d3.selectAll(".emblem")
+                    .filter((d) => {
+                        var location = d[0].Death_Location;
+                        if(location in filtered_counter){
+                            if(selected_emblem!=null )
+                                return filtered_counter[location] < location_to_deaths[location].length && selected_emblem.data()[0][0].Death_Location !=location
+                            else 
+                            return filtered_counter[location] < location_to_deaths[location].length 
+                            }    
+                            else{
+                                if(selected_emblem!=null)
+                                    return selected_emblem.data()[0][0].Death_Location !=location;
+                                else
+                                  return true;
+                            }
+                    })
+
+                .attr("visibility", "visible")
+                .attr("pointer-events", "all");
+
+    }
 
 
 // ---------------------------//

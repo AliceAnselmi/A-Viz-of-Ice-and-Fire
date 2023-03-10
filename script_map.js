@@ -31,7 +31,7 @@ const emblem_size = 2 //Determines the size of the emblems
 var ui_side_svg = d3.select("#sidebar_svg")
     .attr('width', sidebar_width+ 100)
     .attr('height', sidebar_height)
-    // .attr('transform', "translate(" +  -sidebar_width*0.75 + " ,0)")
+    .attr('transform', "translate(" +  (-sidebar_width*0.75) + " ,0)")
 
 
 var ui_bottom_svg = d3.select('#bottombar_svg')
@@ -188,12 +188,6 @@ function update_slider_infos(v1, v2) {
     )
 }
 
-//brown slider background
-/*slider_background = g_slider.append("svg:image")
-    .attr("xlink:href", d => slider_bg_img)
-    .attr("height", bottombar_height)
-    .attr("width", bottombar_width)*/
-//.attr('y', height - 80)
 
 slider_background = g_slider.append("rect")
      .attr("height", bottombar_height)
@@ -491,7 +485,7 @@ function endDrag(event, d) {
 //      View     selector     //
 // --------------------------//
 
-const view_selector = slider.append("rect")
+const view_selector = g_slider.append("rect")
     .attr("id", "view_selector_rect")
     .attr('width', bottombar_width/8)
     .attr('height', bottombar_height/3)
@@ -508,12 +502,14 @@ const view_selector = slider.append("rect")
             .attr("stroke-width", "1px")
             .attr("stroke", "black")
     })
-view_selector.attr("x", -bottombar_width / 3.4)
-    .attr("y",-10)
+view_selector.attr("x", bottombar_width*0.1)
+    .attr("y", 40)
 
-var slider_selector_text = slider.append("text")
-    .attr("x",  -bottombar_width / 3.6)
-    .attr("y", -view_selector.attr("y")+5)
+    
+
+var slider_selector_text = g_slider.append("text")
+.attr("x", bottombar_width*0.12)
+.attr("y", view_selector.attr("y")*1.7)
     //.attr("font-size", "25px")
     .attr("font-size", (bottombar_height/5 + "px"))
     .attr("cursor", "pointer")
@@ -540,7 +536,6 @@ function updateView() {
         // .attr('object-position', 'center')
         // .attr('width', slider_length)
         // .attr('y', 5)
-
 
 
     if (currview == 0) {
@@ -1175,7 +1170,7 @@ var display_filter_menu = function (d) {
 //      Credits     button     //
 // --------------------------//
 
-const credits_button = slider.append("rect")
+const credits_button = g_slider.append("rect")
     .attr("id", "credits_selector_rect")
     .attr('width', bottombar_width/8)
     .attr('height', bottombar_height/3)
@@ -1192,13 +1187,12 @@ const credits_button = slider.append("rect")
             .attr("stroke-width", "1px")
             .attr("stroke", "black")
     })
-    credits_button.attr("x", bottombar_width*0.55)
-    .attr("y",-10)
+    credits_button.attr("x", bottombar_width*0.82)
+    .attr("y",40)
 
-const credits_buttons_text = slider.append("text")
-    .attr("x",   bottombar_width*0.58)
-    .attr("y", -credits_button.attr("y")+5)
-    //.attr("font-size", "25px")
+const credits_buttons_text = g_slider.append("text")
+    .attr("x", bottombar_width*0.84)
+    .attr("y",credits_button.attr("y")*1.7)
     .attr("font-size", (bottombar_height/5 + "px"))
     .attr("cursor", "pointer")
     .text("Credits");

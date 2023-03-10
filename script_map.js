@@ -1191,7 +1191,7 @@ const credits_button = g_slider.append("rect")
     .attr("y",40)
 
 const credits_buttons_text = g_slider.append("text")
-    .attr("x", bottombar_width*0.84)
+    .attr("x", bottombar_width*0.85)
     .attr("y",credits_button.attr("y")*1.7)
     .attr("font-size", (bottombar_height/5 + "px"))
     .attr("cursor", "pointer")

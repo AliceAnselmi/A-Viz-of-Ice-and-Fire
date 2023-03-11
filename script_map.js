@@ -647,12 +647,12 @@ function updateView() {
 
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x", 25)
+        .attr("x", 15)
         .attr("y", 80)
         .html("Filter by")
         g_filter.append("text")
         .attr("font-size","33px")
-        .attr("x", 40)
+        .attr("x", 30)
          .attr("y", 120)
         .html("house")
 
@@ -756,15 +756,15 @@ var display_filter_menu = function (d) {
                         .attr("id", "reset_rect")
                         .attr('width', 120)
                         .attr('height', 30)
-                        .attr("x", sidebar_width/10)
+                        .attr("x", sidebar_width/14)
                         .attr("y", sidebar_height*0.95)
                         .attr('stroke', 'black')
                         .attr('fill', 'white')
                          
             g_reset.append("text")
                         .attr("font-size","28px")
-                        .attr("x", sidebar_width/4)
-                        .attr("y", sidebar_height*0.95 +22)
+                        .attr("x", sidebar_width/5)
+                        .attr("y", sidebar_height*0.95 +25)
                         .text("Reset")    
                         .attr("cursor", "pointer");     
 

@@ -1174,6 +1174,7 @@ var display_filter_menu = function (d) {
 //      Credits     button     //
 // --------------------------//
 
+credits_button_clicked=false;
 const credits_button = g_slider.append("rect")
     .attr("id", "credits_selector_rect")
     .attr('width', bottombar_width/8)
@@ -1211,7 +1212,15 @@ const credits_buttons_text = g_slider.append("text")
             .attr("stroke-width", "1px")
             .attr("stroke", "black")
     })
-    credits_button.on("click", () => { g_credits.attr('visibility', 'visible')});
+    credits_button.on("click", () => { 
+        if(credits_button_clicked==false){
+        credits_button_clicked=true;
+        g_credits.attr('visibility', 'visible')}
+        else
+        {
+            credits_button_clicked=false;
+            g_credits.attr('visibility', 'hidden')
+        }});
 
 const g_credits = svg.append("g")
 .attr("visibility", "hidden")

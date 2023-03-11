@@ -634,7 +634,7 @@ function updateView() {
     .attr('y', 20)
     .attr('stroke', '#000000')
     .attr('stroke-width', 2)
-    .attr('fill', 'rgba(194,176,149,0.32)')
+    .attr('fill', 'rgba(194,184,160,0.32)')
 
 
         
@@ -1239,7 +1239,27 @@ g_credits.append("text")
     .attr('width', "3.5%")
     .attr("cursor", "pointer")
     .on("click", () => { g_credits.attr('visibility', 'hidden')})
+
+    g_credits.selectAll("rect")
+    .data([0,1,2,3,4,5])
+    .enter().append("svg:image")
+    .attr("xlink:href", d => "assets/photos/photo_" + d + ".png")
+    .style("width", "10%")
+    .style("height", "auto")
+    .attr("x", (d)=> {
+       return 150+width*0.12*d
+    })
+    .attr('y',height*0.28)
+
+    names=["Julius Häger", "Philip Berrez","Fabian Hugert", "Alice Anselmi", "Christoffer Eriksson"]
+    g_credits.selectAll("text")
+    .data([0,1,2,3,4,5])
+    .enter().append("text")
+    .text((d)=> { return names[d-1]})
+    .style("font-size", "27px")
+    .attr("x", (d)=> {
+       return 150+width*0.12*d
+    })
+    .attr('y',height*0.57)
+
     
-function showcredits() {
-   
-}

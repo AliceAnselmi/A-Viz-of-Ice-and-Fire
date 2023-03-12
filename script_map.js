@@ -99,7 +99,7 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                     
                     let zoom = d3.zoom()
                         .touchable(true)
-                        .scaleExtent([min_scale*0.8, 8])
+                        .scaleExtent([min_scale*0.8, 6])
                         .translateExtent([[0,0], [map_width, map_height]])
                         .on("zoom", handleZoom)
                         

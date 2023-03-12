@@ -1,4 +1,4 @@
-map_img = "assets/Map.svg"
+map_img = "assets/Map.png"
 slider_bg_img = "assets/slider_bg.png"
 range_button_high_img = "assets/range_button_high.png"
 range_button_low_img ="assets/range_button_low.png"
@@ -122,7 +122,7 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
 
 
     // ---------------------------//
-    //       Tooltip              //
+    //       Tooltips              //
     // ---------------------------//
     const tooltip = d3.select("body").append("g")
         .attr("class", "tooltip")
@@ -133,6 +133,16 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
         .style("border-width", "2px")
         .style("border-radius", "5px")
         .style("padding", "5px")
+
+    const map_tooltip = d3.select("body").append("g")
+    .attr("class", "location_tooltip")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
 
   
 
@@ -265,20 +275,24 @@ var move_handle_one_tick = function (e, d,) {
             x_handle = x_slider(new_value)
             var x_other_handle = x_slider(sliderVals[clickedhandle == 0 ? 1 : 0])
             //handle overlap
-            if (clickedhandle == 0) { //if lower handle
-                if (x_handle >= x_other_handle - 40) {
-                    x_handle = x_other_handle
-                }
-            } else { //otherwise
-                if (x_handle <= x_other_handle + 40) {
-                    x_handle = x_other_handle
-                }
+
+            // console.log(x_other_handle)
+            
+        var value_other_handle = Math.round(x_slider.invert(x_other_handle));
+        if (clickedhandle == 0) { //if lower handle
+            if (new_value >= value_other_handle) {
+                new_value = value_other_handle
             }
+        } else { //otherwise
+            if (new_value <= value_other_handle) {
+                new_value = value_other_handle
+            }
+        }
 
 
-            if (x_handle < xMin && x_handle <= x_other_handle + 40)
+            if (x_handle < xMin && x_handle <= x_other_handle )
                 x_handle = xMin;
-            else if (x_handle > xMax && x_handle >= x_other_handle - 40)
+            else if (x_handle > xMax && x_handle >= x_other_handle)
                 x_handle = xMax;
 
             d3.selectAll(".handle" + clickedhandle).attr("x", x_handle - handle_offset)
@@ -407,18 +421,18 @@ function onDrag(event, d) {
     var x_other_handle = x_slider(sliderVals[d == 0 ? 1 : 0])
     //handle overlap
     if (d == 0) { //if lower handle
-        if (x_cursor >= x_other_handle - 40) {
+        if (x_cursor >= x_other_handle - 10) {
             x_cursor = x_other_handle
         }
     } else { //otherwise
-        if (x_cursor <= x_other_handle + 40) {
+        if (x_cursor <= x_other_handle + 10) {
             x_cursor = x_other_handle
         }
     }
 
-    if (x_cursor < xMin && x_cursor <= x_other_handle + 40)
+    if (x_cursor < xMin && x_cursor <= x_other_handle + 10)
         x_cursor = xMin;
-    else if (x_cursor > xMax && x_cursor >= x_other_handle - 40)
+    else if (x_cursor > xMax && x_cursor >= x_other_handle - 10)
         x_cursor = xMax;
 
     d3.select(this).attr("x", x_cursor - handle_offset)
@@ -842,6 +856,9 @@ var display_filter_menu = function (d) {
                 return `translate(${coord.x_pixels},${coord.y_pixels})`
             })
             .on("click", click)
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
             
     
         
@@ -873,6 +890,21 @@ var display_filter_menu = function (d) {
             select_emblem(emblem, d)
             updateMap(v1, v2, currview);
         }
+        function mouseover(e, d)
+        {
+            map_tooltip.style("visibility", "visible");
+        }
+        function mousemove(e, d){
+            map_tooltip
+                  .style('top', e.clientY - 30 + 'px')
+                  .style('left', e.clientX + 30 + 'px')
+                  .html(d[0].Death_Location)
+        }
+        function mouseleave(d)
+        {
+            map_tooltip.style("visibility", "hidden");
+        }
+
     }
     
     function select_emblem(emblem, data)

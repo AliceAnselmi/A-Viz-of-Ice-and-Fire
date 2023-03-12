@@ -54,11 +54,6 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
             window.resizeTo(bottombar_width + "px", sidebar_limit + "px");
             console.log("Resize" + " to " + bottombar_width + " x " + sidebar_limit)
         };
-     //       .attr("preserveAspectRatio", "xMinYMin slice")
-    /*    ui_bottom_svg.attr('width', width)
-            .attr("preserveAspectRatio", "xMinYMin slice")*/
-        //create_mapview();
-    
         ui_bottom_svg.attr("transform", "translate(" + ((width-bottombar_width)/2) + ",0)");
 
         console.log(Ytranslation_rescale)
@@ -91,7 +86,6 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                         g.attr("scale", e.scale);
                     }
                 
-                    // FIXME: Change these values when the viewport is resized!
                     viewport_width = parseInt(map_svg.style("width"))
                     viewport_height = parseInt(map_svg.style("height"))
                     
@@ -105,7 +99,7 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                     
                     let zoom = d3.zoom()
                         .touchable(true)
-                        .scaleExtent([min_scale, 8])
+                        .scaleExtent([min_scale*0.8, 8])
                         .translateExtent([[0,0], [map_width, map_height]])
                         .on("zoom", handleZoom)
                         

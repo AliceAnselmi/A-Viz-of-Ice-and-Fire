@@ -1,4 +1,4 @@
-map_img = "assets/speculative_map_cut.jpg"
+map_img = "assets/Map.svg"
 slider_bg_img = "assets/slider_bg.png"
 range_button_high_img = "assets/range_button_high.png"
 range_button_low_img ="assets/range_button_low.png"
@@ -67,7 +67,6 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                 .attr("preserveAspectRatio", "xMinYMin slice")
         
             g = map_svg.append("g")
-        
             const map_image = g.append("svg:image")
                 .attr("href", d => map_img)
                 //.attr('width', "100%")
@@ -79,6 +78,7 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                     //the event occurred
                     map_width = parseInt(map_image.style("width"));
                     map_height = parseInt(map_image.style("height"));
+                    console.log(map_width)
                 
                     // Zoom
                     function handleZoom(e) {
@@ -107,7 +107,7 @@ var ui_bottom_svg = d3.select('#bottombar_svg')
                 
                    
                     zoom.scaleBy(map_svg, min_scale);
-                    
+
                 map_svg.call(zoom).on("dblclick.zoom", null);
             
 
@@ -200,12 +200,13 @@ var slider_infos = g_slider.append('g')
 
 slider_infos.append("rect")
     .attr("height", bottombar_height/2)
-    .attr("width", bottombar_width/3)
+    .attr("width", slider_length)
     .attr("rx", 10)
     .attr("ry", 10)
-    .attr("x",  (bottombar_width/3) +25 )
+    .attr("x",  (bottombar_width/3) - 25 )
+    .attr("y", 5)
     .attr("fill", "#fdfdfd")
-    .attr('stroke', '#000000')
+    .attr('stroke', 'rgba(0,0,0,0)')
     slider_background.raise();
 
 var slider_infos_text = slider_infos.append("text")
@@ -492,7 +493,7 @@ const view_selector = g_slider.append("rect")
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {
         d3.select(this)
-            .attr("stroke", "#493521")
+            .attr("stroke", "#f3f3f3")
             .attr("stroke-width", "3px")
     })
     .on("mouseleave", function (d) {
@@ -628,7 +629,7 @@ function updateView() {
     .attr('y', 20)
     .attr('stroke', '#000000')
     .attr('stroke-width', 2)
-    .attr('fill', 'rgba(194,184,160,0.32)')
+    .attr('fill', 'rgba(152,231,255,0.32)')
 
 
         
@@ -1174,6 +1175,8 @@ const credits_button = g_slider.append("rect")
     .attr('width', bottombar_width/8)
     .attr('height', bottombar_height/3)
     .attr('stroke', 'black')
+    .attr("rx", 10)
+    .attr("ry", 10)
     .attr('fill', 'white')
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {

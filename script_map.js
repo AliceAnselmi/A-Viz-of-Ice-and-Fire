@@ -846,7 +846,7 @@ function create_emblems(map) {
         })
         .attr("fill", "#000000")
         .attr("stroke", "#e80b0b")
-        .attr("stroke-width", 2)
+        .attr("stroke-width", 6)
         .attr("opacity", 0.8)
         .attr('class', 'emblem')
         .style('width', "2%")

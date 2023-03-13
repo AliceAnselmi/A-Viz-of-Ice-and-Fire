@@ -27,8 +27,8 @@ body, svg {
 }
 
 #sidebar_svg{
-    min-height: 500px;
-    object-position: center;
+
+    object-position: left center;
 
 
 }
@@ -36,8 +36,8 @@ body, svg {
 #bottombar_svg{
     object-position: bottom center;
 
-    display: inline;
-    position: fixed;
+/*    display: inline;
+    position: fixed;*/
 
 }
 
@@ -69,3 +69,4 @@ text {
     display: inline-block;
     background: #000;
 }
+

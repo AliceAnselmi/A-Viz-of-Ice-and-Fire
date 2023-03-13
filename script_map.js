@@ -221,9 +221,9 @@ slider_infos.append("rect")
 
 var slider_infos_text = slider_infos.append("text")
     .attr("text-anchor", "middle")
-    .attr("font-size", "20px")
-    .attr("x", bottombar_width/2 +20)
-    .attr('y', 25)
+    .attr("font-size", "25px")
+    .attr("x", bottombar_width/2 +40)
+    .attr('y', 35)
 update_slider_infos(sliderVals[0], sliderVals[1]);
 
 

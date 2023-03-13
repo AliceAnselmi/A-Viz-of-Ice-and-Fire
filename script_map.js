@@ -461,13 +461,13 @@ function endDrag(event, d) {
 
     //handle overlap
     if (d == 0) { //if lower handle
-        if (x_cursor >= x_other_handle - 40) {
+        if (x_cursor >= x_other_handle - 10) {
             v = sliderVals[1] //value of the other handle
         } else {
             v = Math.round(x_slider.invert(x_cursor))
         }
     } else { //otherwise
-        if (x_cursor <= x_other_handle + 40) {
+        if (x_cursor <= x_other_handle + 10) {
             v = sliderVals[0] //value of the other handle
         } else {
             v = Math.round(x_slider.invert(x_cursor))
@@ -898,11 +898,13 @@ var display_filter_menu = function (d) {
                  map_tooltip.style("visibility", "visible");
         }
         function mousemove(e, d){
-            if(selected_emblem == null)
+
             map_tooltip
                   .style('top', e.clientY - 30 + 'px')
                   .style('left', e.clientX + 30 + 'px')
                   .html("<b>" +d[0].Death_Location + "</b> <br>Deaths: " + d.length)
+
+            }
 
         }
         function mouseleave(d)
@@ -910,7 +912,6 @@ var display_filter_menu = function (d) {
             map_tooltip.style("visibility", "hidden");
         }
 
-    }
     
     function select_emblem(emblem, data)
     {
@@ -1021,7 +1022,7 @@ var display_filter_menu = function (d) {
               firstBook += "A Feast for Crows"
             }
             else if (d.DwD == 1) {
-              firstBook += "A Dance with Dragons,"
+              firstBook += "A Dance with Dragons"
             } else { 
               firstBook += "Opsie whoopsie! Something went fuckywucky (•ω•`)"}
             
@@ -1164,7 +1165,7 @@ var display_filter_menu = function (d) {
                         num_dead_not_filtered = location_to_deaths[d[0].Death_Location].length - filtered_counter[d[0].Death_Location]
                         if(num_dead_not_filtered< 4)
                             return 20;
-                            return Math. sqrt(d.length)*12
+                        return Math. sqrt(num_dead_not_filtered)*12
                         }
                         else
                             return d3.select(this).attr("r")

@@ -346,6 +346,8 @@ slider_info_bg_img = "assets/slider_info_bg.png"
         // files[0] will contain file1.csv
         // files[1] will contain file2.csv
         const data = files[0];
+        console.log(data);
+        console.log("just printed csv file data");
         const coordinates = files[1];
 
         // Coordinates calculation

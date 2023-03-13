@@ -114,7 +114,8 @@ function create_emblems(map)
     map_width = parseInt(map_image.style("width"));
     map_height = parseInt(map_image.style("height"));
 
-    console.log(location_to_deaths)
+    //console.log(location_to_deaths)
+    //console.log("just printed location to deaths")
     // FIXME: Make a parent element to all emblems
     const emblems = emblem_g.selectAll('.emblem')
         .data(Object.values(location_to_deaths))
@@ -131,6 +132,8 @@ function create_emblems(map)
             // FIXME: We want to display all allegiances here...
             var allegiance = d[0].Allegiances;
             //var allegiance = d.Allegiances
+            //var deathlocation = d[0].Location;
+            //console.log(deathlocation)
             return "assets/emblems/" + allegiance +".PNG"
         })
         .style('width', "2%")
@@ -142,15 +145,25 @@ function create_emblems(map)
     function click(e, d)
     {
         emblem = d3.select(this)
+        //console.log(d3.select(this))
         deselect_emblem(selected_emblem, d)
         selected_emblem = emblem;
         select_emblem(emblem, d)
+        console.log("in click" + deathlocation) //undefined deathlocation
+        //window.alert(`in click function ${d}`) // [object Object]
+        //window.alert(`in click function ${emblem[0].Location}`) // no alert
+        //window.alert(`in click function ${d[0].Location}`) // undefined
+        //window.alert(`in click function ${d.Name}`) // undefined
+        //window.alert(`in click function ${d.data.Location}`) // confirmed, we are at the right place
+
+
     }
 }
 
 function select_emblem(emblem, data)
 {
     center = ({id: 0, data: data, x: 0, y: 0, fx: 0, fy: 0})
+    console.log(center) 
     function intern(value) {
         return value !== null && typeof value === "object" ? value.valueOf() : value;
     }
@@ -274,4 +287,44 @@ const tooltip = d3.select("body").append("div")
     .style("padding", "5px")
 
 const map_svg = create_mapview();
+
+
+
+      //-----------------------------//
+    //  play sound template   //
+    // ---------------------------//
+
+const ctx = new AudioContext();
+let audio;
+
+/*
+function chooseSound(this, uncodedAudio){
+    if this.LocationType == city
+
+}
+*/
+    /*
+
+    const ctx = new AudioContext();
+    let audio;
+
+    fetch ("./assets/sfx/bell edit.mp3")
+        .then(data => data.arrayBuffer()) // insert data from mp3 to an array (buffer)
+        .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+        .then(decodedAudio => {
+            audio = decodedAudio; // assign audio to decoded audio 
+        }); // can now be utilized with nodes
+
+    // play sound function
+    function playback(){
+        const playSound = ctx.createBufferSource();
+        playSound.buffer = audio;
+        playSound.connect(ctx.destination);
+        playSound.start(ctx.currentTime);
+    }
+
+    //event playbutton
+    window.addEventListener("keydown", playback);
+
+    */
 

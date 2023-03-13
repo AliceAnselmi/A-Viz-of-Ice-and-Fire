@@ -140,6 +140,16 @@ const map_tooltip = d3.select("body").append("g")
     .style("border-width", "2px")
     .style("border-radius", "5px")
     .style("padding", "5px")
+    
+const allegiance_tooltip = d3.select(".ui").append("g")
+.attr("class", "allegiance_tooltip")
+.style("position", "absolute")
+.style("visibility", "hidden")
+.style("background-color", "white")
+.style("border", "solid")
+.style("border-width", "2px")
+.style("border-radius", "5px")
+.style("padding", "5px")
 
 
 // ---------------------------//
@@ -720,12 +730,23 @@ filters
         return "url(#pattern" + i + ")"
     })
     .style("cursor", "pointer")
-    .on("mouseover", function (d) {
+    .on("mouseover", function (e,d) {
         d3.select(this)
             .attr("stroke-width", "6px")
             .attr("stroke", "#00c3ff")
+
+        allegiance_tooltip.style("visibility", "visible");
     })
+    .on("mousemove", function (e, d) {
+         allegiance_tooltip
+            .style('top', e.clientY - 30 + 'px')
+            .style('left', e.clientX + 30 + 'px')
+            .html(d)
+
+    })
+    
     .on("mouseleave", function (e, d) {
+        allegiance_tooltip.style("visibility", "hidden");
         if (!selected_allegiances.includes(d)) {
             d3.select(this)
                 .attr("stroke-width", "1px")

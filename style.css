@@ -22,7 +22,7 @@ body, svg {
     left: 0px;
     margin: 0px;
     padding: 0px;
-    color: transparent;
+    /* color: transparent; */
     z-index: 10;
 }
 

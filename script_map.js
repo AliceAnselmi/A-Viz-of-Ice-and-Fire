@@ -18,6 +18,7 @@ var g;
 
 const bottombar_width = 1200;
 const bottombar_height = 120;
+const sidebar_width = 200;
 const sidebar_height = height - bottombar_height;
 const sidebar_width = 300;
 const sidebar_limit = 500;
@@ -32,6 +33,7 @@ const bg_stroke_color = "#050505"
 const btn_color = "#f3e2ce"
 const btn_stroke_color = "#000000"
 const highlight_color = "#493521"
+/*"#493521" OLD HIGHLIGHT COLOR*/
 
 var ui_side_svg = d3.select("#sidebar_svg")
     .attr('width', sidebar_width + 100)
@@ -518,13 +520,13 @@ const view_selector = g_slider.append("rect")
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {
         d3.select(this)
-            .attr("stroke", "#493521")
+            .attr("stroke", highlight_color)
             .attr("stroke-width", "3px")
     })
     .on("mouseleave", function (d) {
         d3.select(this)
             .attr("stroke-width", "1px")
-            .attr("stroke", "black")
+            .attr("stroke", btn_stroke_color)
     })
 view_selector.attr("x", bottombar_width * 0.05)
     .attr("y", 40)
@@ -806,7 +808,8 @@ g_reset.append("rect")
 
 g_reset.append("text")
     .attr("font-size", "28px")
-    .attr("x", sidebar_width / 4)
+    .attr("text-anchor", "middle")
+    .attr("x", sidebar_width*0.75/2)
     .attr("y", sidebar_height * 0.95 + 25)
     .text("Reset")
     .attr("cursor", "pointer");
@@ -1240,20 +1243,20 @@ const credits_button = g_slider.append("rect")
     .attr("id", "credits_selector_rect")
     .attr('width', bottombar_width / 8)
     .attr('height', bottombar_height / 3)
-    .attr('stroke', 'black')
+    .attr('stroke', btn_stroke_color)
     .attr("rx", 10)
     .attr("ry", 10)
     .attr('fill', btn_color)
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {
         d3.select(this)
-            .attr("stroke", "#493521")
+            .attr("stroke", highlight_color)
             .attr("stroke-width", "3px")
     })
     .on("mouseleave", function (d) {
         d3.select(this)
             .attr("stroke-width", "1px")
-            .attr("stroke", "black")
+            .attr("stroke", btn_stroke_color)
     })
 credits_button.attr("x", bottombar_width * 0.84)
     .attr("y", 40)

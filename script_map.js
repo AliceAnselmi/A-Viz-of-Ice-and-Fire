@@ -1323,7 +1323,12 @@ g_credits.selectAll("rect")
     .data([0, 1, 2, 3, 4, 5])
     .enter().append("svg:image")
     .attr("xlink:href", d => "assets/photos/photo_" + d + ".png")
-    .style("width", "10%")
+    .style("width", (d) => {
+            if (d!=5)
+             return"10%"
+             else
+            return "10.8%"
+    })
     .style("height", "auto")
     .attr("x", (d) => {
         return 150 + width * 0.12 * d

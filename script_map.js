@@ -867,14 +867,14 @@ var display_filter_menu = function (d) {
         emblems
             .append("circle")
             .attr("r", (d) => {
-                if(d.length < 10)
-                    return 10;
-                return d.length*1.5
+                if(d.length < 4)
+                    return 20;
+                return Math. sqrt(d.length)*12
             })
-            .attr("fill", "blue")
+            .attr("fill", "red")
             .attr("stroke", "black")
-            .attr("stroke-width", "1px")
-            .attr("opacity", 0.6)
+            .attr("stroke-width", "3px")
+            .attr("opacity", 0.8)
             .attr('class', 'emblem')
             .style('width', "2%")
             .style("height", "auto")
@@ -902,7 +902,8 @@ var display_filter_menu = function (d) {
             map_tooltip
                   .style('top', e.clientY - 30 + 'px')
                   .style('left', e.clientX + 30 + 'px')
-                  .html(d[0].Death_Location)
+                  .html("<b>" +d[0].Death_Location + "</b> <br>Deaths: " + d.length)
+
         }
         function mouseleave(d)
         {
@@ -1161,9 +1162,9 @@ var display_filter_menu = function (d) {
                     .attr("r", function(d){
                         if(d[0].Death_Location in filtered_counter){
                         num_dead_not_filtered = location_to_deaths[d[0].Death_Location].length - filtered_counter[d[0].Death_Location]
-                        if(num_dead_not_filtered< 8)
-                            return 8;
-                        return num_dead_not_filtered*1.5
+                        if(num_dead_not_filtered< 4)
+                            return 20;
+                            return Math. sqrt(d.length)*12
                         }
                         else
                             return d3.select(this).attr("r")

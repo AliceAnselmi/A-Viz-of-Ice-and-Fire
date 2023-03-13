@@ -31,6 +31,7 @@ var ui_side_svg = d3.select("#sidebar_svg")
     .attr('width', sidebar_width)
     .attr('height', sidebar_height)
     .attr('transform', "translate(" + (-sidebar_width*0.75 ) + " ,0)")
+    .style("visibility", "hidden")
 
 
 var ui_bottom_svg = d3.select('#bottombar_svg')
@@ -613,12 +614,19 @@ var process_coordinates = (d) => {
 // --------------------------//
 
 
-let g_filter = ui_side_svg.append("g")
+var g_filter = ui_side_svg.append("g")
+
+var g_filter_button = ui_side_svg.append("g")
+    .attr("height", 75)
+    .attr("width", sidebar_width)
+
 
 var filter_menu = g_filter.append('rect')
     .attr('height', sidebar_height)
     .attr('width', sidebar_width * 0.75)
+    .style("visibility", "visible")
     .attr('y', 20)
+    .attr("ry", 10)
     .attr('stroke', '#000000')
     .attr('stroke-width', 2)
     .attr('fill', 'rgb(207,218,228)')
@@ -628,16 +636,18 @@ var filter_button = g_filter.append("svg:image")
     .attr("xlink:href", "assets/filter_button.png")
     .style('width', sidebar_width / 4)
     .style("height", "auto")
-    .style("position", "relative")
+    .style("visibility", "visible")
     .attr('x', sidebar_width * 0.75)
     .attr("y", (sidebar_height - sidebar_width/4))
 
 g_filter.append("text")
     .attr("font-size", "33px")
     .attr("x", sidebar_width/5)
+    .style("visibility", "visible")
     .attr("y", 80)
     .html("Filter by")
 g_filter.append("text")
+    .style("visibility", "visible")
     .attr("font-size", "33px")
     .attr("x", sidebar_width/4)
     .attr("y", 120)
@@ -667,6 +677,8 @@ var filters = g_filter.selectAll('.filters')
     .enter()
     .append('g')
     .attr('class', 'filters')
+    .style("visibility", "visible")
+
 filters.append("pattern")
     .attr("id", (d, i) => {
         return "pattern" + i
@@ -678,6 +690,7 @@ filters.append("pattern")
         return "assets/emblems/" + d + ".PNG"
     })
     .attr("width", sidebar_width/4 )
+
 var selected_allegiances = [];
 filters
     .append("circle")
@@ -700,8 +713,8 @@ filters
     .style("cursor", "pointer")
     .on("mouseover", function (d) {
         d3.select(this)
-            .attr("stroke-width", "4px")
-            .attr("stroke", "#493521")
+            .attr("stroke-width", "6px")
+            .attr("stroke", "#00c3ff")
     })
     .on("mouseleave", function (e, d) {
         if (!selected_allegiances.includes(d)) {
@@ -732,6 +745,7 @@ filter_button
     .on("click", display_filter_menu)
 
 var g_reset = g_filter.append("g")
+    .style("visibility", "visible")
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {
         d3.select("#reset_rect")
@@ -776,7 +790,7 @@ g_reset.on("click", () => {
         .attr("stroke-opacity", 1)
     d3.selectAll(".filters")
         .attr("stroke-width", "1px")
-        .attr("stroke", "black")
+        .attr("stroke", "blue")
     updateMap(v1, v2, currview)
 
 })
@@ -844,8 +858,8 @@ function create_emblems(map) {
                 return 10;
             return d.length * 1.5
         })
-        .attr("fill", "#000000")
-        .attr("stroke", "#e80b0b")
+        .attr("fill", "#fff206")
+        .attr("stroke", "#000000")
         .attr("stroke-width", 6)
         .attr("opacity", 0.8)
         .attr('class', 'emblem')

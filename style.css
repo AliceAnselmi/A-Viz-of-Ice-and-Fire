@@ -29,6 +29,7 @@ body, svg {
 #sidebar_svg{
 
     object-position: left center;
+    pointer-events: visible;
 
 
 }
@@ -38,6 +39,7 @@ body, svg {
 
 /*    display: inline;
     position: fixed;*/
+
 
 }
 

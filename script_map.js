@@ -24,7 +24,7 @@ const sidebar_limit = 500;
 var Ytranslation_rescale = 0;
 
 var slider_length = bottombar_width * 0.4
-const emblem_size = 2 //Determines the size of the emblems
+const emblem_size = 3 //Determines the size of the emblems
 
 
 const bg_color = "#bfae94"
@@ -909,20 +909,23 @@ function create_emblems(map) {
 
     map_image.on("click", function (e, d) {
         deselect_emblem(selected_emblem);
+        selected_location="";
         selected_emblem = null;
     });
     return emblems
-
+    var selected_location;
     function click(e, d) {
         emblem = d3.select(this)
+        
         deselect_emblem(selected_emblem, d)
         selected_emblem = emblem;
+        selected_location = d[0].Death_Location
         select_emblem(emblem, d)
         updateMap(v1, v2, currview);
     }
 
     function mouseover(e, d) {
-        if (selected_emblem == null)
+        if (selected_location != d[0].Death_Location)
             map_tooltip.style("visibility", "visible");
     }
 
@@ -1094,7 +1097,6 @@ function deselect_emblem(emblem) {
     emblem.select(".emblem")
         .attr("visibility", "visible")
         .attr("pointer-events", "all");
-
     emblem.selectAll(".popup").remove();
     // FIXME: remove the <g> tags
     emblem.selectAll(".lines").remove();

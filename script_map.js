@@ -898,11 +898,17 @@ var display_filter_menu = function (d) {
                  map_tooltip.style("visibility", "visible");
         }
         function mousemove(e, d){
-
+            var numdead;
+            if(d[0].Death_Location in filtered_people_counter){
+                num_dead_not_filtered = location_to_deaths[d[0].Death_Location].length - filtered_people_counter[d[0].Death_Location]
+                numdead = num_dead_not_filtered
+                }
+                else
+                numdead = d.length
             map_tooltip
                   .style('top', e.clientY - 30 + 'px')
                   .style('left', e.clientX + 30 + 'px')
-                  .html("<b>" +d[0].Death_Location + "</b> <br>Deaths: " + d.length)
+                  .html("<b>" +d[0].Death_Location + "</b> <br>Deaths: " + numdead)
 
             }
 
@@ -1073,7 +1079,7 @@ var display_filter_menu = function (d) {
         emblem.selectAll(".lines").remove();
     }
     
-    
+    var filtered_people_counter={}
     function updateMap(min, max, currview) {
         var filteredvalue;
            d3.selectAll(".popup")
@@ -1199,7 +1205,7 @@ var display_filter_menu = function (d) {
 
                 .attr("visibility", "visible")
                 .attr("pointer-events", "all");
-
+                filtered_people_counter = filtered_counter;
     }
 
 

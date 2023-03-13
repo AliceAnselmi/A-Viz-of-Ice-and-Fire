@@ -18,7 +18,6 @@ var g;
 
 const bottombar_width = 1200;
 const bottombar_height = 120;
-const sidebar_width = 300;
 const sidebar_height = height - bottombar_height;
 const sidebar_limit = 500;
 var Ytranslation_rescale = 0;
@@ -28,7 +27,10 @@ const emblem_size = 2 //Determines the size of the emblems
 
 
 const bg_color = "#bfae94"
-const btn_color = "#e7d6c3"
+const bg_stroke_color = "#050505"
+const btn_color = "#f3e2ce"
+const btn_stroke_color = "#000000"
+const highlight_color = "#493521"
 
 var ui_side_svg = d3.select("#sidebar_svg")
     .attr('width', sidebar_width + 100)
@@ -209,6 +211,7 @@ slider_background = g_slider.append("rect")
     .attr("rx", 10)
     .attr("ry", 10)
     .attr("fill", bg_color)
+    .attr('opacity', 0)
 
 var slider_infos = g_slider.append('g')
 //.attr("transform", "translate(" + width / 3 + "," + (height - 140) + ")")
@@ -222,7 +225,7 @@ slider_infos.append("rect")
     .attr("x", (bottombar_width / 3) - 25)
     .attr("y", 5)
     .attr("fill", bg_color)
-    .attr('stroke', 'rgba(0,0,0,0)')
+    .attr('stroke', bg_stroke_color)
 slider_background.raise();
 
 var slider_infos_text = slider_infos.append("text")
@@ -509,7 +512,7 @@ const view_selector = g_slider.append("rect")
     .attr('height', bottombar_height / 3)
     .attr("rx", 10)
     .attr("ry", 10)
-    .attr('stroke', 'black')
+    .attr('stroke', btn_stroke_color)
     .attr('fill', btn_color)
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {
@@ -536,13 +539,13 @@ var slider_selector_text = g_slider.append("text")
 slider_selector_text.on("click", updateView)
     .on("mouseover", function (d) {
         d3.select("#view_selector_rect")
-            .attr("stroke", "#493521")
+            .attr("stroke", highlight_color)
             .attr("stroke-width", "3px")
     })
     .on("mouseleave", function (d) {
         d3.select("#view_selector_rect")
             .attr("stroke-width", "1px")
-            .attr("stroke", "black")
+            .attr("stroke", btn_stroke_color)
     })
 view_selector.on("click", updateView);
 
@@ -646,7 +649,7 @@ var filter_menu = g_filter.append('rect')
     .style("visibility", "visible")
     .attr('y', 20)
     .attr("ry", 10)
-    .attr('stroke', '#000000')
+    .attr('stroke', bg_stroke_color)
     .attr('stroke-width', 2)
     .attr('opacity', 0.8)
     .attr('fill', bg_color)
@@ -661,14 +664,14 @@ var filter_button = g_filter.append("svg:image")
 
 g_filter.append("text")
     .attr("font-size", "33px")
-    .attr("x", sidebar_width/5)
+    .attr("x", sidebar_width/8-10)
     .style("visibility", "visible")
     .attr("y", 60)
     .html("Filter by")
 g_filter.append("text")
     .attr("font-size", "33px")
     .attr("font-size", "33px")
-    .attr("x", sidebar_width/6)
+    .attr("x", sidebar_width/10-10)
     .attr("y", 100)
     .html("allegiance")
     .style("visibility", "visible")
@@ -733,9 +736,10 @@ filters
     .on("mouseover", function (e,d) {
         d3.select(this)
             .attr("stroke-width", "6px")
-            .attr("stroke", "#00c3ff")
+            .attr("stroke", highlight_color)
 
         allegiance_tooltip.style("visibility", "visible");
+
     })
     .on("mousemove", function (e, d) {
          allegiance_tooltip
@@ -779,24 +783,24 @@ var g_reset = g_filter.append("g")
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {
         d3.select("#reset_rect")
-            .attr("stroke", "#493521")
+            .attr("stroke", highlight_color)
             .attr("stroke-width", "3px")
     })
     .on("mouseleave", function (d) {
         d3.select("#reset_rect")
             .attr("stroke-width", "1px")
-            .attr("stroke", "black")
+            .attr("stroke", btn_stroke_color)
     })
 
 g_reset.append("rect")
     .attr("id", "reset_rect")
     .attr('width', 120)
     .attr('height', 30)
-    .attr("x", sidebar_width * 0.15)
+    .attr("x", sidebar_width*0.75/2 - 60)
     .attr("y", sidebar_height * 0.95)
     .attr("rx", 10)
     .attr("ry", 10)
-    .attr('stroke', 'black')
+    .attr('stroke', btn_stroke_color)
     .attr('fill', btn_color)
 
 g_reset.append("text")
@@ -1264,13 +1268,13 @@ credits_buttons_text.on("click", () => {
 })
     .on("mouseover", function (d) {
         d3.select("#credits_selector_rect")
-            .attr("stroke", "#493521")
+            .attr("stroke", highlight_color)
             .attr("stroke-width", "3px")
     })
     .on("mouseleave", function (d) {
         d3.select("#credits_selector_rect")
             .attr("stroke-width", "1px")
-            .attr("stroke", "black")
+            .attr("stroke", btn_stroke_color)
     })
 credits_button.on("click", () => {
     if (credits_button_clicked == false) {
@@ -1290,7 +1294,7 @@ var credits_menu = g_credits.append("rect")
     .attr('x', width / 6)
     .attr('y', height / 6)
     .attr("rx", 10)
-    .attr('stroke', '#000000')
+    .attr('stroke', bg_stroke_color)
     .attr('stroke-width', 2)
     .attr('fill', bg_color)
 

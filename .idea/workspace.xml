@@ -52,7 +52,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/script_map.js</url>
-          <line>863</line>
+          <line>889</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>

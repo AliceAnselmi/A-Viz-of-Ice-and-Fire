@@ -1,7 +1,7 @@
 
 html, body {
     margin: 0;
-    background: rgb(205, 216, 226)
+    background: #bfae94
 }
 
 body, svg {
@@ -36,6 +36,7 @@ body, svg {
 
 #bottombar_svg{
     object-position: bottom center;
+
  
    display: inline;
     position: fixed;

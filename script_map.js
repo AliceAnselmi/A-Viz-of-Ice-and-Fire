@@ -27,6 +27,9 @@ var slider_length = bottombar_width * 0.4
 const emblem_size = 2 //Determines the size of the emblems
 
 
+const bg_color = "#bfae94"
+const btn_color = "#e7d6c3"
+
 var ui_side_svg = d3.select("#sidebar_svg")
     .attr('width', sidebar_width + 100)
     .attr('height', sidebar_height)
@@ -195,7 +198,7 @@ slider_background = g_slider.append("rect")
     .attr("width", bottombar_width)
     .attr("rx", 10)
     .attr("ry", 10)
-    .attr("fill", "rgba(0,162,162,0)")
+    .attr("fill", bg_color)
 
 var slider_infos = g_slider.append('g')
 //.attr("transform", "translate(" + width / 3 + "," + (height - 140) + ")")
@@ -208,7 +211,7 @@ slider_infos.append("rect")
     .attr("ry", 10)
     .attr("x", (bottombar_width / 3) - 25)
     .attr("y", 5)
-    .attr("fill", "#fdfdfd")
+    .attr("fill", bg_color)
     .attr('stroke', 'rgba(0,0,0,0)')
 slider_background.raise();
 
@@ -497,7 +500,7 @@ const view_selector = g_slider.append("rect")
     .attr("rx", 10)
     .attr("ry", 10)
     .attr('stroke', 'black')
-    .attr('fill', 'white')
+    .attr('fill', btn_color)
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {
         d3.select(this)
@@ -635,7 +638,8 @@ var filter_menu = g_filter.append('rect')
     .attr("ry", 10)
     .attr('stroke', '#000000')
     .attr('stroke-width', 2)
-    .attr('fill', 'rgb(207,218,228)')
+    .attr('opacity', 0.8)
+    .attr('fill', bg_color)
 
 var filter_button = g_filter.append("svg:image")
     .attr("xlink:href", "assets/filter_button.png")
@@ -772,7 +776,7 @@ g_reset.append("rect")
     .attr("rx", 10)
     .attr("ry", 10)
     .attr('stroke', 'black')
-    .attr('fill', 'white')
+    .attr('fill', btn_color)
 
 g_reset.append("text")
     .attr("font-size", "28px")
@@ -1213,7 +1217,7 @@ const credits_button = g_slider.append("rect")
     .attr('stroke', 'black')
     .attr("rx", 10)
     .attr("ry", 10)
-    .attr('fill', 'white')
+    .attr('fill', btn_color)
     .attr("cursor", "pointer")
     .on("mouseover", function (d) {
         d3.select(this)
@@ -1267,7 +1271,7 @@ var credits_menu = g_credits.append("rect")
     .attr("rx", 10)
     .attr('stroke', '#000000')
     .attr('stroke-width', 2)
-    .attr('fill', 'rgb(202,214,224)')
+    .attr('fill', bg_color)
 
 g_credits.append("text")
     .attr('x', width / 2)

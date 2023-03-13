@@ -20,7 +20,6 @@ const bottombar_width = 1200;
 const bottombar_height = 120;
 const sidebar_width = 200;
 const sidebar_height = height - bottombar_height;
-const sidebar_width = 300;
 const sidebar_limit = 500;
 var Ytranslation_rescale = 0;
 

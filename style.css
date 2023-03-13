@@ -27,7 +27,7 @@ body, svg {
 }
 
 #sidebar_svg{
-
+    min-height: 500px;
     object-position: left center;
     pointer-events: visible;
 
@@ -36,9 +36,9 @@ body, svg {
 
 #bottombar_svg{
     object-position: bottom center;
-
-/*    display: inline;
-    position: fixed;*/
+ 
+   display: inline;
+    position: fixed;
 
 
 }

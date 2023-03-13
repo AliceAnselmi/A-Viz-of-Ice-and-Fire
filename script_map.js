@@ -1147,7 +1147,7 @@ var display_filter_menu = function (d) {
                 .attr("pointer-events", "none");
 
 
-                var filtered_counter = {}
+                var filtered_counter = {} //HIDDEN emblems
 
                 d3.selectAll(".emblem")
                 .each(function(d) {
@@ -1173,8 +1173,9 @@ var display_filter_menu = function (d) {
                             return 20;
                         return Math. sqrt(num_dead_not_filtered)*12
                         }
-                        else
-                            return d3.select(this).attr("r")
+                        else{
+                            return Math. sqrt(location_to_deaths[d[0].Death_Location].length)*12
+                        }
                     })
                     .filter(function(d) {
                         var location = d[0].Death_Location;

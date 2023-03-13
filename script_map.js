@@ -216,7 +216,7 @@ var slider_infos_text = slider_infos.append("text")
     .attr("text-anchor", "middle")
     .attr("font-size", "25px")
     .attr("x", bottombar_width / 2 + 10)
-    .attr('y', 25)
+    .attr('y', 38)
 update_slider_infos(sliderVals[0], sliderVals[1]);
 
 
@@ -1138,7 +1138,7 @@ function updateMap(min, max, currview) {
         .attr("pointer-events", "none");
 
 
-                var filtered_counter = {} //HIDDEN emblems
+                var filtered_counter = {}
 
                 d3.selectAll(".emblem")
                 .each(function(d) {

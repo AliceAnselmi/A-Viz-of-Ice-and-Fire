@@ -894,9 +894,11 @@ var display_filter_menu = function (d) {
         }
         function mouseover(e, d)
         {
-            map_tooltip.style("visibility", "visible");
+            if(selected_emblem == null)
+                 map_tooltip.style("visibility", "visible");
         }
         function mousemove(e, d){
+            if(selected_emblem == null)
             map_tooltip
                   .style('top', e.clientY - 30 + 'px')
                   .style('left', e.clientX + 30 + 'px')

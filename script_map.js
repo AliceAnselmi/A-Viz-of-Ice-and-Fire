@@ -31,7 +31,7 @@ const bg_color = "#bfae94"
 const bg_stroke_color = "#050505"
 const btn_color = "#f3e2ce"
 const btn_stroke_color = "#000000"
-const highlight_color = "#493521"
+const highlight_color = "#f6fffe"
 /*"#493521" OLD HIGHLIGHT COLOR*/
 
 var ui_side_svg = d3.select("#sidebar_svg")
@@ -234,7 +234,7 @@ var slider_infos_text = slider_infos.append("text")
     .attr("text-anchor", "middle")
     .attr("font-size", "25px")
     .attr("x", bottombar_width / 2 + 10)
-    .attr('y', 38)
+    .attr('y', 35)
 update_slider_infos(sliderVals[0], sliderVals[1]);
 
 
@@ -250,7 +250,7 @@ var slider_button_upper = g_slider.selectAll("circle")
     .style("width", "3%")
     .style("height", "auto")
     .attr("x", d => bottombar_width * 0.75 + d * 40 - 36)
-    .attr('y', bottombar_height / 2.5)
+    .attr('y', bottombar_height / 2.2)
     .attr('object-position', 'center')
     .attr("cursor", "pointer")
     .on("click", (e, d) => {
@@ -267,7 +267,7 @@ var slider_button_lower = g_slider.selectAll("circle")
     .style("height", "auto")
     .attr("x", d => bottombar_width * 0.25 + d * 40 - 18)
     //.attr('y', g_slider.attr('height')/3)
-    .attr('y', bottombar_height / 2.5)
+    .attr('y', bottombar_height / 2.2)
     .attr('object-position', 'center')
     .attr("cursor", "pointer")
     .on("click", (e, d) => {
@@ -334,7 +334,7 @@ var handle_offset = 20;
 
 const slider = g_slider.append("g")
     //.attr("transform", "translate(" + width / 3 + "," + (height - 55) + ")")
-    .attr("transform", "translate(" + (bottombar_width / 3.2) + "," + bottombar_height / 2.5 + ")")
+    .attr("transform", "translate(" + (bottombar_width / 3.2) + "," + bottombar_height / 2.2 + ")")
 
 
 var slider_image = slider.append("svg:image")
@@ -406,7 +406,7 @@ var handle = slider.selectAll("circle")
     .enter().append("svg:image").attr("xlink:href", d => range_button_imgs[d])
     .attr("class", d => "handle" + d)
     .attr("x", d => x_slider(sliderVals[d]) - handle_offset)
-    .attr("y", -25)
+    .attr("y", -20)
     .style("width", "2.5%")
     .style("height", "auto")
     .style("cursor", "pointer")
@@ -665,18 +665,19 @@ var filter_button = g_filter.append("svg:image")
     .attr("y", (sidebar_height - sidebar_width/4))
 
 g_filter.append("text")
-    .attr("font-size", "33px")
-    .attr("x", sidebar_width/8-10)
+    .attr("font-size", "20px")
+    .attr("x", 1)
     .style("visibility", "visible")
-    .attr("y", 60)
-    .html("Filter by")
-g_filter.append("text")
+    .attr("background-color", bg_color)
+    .attr("y", 50)
+    .html("Filter by \nallegiance")
+/*g_filter.append("text")
     .attr("font-size", "33px")
     .attr("font-size", "33px")
     .attr("x", sidebar_width/10-10)
     .attr("y", 100)
     .html("allegiance")
-    .style("visibility", "visible")
+    .style("visibility", "visible")*/
 
 var filter_menu_open = false;
 var display_filter_menu = function (d) {
@@ -696,7 +697,7 @@ var display_filter_menu = function (d) {
 var allegiances = ["Arryn", "Baratheon", "Greyjoy", "Lannister", "Martell", "Night's Watch", "Stark", "Targaryen", "Tully", "Tyrell", "Wildling", "None"]
 
 var emblemX = sidebar_width / 6;
-var emblemY = 170;
+var emblemY = 100;
 var filters = g_filter.selectAll('.filters')
     .data(allegiances)
     .enter()
@@ -737,7 +738,7 @@ filters
     .style("cursor", "pointer")
     .on("mouseover", function (e,d) {
         d3.select(this)
-            .attr("stroke-width", "6px")
+            .attr("stroke-width", "4px")
             .attr("stroke", highlight_color)
 
         allegiance_tooltip.style("visibility", "visible");
@@ -799,7 +800,7 @@ g_reset.append("rect")
     .attr('width', 120)
     .attr('height', 30)
     .attr("x", sidebar_width*0.75/2 - 60)
-    .attr("y", sidebar_height * 0.95)
+    .attr("y", sidebar_height * 0.93)
     .attr("rx", 10)
     .attr("ry", 10)
     .attr('stroke', btn_stroke_color)
@@ -809,7 +810,7 @@ g_reset.append("text")
     .attr("font-size", "28px")
     .attr("text-anchor", "middle")
     .attr("x", sidebar_width*0.75/2)
-    .attr("y", sidebar_height * 0.95 + 25)
+    .attr("y", sidebar_height * 0.93 + 25)
     .text("Reset")
     .attr("cursor", "pointer");
 
@@ -1194,9 +1195,9 @@ function updateMap(min, max, currview) {
                     .attr("r", function(d){
                         if(d[0].Death_Location in filtered_counter){
                         num_dead_not_filtered = location_to_deaths[d[0].Death_Location].length - filtered_counter[d[0].Death_Location]
-                        if(num_dead_not_filtered< 4)
-                            return 20;
-                        return Math. sqrt(num_dead_not_filtered)*12
+/*                        if(num_dead_not_filtered< 4)
+                            return 20;*/
+                        return Math. sqrt(num_dead_not_filtered + 1)*12
                         }
                         else{
                             return Math. sqrt(location_to_deaths[d[0].Death_Location].length)*12

@@ -1258,15 +1258,12 @@ const credits_button = g_slider.append("rect")
 credits_button.attr("x", bottombar_width * 0.84)
     .attr("y", 40)
 
-const credits_buttons_text = g_slider.append("text")
-    .attr("x", bottombar_width * 0.87)
+const credits_button_text = g_slider.append("text")
+    .attr("x", bottombar_width * 0.875)
     .attr("y", credits_button.attr("y") * 1.7)
     .attr("font-size", (bottombar_height / 5 + "px"))
     .attr("cursor", "pointer")
-    .text("Credits");
-credits_buttons_text.on("click", () => {
-    g_credits.attr('visibility', 'visible')
-})
+    .text("About")
     .on("mouseover", function (d) {
         d3.select("#credits_selector_rect")
             .attr("stroke", highlight_color)
@@ -1289,28 +1286,36 @@ credits_button.on("click", () => {
 
 const g_credits = svg.append("g")
     .attr("visibility", "hidden")
+
+
 var credits_menu = g_credits.append("rect")
-    .attr('height', height / 1.5)
-    .attr('width', width / 1.5)
-    .attr('x', width / 6)
-    .attr('y', height / 6)
+    .attr('height', height / 1.4)
+    .attr('width', width / 1.3)
+    .attr('x', width / 9)
+    .attr('y', height / 9)
     .attr("rx", 10)
     .attr('stroke', bg_stroke_color)
     .attr('stroke-width', 2)
     .attr('fill', bg_color)
 
+
+
+    
+    //title
 g_credits.append("text")
-    .attr('x', width / 2)
-    .attr('y', height / 4.2)
+    .attr("class", "team")
+    .attr('x', width / 2.05)
+    .attr('y', height / 5)
     .attr('font-size', '38px')
     .attr('font-weight', 'bold')
     .attr("text-anchor", "middle")
-    .text("Credits")
+    .text("The team")
 
+    //close button
 g_credits.append("svg:image")
     .attr("xlink:href", "assets/close_button.png")
-    .attr('x', width * 0.18)
-    .attr('y', height * 0.18)
+    .attr('x', width * 0.12)
+    .attr('y', height * 0.13)
     .attr('width', "3.5%")
     .attr("cursor", "pointer")
     .on("click", () => {
@@ -1320,6 +1325,7 @@ g_credits.append("svg:image")
 g_credits.selectAll("rect")
     .data([0, 1, 2, 3, 4, 5])
     .enter().append("svg:image")
+    .attr("class", "team")
     .attr("xlink:href", d => "assets/photos/photo_" + d + ".png")
     .style("width", (d) => {
             if (d!=5)
@@ -1329,50 +1335,160 @@ g_credits.selectAll("rect")
     })
     .style("height", "auto")
     .attr("x", (d) => {
-        return 150 + width * 0.12 * d
+        if(d!=5)
+        return 80 + width * 0.13 * d
+        else 
+        return 80 + width * 0.133 * d
     })
-    .attr('y', height * 0.28)
+    .attr('y', height * 0.24)
 
 names = ["Julius Häger", "Philip Berrez", "Fabian Hugert", "Alice Anselmi", "Christoffer Eriksson"]
 g_credits.selectAll("text")
     .data([0, 1, 2, 3, 4, 5])
     .enter().append("text")
+    .attr("class", "team")
     .text((d) => {
         return names[d - 1]
     })
     .style("font-size", "27px")
     .attr("x", (d) => {
-        return 150 + width * 0.12 * d
+        return 80 + width * 0.13 * d
     })
-    .attr('y', height * 0.57)
+    .attr('y', height * 0.53)
 
-g_credits.append("text")
+    
+    const team_button = g_credits.append("rect")
+    .attr("id", "team_selector_rect")
+    .attr('width', width / 9)
+    .attr('height', height / 16)
+    .attr('stroke', btn_stroke_color)
+    .attr('x', width * 0.25)
+    .attr('y', height * 0.7)
+    .attr("rx", 10)
+    .attr("ry", 10)
+    .attr('fill', btn_color)
+    .attr("cursor", "pointer")
+    .on("mouseover", function (d) {
+        d3.select(this)
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select(this)
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+            show_team();
+        });
+
+const team_button_text = g_credits.append("text")
+    .attr("x", team_button.attr("x")*1.09)
+    .attr("y", team_button.attr("y")*1.06)
+    .attr("font-size", (bottombar_height / 5 + "px"))
+    .attr("cursor", "pointer")
+    .text("The team")
+    .on("mouseover", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    }).on("click", () => {
+        show_team();
+    });
+
+    function show_team() {
+        d3.selectAll(".team").attr("opacity", 1)
+         d3.selectAll(".instructions").attr("opacity", 0)
+    }
+
+
+    const instructions_button = g_credits.append("rect")
+    .attr("id", "instructions_selector_rect")
+    .attr('width', width / 9)
+    .attr('height', height / 16)
+    .attr('stroke', btn_stroke_color)
+    .attr('x', width * 0.44)
+    .attr('y', height * 0.7)
+    .attr("rx", 10)
+    .attr("ry", 10)
+    .attr('fill', btn_color)
+    .attr("cursor", "pointer")
+    .on("mouseover", function (d) {
+        d3.select(this)
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select(this)
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+                show_instructions();
+        });
+
+
+        
+
+const instruction_button_text = g_credits.append("text")
+    .attr("x", instructions_button.attr("x")*1.04)
+    .attr("y", instructions_button.attr("y")*1.06)
+    .attr("font-size", (bottombar_height / 5 + "px"))
+    .attr("cursor", "pointer")
+    .text("Instructions")
+    .on("mouseover", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+        show_instructions();
+});
+
+    function show_instructions() {
+        d3.selectAll(".team").attr("opacity", 0)
+         d3.selectAll(".instructions").attr("opacity", 1)
+
+    }
+    g_credits.append("text")
+    .attr("class", "instructions")
     .attr('x', width / 2)
-    .attr('y', height / 1.58)
-    .attr('font-size', '36px')
+    .attr('y', height / 5)
+    .attr('font-size', '38px')
     .attr('font-weight', 'bold')
     .attr("text-anchor", "middle")
     .text("Instructions")
 
+    instruction_text_x = 90+ width * 0.12
+    instruction_text_y =  height / 3.5
+    offset=35
 
-g_credits.append("text")
-    .text("A Viz of Ice and Fire is a map of characters' deaths in \"A Song of Ice and Fire\" by George R. R. Martin.")
+    function append_text_to_instructions(text, line_number){
+        g_credits.append("text")
+    .attr("class","instructions")
+    .text(text)
     .style("font-size", "23px")
-    .attr("x", 150 + width * 0.12)
-    .attr('y', height / 1.47)
-g_credits.append("text")
-    .text(" ➢ Zoom in and out to see the details of the map. Click on the circles to see who died in each location.")
-    .style("font-size", "23px")
-    .attr("x", 150 + width * 0.12)
-    .attr('y', height / 1.47 + 40)
-g_credits.append("text")
-    .text(" ➢Select a range in the slider to see who died in the chosen range of books/chapters or time period.")
-    .style("font-size", "23px")
-    .attr("x", 150 + width * 0.12)
-    .attr('y', height / 1.47 + 70)
-g_credits.append("text")
-    .text(" ➢Click on the emblems in the left pop-up menu to filter the characters by house.")
-    .style("font-size", "23px")
-    .attr("x", 150 + width * 0.12)
-    .attr('y', height / 1.47 + 100)
+    .attr("x", instruction_text_x )
+    .attr('y', instruction_text_y+offset*line_number)
+    }
+
+    append_text_to_instructions("A Viz of Ice and Fire is a map of the characters' deaths in \"A Song of Ice and Fire\" by George R. R. Martin.", 0)
+    append_text_to_instructions(" ➢ Zoom in and out to see the details of the map. Click on the circles to see who died in each location.", 2)
+    append_text_to_instructions(" ➢ Click on the \"Books/Years view\" button to choose the filtering criteria you want to apply.", 3)
+    append_text_to_instructions(" ➢ Select a range in the slider to see who died in the chosen range of books/chapters or time period.", 4)
+    append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by house.", 5)
+
+
+    d3.selectAll(".instructions").attr("opacity", 0)
+
     

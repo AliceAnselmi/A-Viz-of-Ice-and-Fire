@@ -216,7 +216,6 @@ slider_background = g_slider.append("rect")
     .attr('opacity', 0)
 
 var slider_infos = g_slider.append('g')
-//.attr("transform", "translate(" + width / 3 + "," + (height - 140) + ")")
 
 
 slider_infos.append("rect")
@@ -646,7 +645,7 @@ var process_coordinates = (d) => {
 const g_filter = ui_side_svg.append("g")
 
 var filter_menu = g_filter.append('rect')
-    .attr('height', sidebar_height)
+    .attr('height', sidebar_height-20)
     .attr('width', sidebar_width * 0.75)
     .style("visibility", "visible")
     .attr('y', 20)

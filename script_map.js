@@ -160,7 +160,7 @@ const allegiance_tooltip = d3.select(".ui").append("g")
 //          Slider           //
 // --------------------------//
 const g_slider = ui_bottom_svg.append("g")
-var v1 = 0, v2 = 343;
+var v1 = 0, v2 = 344;
 var sliderVals = [v1, v2];
 var views = ["Books", "Years"];
 var currview = 0; // 0 -> BOOKS, 1 -> YEARS
@@ -187,7 +187,7 @@ function calculate_book_and_chapter(chapter_tot) {
     } else if (chapter_tot >= 225 && chapter_tot <= 271) {
         book = 4;
         chapter = chapter_tot - 225;
-    } else if (chapter_tot >= 272 && chapter_tot <= 343) {
+    } else if (chapter_tot >= 272 && chapter_tot <= 344) {
         book = 5;
         chapter = chapter_tot - 272;
     }
@@ -347,11 +347,11 @@ var slider_image = slider.append("svg:image")
 //.style("height", "17px")
 
 var x_slider = d3.scaleLinear()
-    .domain([0, 343])
+    .domain([0, 344])
     .range([slider_length * 0.04 + handle_offset, slider_length * 0.87 + handle_offset])
     .clamp(true);
 var xMin = x_slider(0),
-    xMax = x_slider(343)
+    xMax = x_slider(344)
 
 var range_button_imgs = []
 range_button_imgs[0] = range_button_low_img;
@@ -563,14 +563,14 @@ function updateView() {
 
     if (currview == 0) {
         v1 = 0;
-        v2 = 343;
+        v2 = 344;
         sliderVals = [v1, v2];
         x_slider = d3.scaleLinear()
-            .domain([0, 343])
+            .domain([0, 344])
             .range([slider_length * 0.04 + handle_offset, slider_length * 0.87 + handle_offset])
             .clamp(true);
         xMin = x_slider(0);
-        xMax = x_slider(343);
+        xMax = x_slider(344);
 
         selRange.style("stroke", "url(#linear-gradient)")
             .attr("transform", "translate(0,12)")
@@ -665,19 +665,18 @@ var filter_button = g_filter.append("svg:image")
     .attr("y", (sidebar_height - sidebar_width/4))
 
 g_filter.append("text")
-    .attr("font-size", "20px")
-    .attr("x", 1)
+    .attr("font-size", "25px")
+    .attr("x", 30)
     .style("visibility", "visible")
     .attr("background-color", bg_color)
     .attr("y", 50)
-    .html("Filter by \nallegiance")
-/*g_filter.append("text")
-    .attr("font-size", "33px")
-    .attr("font-size", "33px")
-    .attr("x", sidebar_width/10-10)
-    .attr("y", 100)
+    .html("Filter by")
+g_filter.append("text")
+    .attr("font-size", "25px")
+    .attr("x", 25)
+    .attr("y", 80)
     .html("allegiance")
-    .style("visibility", "visible")*/
+    .style("visibility", "visible")
 
 var filter_menu_open = false;
 var display_filter_menu = function (d) {
@@ -696,8 +695,8 @@ var display_filter_menu = function (d) {
 
 var allegiances = ["Arryn", "Baratheon", "Greyjoy", "Lannister", "Martell", "Night's Watch", "Stark", "Targaryen", "Tully", "Tyrell", "Wildling", "None"]
 
-var emblemX = sidebar_width / 6;
-var emblemY = 100;
+var emblemX = sidebar_width / 5.5;
+var emblemY = 120;
 var filters = g_filter.selectAll('.filters')
     .data(allegiances)
     .enter()
@@ -895,8 +894,6 @@ function create_emblems(map) {
     emblems
         .append("circle")
         .attr("r", (d) => {
-            if (d.length < 4)
-                return 20;
             return Math.sqrt(d.length) * 12
         })
         .attr("fill", "red")
@@ -933,10 +930,11 @@ function create_emblems(map) {
     function mousemove(e, d) {
         var numdead;
         if (d[0].Death_Location in filtered_people_counter) {
-            num_dead_not_filtered = location_to_deaths[d[0].Death_Location].length - filtered_people_counter[d[0].Death_Location]
-            numdead = num_dead_not_filtered
-        } else
+            num_dead_shown = location_to_deaths[d[0].Death_Location].length - filtered_people_counter[d[0].Death_Location]
+            numdead = num_dead_shown
+        } else{
             numdead = d.length
+        }
         map_tooltip
             .style('top', e.clientY - 30 + 'px')
             .style('left', e.clientX + 30 + 'px')
@@ -1183,8 +1181,9 @@ function updateMap(min, max, currview) {
                         filteredvalue= d[i].Timeline_Chapter_Death;
                     else
                         filteredvalue = d[i].Death_Year;
-                    if(((selected_allegiances.length > 0)&& (!selected_allegiances.includes(d[i].Allegiances) || filteredvalue < min || filteredvalue > max)) ||
-                          (filteredvalue < min || filteredvalue > max)){
+                    if(((selected_allegiances.length > 0)&& 
+                    (!selected_allegiances.includes(d[i].Allegiances) || filteredvalue < min || filteredvalue > max)) ||
+                          (selected_allegiances.length == 0 && (filteredvalue < min || filteredvalue > max))){
                             if(d[0].Death_Location in filtered_counter)
                                 filtered_counter[d[i].Death_Location] += 1;
                             else
@@ -1194,10 +1193,8 @@ function updateMap(min, max, currview) {
                     })
                     .attr("r", function(d){
                         if(d[0].Death_Location in filtered_counter){
-                        num_dead_not_filtered = location_to_deaths[d[0].Death_Location].length - filtered_counter[d[0].Death_Location]
-/*                        if(num_dead_not_filtered< 4)
-                            return 20;*/
-                        return Math. sqrt(num_dead_not_filtered + 1)*12
+                            num_dead_shown = location_to_deaths[d[0].Death_Location].length - filtered_counter[d[0].Death_Location]
+                        return Math. sqrt(num_dead_shown)*12
                         }
                         else{
                             return Math. sqrt(location_to_deaths[d[0].Death_Location].length)*12
@@ -1228,11 +1225,10 @@ function updateMap(min, max, currview) {
                     return true;
             }
         })
-
-
         .attr("visibility", "visible")
         .attr("pointer-events", "all");
     filtered_people_counter = filtered_counter;
+    console.log(filtered_people_counter["King's Landing"])
 }
 
 

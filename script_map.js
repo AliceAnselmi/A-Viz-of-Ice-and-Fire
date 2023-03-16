@@ -939,11 +939,33 @@ function create_emblems(map) {
         } else{
             numdead = d.length
         }
+
+        // https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
+        var groupBy = function(xs, key) {
+            return xs.reduce(function(rv, x) {
+                (rv[x[key]] = rv[x[key]] || []).push(x);
+                return rv;
+            }, {});
+            };
+
+        // Figure out the different houses
+        houses = groupBy(d, 'Allegiances');
+
+        // FIXME: Filter out houses!
+
         map_tooltip
             .style('top', e.clientY - 30 + 'px')
             .style('left', e.clientX + 30 + 'px')
-            .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead)
-
+            .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead + "<br>")
+            
+        // Show images for each house that has died here
+        map_tooltip
+            .selectAll("img")
+            .data(Object.entries(houses))
+            .join("img")
+            .attr("src", function (d) { console.log(d); return "assets/emblems/" + d[0] + ".PNG"})
+            .attr("width", "24px")
+            .attr("height", "24px")
     }
 
 }
@@ -1037,7 +1059,6 @@ function select_emblem(emblem, data) {
                 return d.y - (this.height.animVal.value / 2);
             });
     }
-
 
     //-----------------------------//
     //  Emblems mouse functions   //

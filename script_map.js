@@ -1299,7 +1299,7 @@ var credits_menu = g_credits.append("rect")
     .attr('fill', bg_color)
 
 
-
+// ------------------TEAM -------------------//
     
     //title
 g_credits.append("text")
@@ -1356,6 +1356,70 @@ g_credits.selectAll("text")
     })
     .attr('y', height * 0.53)
 
+
+//USE THIS FUNCTION TO ADD A ROLE AND THE LINKEDIN BUTTON
+function append_role(role, person_idx, y_offset){
+    g_credits.append("text")
+    .attr("class", "team")
+    .text(role)
+    .style("font-size", "20px")
+    .attr("x",  80 + width * 0.13 * person_idx)
+    .attr('y', height * 0.56 + y_offset)
+}
+function append_linkedin_button(link, person_idx){
+    var linkedin_button = g_credits.append("rect")
+    .attr("class","team")
+    .attr('width', 100)
+    .attr('height', 30)
+    .attr('stroke', btn_stroke_color)
+    .attr("x",  80 + width * 0.13 * person_idx)
+    .attr('y', height * 0.63)
+    .attr('fill', btn_color)
+    .attr("cursor", "pointer")
+    .on("mouseover", function (d) {
+        d3.select(this)
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select(this)
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+        window.open(link)
+        });
+
+
+    g_credits.append("text")
+    .attr("class","team")
+    .attr("x", linkedin_button.attr("x")*1.02)
+    .attr("y", parseInt(linkedin_button.attr("y")) +25)
+    .attr("font-size", "20px")
+    .attr("cursor", "pointer")
+    .text("Linkedin")
+    .on("mouseover", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+        window.open(link)
+    });
+
+} 
+
+
+
+append_role("➢ Data", 4, 0)
+append_role("➢ Back-end", 4, 20)
+append_role("➢ Front-end", 4, 40)
+append_linkedin_button("https://www.linkedin.com/in/alice-anselmi/", 4)
     
     const team_button = g_credits.append("rect")
     .attr("id", "team_selector_rect")
@@ -1363,7 +1427,7 @@ g_credits.selectAll("text")
     .attr('height', height / 16)
     .attr('stroke', btn_stroke_color)
     .attr('x', width * 0.25)
-    .attr('y', height * 0.7)
+    .attr('y', height * 0.72)
     .attr("rx", 10)
     .attr("ry", 10)
     .attr('fill', btn_color)
@@ -1404,16 +1468,17 @@ const team_button_text = g_credits.append("text")
     function show_team() {
         d3.selectAll(".team").attr("opacity", 1)
          d3.selectAll(".instructions").attr("opacity", 0)
+         d3.selectAll(".references").attr("opacity", 0)
     }
 
-
+// ------------------INSTRUCTIONS -------------------//
     const instructions_button = g_credits.append("rect")
     .attr("id", "instructions_selector_rect")
     .attr('width', width / 9)
     .attr('height', height / 16)
     .attr('stroke', btn_stroke_color)
     .attr('x', width * 0.44)
-    .attr('y', height * 0.7)
+    .attr('y', height * 0.72)
     .attr("rx", 10)
     .attr("ry", 10)
     .attr('fill', btn_color)
@@ -1455,10 +1520,12 @@ const instruction_button_text = g_credits.append("text")
         show_instructions();
 });
 
+//opacity instead of visibility because otherwise clashes with "about " button
     function show_instructions() {
         d3.selectAll(".team").attr("opacity", 0)
+        d3.selectAll(".references").attr("opacity", 0)
          d3.selectAll(".instructions").attr("opacity", 1)
-
+        
     }
     g_credits.append("text")
     .attr("class", "instructions")
@@ -1469,8 +1536,8 @@ const instruction_button_text = g_credits.append("text")
     .attr("text-anchor", "middle")
     .text("Instructions")
 
-    instruction_text_x = 90+ width * 0.12
-    instruction_text_y =  height / 3.5
+    text_x = 90+ width * 0.12
+    text_y =  height / 3.5
     offset=35
 
     function append_text_to_instructions(text, line_number){
@@ -1478,17 +1545,153 @@ const instruction_button_text = g_credits.append("text")
     .attr("class","instructions")
     .text(text)
     .style("font-size", "23px")
-    .attr("x", instruction_text_x )
-    .attr('y', instruction_text_y+offset*line_number)
+    .attr("x", text_x )
+    .attr('y', text_y+offset*line_number)
     }
 
     append_text_to_instructions("A Viz of Ice and Fire is a map of the characters' deaths in \"A Song of Ice and Fire\" by George R. R. Martin.", 0)
-    append_text_to_instructions(" ➢ Zoom in and out to see the details of the map. Click on the circles to see who died in each location.", 2)
-    append_text_to_instructions(" ➢ Click on the \"Books/Years view\" button to choose the filtering criteria you want to apply.", 3)
-    append_text_to_instructions(" ➢ Select a range in the slider to see who died in the chosen range of books/chapters or time period.", 4)
-    append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by house.", 5)
-
+    append_text_to_instructions("This visualization is the final project for the \"Information Visualization\" course at KTH.", 1)
+    append_text_to_instructions(" ➢ Zoom in and out to see the details of the map. Click on the circles to see who died in each location.", 3)
+    append_text_to_instructions(" ➢ Click on the \"Books/Years view\" button to choose the filtering criteria you want to apply.", 4)
+    append_text_to_instructions(" ➢ Select a range in the slider to see who died in the chosen range of books/chapters or time period.",5)
+    append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by allegiance.", 6)
+    append_text_to_instructions(" Note for bigger screens: zoom in the browser to have a better positioning of elements!", 8)
 
     d3.selectAll(".instructions").attr("opacity", 0)
 
+    const references_button = g_credits.append("rect")
+    .attr("id", "references_selector_rect")
+    .attr('width', width / 9)
+    .attr('height', height / 16)
+    .attr('stroke', btn_stroke_color)
+    .attr('x', width * 0.63)
+    .attr('y', height * 0.72)
+    .attr("rx", 10)
+    .attr("ry", 10)
+    .attr('fill', btn_color)
+    .attr("cursor", "pointer")
+    .on("mouseover", function (d) {
+        d3.select(this)
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select(this)
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+                show_references();
+        });
+
+
+    // ------------------REFERENCES -------------------//    
+
+const references_button_text = g_credits.append("text")
+    .attr("x", references_button.attr("x")*1.04)
+    .attr("y", references_button.attr("y")*1.06)
+    .attr("font-size", (bottombar_height / 5 + "px"))
+    .attr("cursor", "pointer")
+    .text("References")
+    .on("mouseover", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+        show_references();
+});
+
+
+g_credits.append("text")
+.attr("class", "references")
+.attr('x', width / 2)
+.attr('y', height / 5)
+.attr('font-size', '38px')
+.attr('font-weight', 'bold')
+.attr("text-anchor", "middle")
+.text("References")
+
+
+
+
+function append_text_to_references(text, line_number){
+    g_credits.append("text")
+.attr("class","references")
+.text(text)
+.style("font-size", "23px")
+.attr("x", text_x )
+.attr('y',text_y+offset*line_number)
+
+}
+
+function append_link_to_references(link, line_number, start_x){    
+        var access_button = g_credits.append("rect")
+        .attr("class","references")
+        .attr('width', 100)
+        .attr('height', 30)
+        .attr('stroke', btn_stroke_color)
+        .attr('x',start_x)
+        .attr('y', text_y+offset*line_number - 25)
+        .attr("rx", 10)
+        .attr("ry", 10)
+        .attr('fill', btn_color)
+        .attr("cursor", "pointer")
+        .on("mouseover", function (d) {
+            d3.select(this)
+                .attr("stroke", highlight_color)
+                .attr("stroke-width", "3px")
+        })
+        .on("mouseleave", function (d) {
+            d3.select(this)
+                .attr("stroke-width", "1px")
+                .attr("stroke", btn_stroke_color)
+        })
+        .on("click", () => {
+            window.open(link)
+            });
+
+
+        g_credits.append("text")
+        .attr("class","references")
+        .attr("x", access_button.attr("x")*1.02)
+        .attr("y", parseInt(access_button.attr("y")) +25)
+        .attr("font-size", (bottombar_height / 5 + "px"))
+        .attr("cursor", "pointer")
+        .text("Access")
+        .on("mouseover", function (d) {
+            d3.select("#instructions_selector_rect")
+                .attr("stroke", highlight_color)
+                .attr("stroke-width", "3px")
+        })
+        .on("mouseleave", function (d) {
+            d3.select("#instructions_selector_rect")
+                .attr("stroke-width", "1px")
+                .attr("stroke", btn_stroke_color)
+        })
+        .on("click", () => {
+            window.open(link)
+        });
+
+
+}
+append_text_to_references("➢ Data: Kaggle fan-made dataset ", 0)
+append_link_to_references("https://www.kaggle.com/datasets/mylesoneill/game-of-thrones", 0, text_x+500)
+append_text_to_references("➢ Data: A Song of Ice and Fire Wiki", 1)
+append_link_to_references("https://awoiaf.westeros.org/index.php/Main_Page", 1, text_x+500)
+
+//The End ;-)
+d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
+
+
+function show_references(){
+    d3.selectAll(".team").attr("opacity", 0)
+    d3.selectAll(".references").attr("opacity", 1).attr("pointer-events", "all")
+     d3.selectAll(".instructions").attr("opacity", 0)
     
+}

@@ -26,7 +26,6 @@ var Ytranslation_rescale = 0;
 var slider_length = bottombar_width * 0.4
 const emblem_size = 3 //Determines the size of the emblems
 
-
 const bg_color = "#bfae94"
 const bg_stroke_color = "#050505"
 const btn_color = "#f3e2ce"
@@ -164,13 +163,32 @@ const allegiance_tooltip = d3.select(".ui").append("g")
 //          Slider           //
 // --------------------------//
 const g_slider = ui_bottom_svg.append("g")
-var v1 = 0, v2 = 344;
-var sliderVals = [v1, v2];
-var views = ["Books", "Years"];
-var currview = 0; // 0 -> BOOKS, 1 -> YEARS
-const slider_imgs = []
-slider_imgs[0] = slider_books_bar_img;
-slider_imgs[1] = slider_years_bar_img;
+var sliderVals = [0, 344];
+const MapMode = {
+    Year: "Years",
+    Book: "Books",
+}
+var mapMode = MapMode.Book
+const slider_imgs = {}
+slider_imgs[MapMode.Book] = slider_books_bar_img;
+slider_imgs[MapMode.Year] = slider_years_bar_img;
+
+function person_filter(person)
+{
+    let value;
+    if (mapMode == MapMode.Book)
+        value = person.Timeline_Chapter_Death;
+    else
+        value = person.Death_Year;
+
+    let min = sliderVals[0]
+    let max = sliderVals[1]
+
+    if (selected_allegiances.length > 0)
+        return selected_allegiances.includes(d.data.Allegiances) && value >= min && value <= max
+    else
+        return value >= min && value <= max
+}
 
 
 // ---------------------------//
@@ -202,7 +220,7 @@ function calculate_book_and_chapter(chapter_tot) {
 function update_slider_infos(v1, v2) {
     slider_infos_text.text(
         () => {
-            if (currview == 0)
+            if (mapMode == MapMode.Book)
                 return "Book " + calculate_book_and_chapter(v1)[0] + " Ch " + calculate_book_and_chapter(v1)[1] + " - Book " + calculate_book_and_chapter(v2)[0] + " Ch " + calculate_book_and_chapter(v2)[1];
             else
                 return "Years " + v1 + " - " + v2;
@@ -261,7 +279,6 @@ var slider_button_upper = g_slider.selectAll("circle")
         move_handle_one_tick(e, d)
     })
 
-
 var slider_button_lower = g_slider.selectAll("circle")
     .data([0, 1])
     .enter().append("svg:image")
@@ -281,18 +298,18 @@ var slider_button_lower = g_slider.selectAll("circle")
 var move_handle_one_tick = function (e, d,) {
     if (clickedhandle != null) {
         //positioning of button
-        var x_handle = x_slider(sliderVals[clickedhandle == 0 ? 0 : 1]);
+        let x_handle = x_slider(sliderVals[clickedhandle == 0 ? 0 : 1]);
 
-        var curr_value = Math.round(x_slider.invert(x_handle));
-        var new_value = curr_value + (d == 0 ? -1 : 1);
+        let curr_value = Math.round(x_slider.invert(x_handle));
+        let new_value = curr_value + (d == 0 ? -1 : 1);
         if (new_value >= x_slider.domain()[0] && new_value <= x_slider.domain()[1]) {
             x_handle = x_slider(new_value)
-            var x_other_handle = x_slider(sliderVals[clickedhandle == 0 ? 1 : 0])
+            let x_other_handle = x_slider(sliderVals[clickedhandle == 0 ? 1 : 0])
             //handle overlap
 
             // console.log(x_other_handle)
 
-            var value_other_handle = Math.round(x_slider.invert(x_other_handle));
+            let value_other_handle = Math.round(x_slider.invert(x_other_handle));
             if (clickedhandle == 0) { //if lower handle
                 if (new_value >= value_other_handle) {
                     new_value = value_other_handle
@@ -314,18 +331,16 @@ var move_handle_one_tick = function (e, d,) {
             selRange
                 .attr("x1", x_handle)
                 .attr("x2", x_other_handle)
-            sliderVals[clickedhandle] = new_value
-            if (clickedhandle == 0) { //if moving lower handle
-                update_slider_infos(new_value, sliderVals[1]);
-                v1 = Math.min(new_value, sliderVals[1]);
-                v2 = Math.max(new_value, sliderVals[1]);
 
+            if (clickedhandle == 0) { //if moving lower handle
+                sliderVals[0] = Math.min(new_value, sliderVals[1]);
+                sliderVals[1] = Math.max(new_value, sliderVals[1]);
             } else { //otherwise
-                update_slider_infos(sliderVals[0], new_value);
-                v1 = Math.min(sliderVals[0], new_value);
-                v2 = Math.max(sliderVals[0], new_value);
+                sliderVals[0] = Math.min(sliderVals[0], new_value);
+                sliderVals[1] = Math.max(sliderVals[0], new_value);
             }
-            updateMap(v1, v2, currview);
+            update_slider_infos(sliderVals[0], sliderVals[1]);
+            updateMap(sliderVals[0], sliderVals[1], mapMode);
         }
     }
 }
@@ -341,7 +356,7 @@ const slider = g_slider.append("g")
 
 
 var slider_image = slider.append("svg:image")
-    .attr("xlink:href", d => slider_imgs[currview])
+    .attr("xlink:href", d => slider_imgs[mapMode])
     .attr('object-position', 'center')
     .attr('width', slider_length)
     .attr('y', 5)
@@ -453,18 +468,17 @@ function onDrag(event, d) {
     selRange
         .attr("x1", x_cursor)
         .attr("x2", x_other_handle)
-    var v = Math.round(x_slider.invert(x_cursor))
-    if (d == 0) { //if moving lower handle
-        update_slider_infos(v, sliderVals[1]);
-        v1 = Math.min(v, sliderVals[1]);
-        v2 = Math.max(v, sliderVals[1]);
 
+    var value = Math.round(x_slider.invert(x_cursor))
+    if (d == 0) { //if moving lower handle
+        sliderVals[0] = Math.min(value, sliderVals[1]);
+        sliderVals[1] = Math.max(value, sliderVals[1]);
     } else { //otherwise
-        update_slider_infos(sliderVals[0], v);
-        v1 = Math.min(sliderVals[0], v);
-        v2 = Math.max(sliderVals[0], v);
+        sliderVals[0] = Math.min(sliderVals[0], value);
+        sliderVals[1] = Math.max(sliderVals[0], value);
     }
-    updateMap(v1, v2, currview);
+    update_slider_infos(sliderVals[0], sliderVals[1]);
+    updateMap(sliderVals[0], sliderVals[1], mapMode);
 }
 
 function endDrag(event, d) {
@@ -500,9 +514,9 @@ function endDrag(event, d) {
     selRange
         .attr("x1", x_slider(v1))
         .attr("x2", x_slider(v2))
-    slider_infos_text.text(views[currview] + " " + sliderVals[0] + " - " + sliderVals[1])
+    slider_infos_text.text(mapMode + " " + sliderVals[0] + " - " + sliderVals[1])
     update_slider_infos(sliderVals[0], sliderVals[1]);
-    updateMap(v1, v2, currview);
+    updateMap(v1, v2, mapMode);
 
 }
 
@@ -530,7 +544,9 @@ const view_selector = g_slider.append("rect")
             .attr("stroke-width", "1px")
             .attr("stroke", btn_stroke_color)
     })
-view_selector.attr("x", bottombar_width * 0.05)
+
+view_selector
+    .attr("x", bottombar_width * 0.05)
     .attr("y", 40)
 
 
@@ -540,7 +556,8 @@ var slider_selector_text = g_slider.append("text")
     //.attr("font-size", "25px")
     .attr("font-size", (bottombar_height / 5 + "px"))
     .attr("cursor", "pointer")
-    .text(views[currview] + " view");
+    .text(mapMode + " view");
+
 slider_selector_text.on("click", updateView)
     .on("mouseover", function (d) {
         d3.select("#view_selector_rect")
@@ -557,14 +574,23 @@ view_selector.on("click", updateView);
 function updateView() {
 
 
-    currview = 1 - currview;
-    slider_image.attr("xlink:href", d => slider_imgs[currview])
+    switch (mapMode) {
+        case MapMode.Book:
+            mapMode = MapMode.Year;
+            break;
+        case MapMode.Year:
+        default:
+            mapMode = MapMode.Book;
+            break;
+    }
+
+    slider_image.attr("xlink:href", d => slider_imgs[mapMode])
     // .attr('object-position', 'center')
     // .attr('width', slider_length)
     // .attr('y', 5)
 
 
-    if (currview == 0) {
+    if (mapMode == MapMode.Book) {
         v1 = 0;
         v2 = 344;
         sliderVals = [v1, v2];
@@ -604,9 +630,9 @@ function updateView() {
         .attr("x2", x_slider(sliderVals[1]))
 
     handle.attr("x", d => x_slider(sliderVals[d]) - handle_offset)
-    slider_selector_text.text(views[currview] + " view")
+    slider_selector_text.text(mapMode + " view")
     update_slider_infos(sliderVals[0], sliderVals[1]);
-    updateMap(v1, v2, currview);
+    updateMap(v1, v2, mapMode);
 
 }
 
@@ -776,7 +802,7 @@ filters
                 .attr("stroke", "black")
         }
         console.log(selected_allegiances)
-        updateMap(v1, v2, currview)
+        updateMap(v1, v2, mapMode)
     })
 
 filter_button
@@ -831,7 +857,7 @@ g_reset.on("click", () => {
     d3.selectAll(".filters")
         .attr("stroke-width", "1px")
         .attr("stroke", "black")
-    updateMap(v1, v2, currview)
+    updateMap(v1, v2, mapMode)
 
 })
 
@@ -927,7 +953,7 @@ function create_emblems(map) {
         selected_emblem = emblem;
         selected_location = d[0].Death_Location
         select_emblem(emblem, d)
-        updateMap(v1, v2, currview);
+        updateMap(sliderVals[0], sliderVals[1], mapMode);
     }
 
     function mouseover(e, d) {
@@ -951,6 +977,9 @@ function create_emblems(map) {
                 return rv;
             }, []);
         };
+
+        // Apply time filter
+        //d.filter(item => )
 
         // Figure out the different houses
         houses = Object.entries(groupBy(d, 'Allegiances'));
@@ -1150,62 +1179,33 @@ function deselect_emblem(emblem) {
 
 var filtered_people_counter = {}
 
-function updateMap(min, max, currview) {
+function updateMap(min, max, mapMode) {
     var filteredvalue;
+    // Hide filtered people
     d3.selectAll(".popup")
         .filter((d) => {
-
-            if (currview == 0)
-                filteredvalue = d.data.Timeline_Chapter_Death;
-            else
-                filteredvalue = d.data.Death_Year;
-            if (selected_allegiances.length > 0)
-                return !selected_allegiances.includes(d.data.Allegiances) || filteredvalue < min || filteredvalue > max
-            else
-                return filteredvalue < min || filteredvalue > max
+            return !person_filter(d.data);
         })
         .attr("visibility", "hidden")
         .attr("pointer-events", "none");
 
+    // Show people that pass the filter
     d3.selectAll(".popup")
         .filter((d) => {
-            if (currview == 0)
-                filteredvalue = d.data.Timeline_Chapter_Death
-            else
-                filteredvalue = d.data.Death_Year;
-            if (selected_allegiances.length > 0)
-                return selected_allegiances.includes(d.data.Allegiances) && filteredvalue >= min && filteredvalue <= max;
-            else
-                return filteredvalue >= min && filteredvalue <= max;
+            return person_filter(d.data);
         })
         .attr("visibility", "visible")
         .attr("pointer-events", "all");
 
     d3.selectAll(".line_link")
         .filter((d) => {
-            if (currview == 0)
-                filteredvalue = d.target.data.Timeline_Chapter_Death;
-            else
-                filteredvalue = d.target.data.Death_Year;
-            if (selected_allegiances.length > 0)
-                return !selected_allegiances.includes(d.target.data.Allegiances) || filteredvalue < min || filteredvalue > max
-            else
-                return filteredvalue < min || filteredvalue > max
-
+            return !person_filter(d.target.data);
         })
         .attr("stroke-opacity", 0)
 
     d3.selectAll(".line_link")
         .filter((d) => {
-            if (currview == 0)
-                filteredvalue = d.target.data.Timeline_Chapter_Death;
-            else
-                filteredvalue = d.target.data.Death_Year;
-            if (selected_allegiances.length > 0)
-                return selected_allegiances.includes(d.target.data.Allegiances) && filteredvalue >= min && filteredvalue <= max;
-            else
-                return filteredvalue >= min && filteredvalue <= max;
-
+            return person_filter(d.target.data);
         })
         .attr("stroke-opacity", 1)
 
@@ -1217,45 +1217,38 @@ function updateMap(min, max, currview) {
         .attr("visibility", "hidden")
         .attr("pointer-events", "none");
 
+    var filtered_counter = {}
 
-                var filtered_counter = {}
-
-                d3.selectAll(".emblem")
-                .each(function(d) {
-                    for(var i = 0 ; i<d.length; i++){
-                        var person = d[i]; 
-                        if(currview==0)
-                        filteredvalue= d[i].Timeline_Chapter_Death;
+    d3.selectAll(".emblem")
+        .each(function(d) {
+            for(var i = 0 ; i < d.length; i++) {
+                var person = d[i];
+                if (!person_filter(person))
+                {
+                    if (person.Death_Location in filtered_counter)
+                        filtered_counter[person.Death_Location] += 1;
                     else
-                        filteredvalue = d[i].Death_Year;
-                    if(((selected_allegiances.length > 0)&& 
-                    (!selected_allegiances.includes(d[i].Allegiances) || filteredvalue < min || filteredvalue > max)) ||
-                          (selected_allegiances.length == 0 && (filteredvalue < min || filteredvalue > max))){
-                            if(d[0].Death_Location in filtered_counter)
-                                filtered_counter[d[i].Death_Location] += 1;
-                            else
-                                filtered_counter[d[i].Death_Location] = 1;
-                          }
-                    }
-                    })
-                    .attr("r", function(d){
-                        if(d[0].Death_Location in filtered_counter){
-                            num_dead_shown = location_to_deaths[d[0].Death_Location].length - filtered_counter[d[0].Death_Location]
-                        return Math. sqrt(num_dead_shown)*12
-                        }
-                        else{
-                            return Math. sqrt(location_to_deaths[d[0].Death_Location].length)*12
-                        }
-                    })
-                    .filter(function(d) {
-                        var location = d[0].Death_Location;
-                        if(selected_emblem != null)
-                            return filtered_counter[location] == location_to_deaths[location].length || selected_emblem.data()[0][0].Death_Location ==location
-                        else
-                             return filtered_counter[location] == location_to_deaths[location].length 
-                        })
-                .attr("visibility", "hidden")
-                .attr("pointer-events", "none");
+                        filtered_counter[person.Death_Location] = 1;
+                }
+            }
+        })
+        .attr("r", function(d) {
+            if (d[0].Death_Location in filtered_counter) {
+                num_dead_shown = location_to_deaths[d[0].Death_Location].length - filtered_counter[d[0].Death_Location]
+                return Math. sqrt(num_dead_shown)*12
+            } else {
+                return Math. sqrt(location_to_deaths[d[0].Death_Location].length)*12
+            }
+        })
+        .filter(function(d) {
+            var location = d[0].Death_Location;
+            if (selected_emblem != null)
+                return filtered_counter[location] == location_to_deaths[location].length || selected_emblem.data()[0][0].Death_Location ==location
+            else
+                return filtered_counter[location] == location_to_deaths[location].length 
+            })
+    .attr("visibility", "hidden")
+    .attr("pointer-events", "none");
 
     d3.selectAll(".emblem")
         .filter((d) => {
@@ -1275,7 +1268,6 @@ function updateMap(min, max, currview) {
         .attr("visibility", "visible")
         .attr("pointer-events", "all");
     filtered_people_counter = filtered_counter;
-    console.log(filtered_people_counter["King's Landing"])
 }
 
 

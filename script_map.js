@@ -884,11 +884,6 @@ function create_emblems(map) {
             let coord = place_to_coordinate[d[0].Death_Location];
             return `translate(${coord.x_pixels},${coord.y_pixels})`
         })
-        .on("click", click)
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
-
 
     emblems
         .append("circle")
@@ -902,7 +897,16 @@ function create_emblems(map) {
         .attr('class', 'emblem')
         .style('width', "2%")
         .style("height", "auto")
-        .attr("cursor", "pointer");
+        .attr("cursor", "pointer")
+        .on("click", click)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave);
+    
+    // Sort emblems to that small circles can't be obscured by bigger circles
+    emblems.sort(function (a, b) {
+        return d3.descending(a.length, b.length);
+    });
 
     map_image.on("click", function (e, d) {
         deselect_emblem(selected_emblem);
@@ -910,9 +914,10 @@ function create_emblems(map) {
         selected_emblem = null;
     });
     return emblems
+
     var selected_location;
     function click(e, d) {
-        emblem = d3.select(this)
+        emblem = d3.select(this.parentNode)
         
         deselect_emblem(selected_emblem, d)
         selected_emblem = emblem;
@@ -934,11 +939,36 @@ function create_emblems(map) {
         } else{
             numdead = d.length
         }
+
+        // https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
+        var groupBy = function(xs, key) {
+            return xs.reduce(function(rv, x) {
+                (rv[x[key]] = rv[x[key]] || []).push(x);
+                return rv;
+            }, []);
+        };
+
+        // Figure out the different houses
+        houses = Object.entries(groupBy(d, 'Allegiances'));
+
+        // Apply the allegiance filter
+        houses = houses.filter(function (house) {
+            return selected_allegiances.length > 0 ? selected_allegiances.includes(house[0]) : true;
+        });
+
         map_tooltip
             .style('top', e.clientY - 30 + 'px')
             .style('left', e.clientX + 30 + 'px')
-            .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead)
+            .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead + "<br>")
 
+        // Show images for each house that has died here
+        map_tooltip
+            .selectAll("img")
+            .data(houses)
+            .join("img")
+            .attr("src", function (d) { return "assets/emblems/" + d[0] + ".PNG"})
+            .attr("width", "24px")
+            .attr("height", "24px")
     }
 
 }
@@ -949,7 +979,9 @@ function mouseleave(d) {
 
 
 function select_emblem(emblem, data) {
-
+    // Bring this element to the top, when we deselect we will re-sort
+    emblem.raise();
+    
     center = ({id: 0, data: data, x: 0, y: 0, fx: 0, fy: 0})
 
     function intern(value) {
@@ -957,7 +989,7 @@ function select_emblem(emblem, data) {
     }
 
     nodes = [center]
-    map = d3.map(data, (d, i) => ({id: i, data: d, x: 0, y: 0})).map(intern);
+    map = d3.map(data, (d, i) => ({id: i, data: d, x: Math.random()*80-40, y: Math.random()*80-40})).map(intern);
     nodes = nodes.concat(map)
     //nodes = map
     links = d3.map(map, (d, i) => ({source: center, target: d}));
@@ -969,7 +1001,7 @@ function select_emblem(emblem, data) {
         .distanceMin(40)
     const forceLink = d3.forceLink(links)
         .id(({index: i}) => i)
-        .distance((d) => Math.random() * 70 + 35)
+        .distance((d) => Math.random() * map.length * 5 + 35)
 
     link = emblem.append("g")
         .attr("class", "lines")
@@ -983,20 +1015,18 @@ function select_emblem(emblem, data) {
         .attr("class", "line_link")
 
     node = emblem.selectAll(".popup")
-
         .data(map)
         .join("svg:image")
         .attr("class", "popup")
         .attr("xlink:href", (d) => {
-            // FIXME: We want to display all allegiances here...
             var allegiance = d.data.Allegiances;
-            //var allegiance = d.Allegiances
             return "assets/emblems/" + allegiance + ".PNG"
         })
         .attr('width', emblem_size + "%")
         // .attr("height", "3%")
         .attr('x', 0)
         .attr('y', 0)
+        .on("click", click)
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
@@ -1004,7 +1034,7 @@ function select_emblem(emblem, data) {
     forceSimulation = d3.forceSimulation(nodes)
         .force("link", forceLink)
         .force("charge", forceNode)
-        .force("center", d3.forceCenter())
+        //.force("center", d3.forceCenter())
         .on("tick", tick)
 
     emblem.select(".emblem").attr("visibility", "hidden");
@@ -1031,11 +1061,16 @@ function select_emblem(emblem, data) {
             });
     }
 
-
     //-----------------------------//
     //  Emblems mouse functions   //
     // ---------------------------//
 
+    function click(e, d) {
+        // FIXME: Make the transparent parts of the images click-through
+        // FIXME: Show selection!
+
+        d3.select(this).raise();
+    }
 
     function mouseover(d) {
         tooltip.style("visibility", "visible");
@@ -1098,6 +1133,11 @@ function deselect_emblem(emblem) {
     emblem.selectAll(".popup").remove();
     // FIXME: remove the <g> tags
     emblem.selectAll(".lines").remove();
+
+    // Sort emblems to that small circles can't be obscured by bigger circles
+    emblems.sort(function (a, b) {
+        return d3.descending(a.length, b.length);
+    });
 }
 
 var filtered_people_counter = {}

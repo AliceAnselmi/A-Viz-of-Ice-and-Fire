@@ -1591,10 +1591,6 @@ const instruction_button_text = g_credits.append("text")
 
 
 
-    // ------------------REFERENCES -------------------//    
- 
-    // ------------------REFERENCES -------------------//    
-
 const references_button_text = g_credits.append("text")
     .attr("x", references_button.attr("x")*1.045)
     .attr("y", references_button.attr("y")*1.06)

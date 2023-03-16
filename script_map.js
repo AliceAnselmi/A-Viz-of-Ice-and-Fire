@@ -172,6 +172,12 @@ const slider_imgs = {}
 slider_imgs[MapMode.Book] = slider_books_bar_img;
 slider_imgs[MapMode.Year] = slider_years_bar_img;
 
+const min_chapter = 0;
+const max_chapter = 344;
+
+const min_year = 297;
+const max_year = 300;
+
 function person_filter(person)
 {
     let value;
@@ -365,11 +371,11 @@ var slider_image = slider.append("svg:image")
 //.style("height", "17px")
 
 var x_slider = d3.scaleLinear()
-    .domain([0, 344])
+    .domain([min_chapter, max_chapter])
     .range([slider_length * 0.04 + handle_offset, slider_length * 0.87 + handle_offset])
     .clamp(true);
-var xMin = x_slider(0),
-    xMax = x_slider(344)
+var xMin = x_slider(min_chapter),
+    xMax = x_slider(max_chapter)
 
 var range_button_imgs = []
 range_button_imgs[0] = range_button_low_img;
@@ -509,8 +515,8 @@ function endDrag(event, d) {
         .style("cursor", "pointer")
 
     selRange
-        .attr("x1", x_slider(v1))
-        .attr("x2", x_slider(v2))
+        .attr("x1", x_slider(sliderVals[0]))
+        .attr("x2", x_slider(sliderVals[1]))
     
     update_slider_infos(sliderVals[0], sliderVals[1]);
     updateMap(sliderVals[0], sliderVals[1], mapMode);
@@ -584,31 +590,27 @@ function updateView() {
     // .attr('y', 5)
 
     if (mapMode == MapMode.Book) {
-        v1 = 0;
-        v2 = 344;
-        sliderVals = [v1, v2];
+        sliderVals = [min_chapter, max_chapter];
         x_slider = d3.scaleLinear()
-            .domain([0, 344])
+            .domain([min_chapter, max_chapter])
             .range([slider_length * 0.04 + handle_offset, slider_length * 0.87 + handle_offset])
             .clamp(true);
-        xMin = x_slider(0);
-        xMax = x_slider(344);
+        xMin = x_slider(min_chapter);
+        xMax = x_slider(max_chapter);
 
         selRange.style("stroke", "url(#linear-gradient)")
             .attr("transform", "translate(0,12)")
             .style("stroke-width", bottombar_height / 8.4 + "px")
         handle.style("width", "3%")
     } else {
-        v1 = 297;
-        v2 = 300;
-        sliderVals = [v1, v2];
+        sliderVals = [min_year, max_year];
         x_slider = d3.scaleLinear()
-            .domain([297, 300])
+            .domain([min_year, max_year])
             .range([slider_length * 0.04 + handle_offset, slider_length * 0.87 + handle_offset])
             .clamp(true);
 
-        xMin = x_slider(297);
-        xMax = x_slider(300);
+        xMin = x_slider(min_year);
+        xMax = x_slider(max_year);
         slider_image
             //     .attr("height", bottombar_height/4 )
             .attr("width", slider_length)
@@ -625,7 +627,7 @@ function updateView() {
     handle.attr("x", d => x_slider(sliderVals[d]) - handle_offset)
     slider_selector_text.text(mapMode + " view")
     update_slider_infos(sliderVals[0], sliderVals[1]);
-    updateMap(v1, v2, mapMode);
+    updateMap(sliderVals[0], sliderVals[1], mapMode);
 }
 
 // ---------------------------//
@@ -790,7 +792,7 @@ filters
                 .attr("stroke", "black")
         }
         console.log(selected_allegiances)
-        updateMap(v1, v2, mapMode)
+        updateMap(sliderVals[0], sliderVals[1], mapMode)
     })
 
 filter_button
@@ -844,7 +846,7 @@ g_reset.on("click", () => {
     d3.selectAll(".filters")
         .attr("stroke-width", "1px")
         .attr("stroke", "black")
-    updateMap(v1, v2, mapMode)
+    updateMap(sliderVals[0], sliderVals[1], mapMode)
 });
 
 

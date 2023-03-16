@@ -945,25 +945,28 @@ function create_emblems(map) {
             return xs.reduce(function(rv, x) {
                 (rv[x[key]] = rv[x[key]] || []).push(x);
                 return rv;
-            }, {});
-            };
+            }, []);
+        };
 
         // Figure out the different houses
-        houses = groupBy(d, 'Allegiances');
+        houses = Object.entries(groupBy(d, 'Allegiances'));
 
-        // FIXME: Filter out houses!
+        // Apply the allegiance filter
+        houses = houses.filter(function (house) {
+            return selected_allegiances.length > 0 ? selected_allegiances.includes(house[0]) : true;
+        });
 
         map_tooltip
             .style('top', e.clientY - 30 + 'px')
             .style('left', e.clientX + 30 + 'px')
             .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead + "<br>")
-            
+
         // Show images for each house that has died here
         map_tooltip
             .selectAll("img")
-            .data(Object.entries(houses))
+            .data(houses)
             .join("img")
-            .attr("src", function (d) { console.log(d); return "assets/emblems/" + d[0] + ".PNG"})
+            .attr("src", function (d) { return "assets/emblems/" + d[0] + ".PNG"})
             .attr("width", "24px")
             .attr("height", "24px")
     }

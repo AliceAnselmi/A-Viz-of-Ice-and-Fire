@@ -190,7 +190,7 @@ function person_filter(person)
     let max = sliderVals[1]
 
     if (selected_allegiances.length > 0)
-        return selected_allegiances.includes(d.data.Allegiances) && value >= min && value <= max
+        return selected_allegiances.includes(person.Allegiances) && value >= min && value <= max
     else
         return value >= min && value <= max
 }

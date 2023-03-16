@@ -902,6 +902,11 @@ function create_emblems(map) {
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave);
+    
+    // Sort emblems to that small circles can't be obscured by bigger circles
+    emblems.sort(function (a, b) {
+        return d3.descending(a.length, b.length);
+    });
 
     map_image.on("click", function (e, d) {
         deselect_emblem(selected_emblem);
@@ -909,6 +914,7 @@ function create_emblems(map) {
         selected_emblem = null;
     });
     return emblems
+
     var selected_location;
     function click(e, d) {
         emblem = d3.select(this.parentNode)
@@ -948,7 +954,9 @@ function mouseleave(d) {
 
 
 function select_emblem(emblem, data) {
-
+    // Bring this element to the top, when we deselect we will resort
+    emblem.raise();
+    
     center = ({id: 0, data: data, x: 0, y: 0, fx: 0, fy: 0})
 
     function intern(value) {
@@ -956,7 +964,7 @@ function select_emblem(emblem, data) {
     }
 
     nodes = [center]
-    map = d3.map(data, (d, i) => ({id: i, data: d, x: 0, y: 0})).map(intern);
+    map = d3.map(data, (d, i) => ({id: i, data: d, x: Math.random()*80-40, y: Math.random()*80-40})).map(intern);
     nodes = nodes.concat(map)
     //nodes = map
     links = d3.map(map, (d, i) => ({source: center, target: d}));
@@ -968,7 +976,7 @@ function select_emblem(emblem, data) {
         .distanceMin(40)
     const forceLink = d3.forceLink(links)
         .id(({index: i}) => i)
-        .distance((d) => Math.random() * 70 + 35)
+        .distance((d) => Math.random() * map.length * 5 + 35)
 
     link = emblem.append("g")
         .attr("class", "lines")
@@ -982,7 +990,6 @@ function select_emblem(emblem, data) {
         .attr("class", "line_link")
 
     node = emblem.selectAll(".popup")
-
         .data(map)
         .join("svg:image")
         .attr("class", "popup")
@@ -996,6 +1003,7 @@ function select_emblem(emblem, data) {
         // .attr("height", "3%")
         .attr('x', 0)
         .attr('y', 0)
+        .on("click", click)
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
@@ -1003,7 +1011,7 @@ function select_emblem(emblem, data) {
     forceSimulation = d3.forceSimulation(nodes)
         .force("link", forceLink)
         .force("charge", forceNode)
-        .force("center", d3.forceCenter())
+        //.force("center", d3.forceCenter())
         .on("tick", tick)
 
     emblem.select(".emblem").attr("visibility", "hidden");
@@ -1035,6 +1043,10 @@ function select_emblem(emblem, data) {
     //  Emblems mouse functions   //
     // ---------------------------//
 
+    function click(e, d) {
+        // FIXME: Show selection!
+        d3.select(this).raise();
+    }
 
     function mouseover(d) {
         tooltip.style("visibility", "visible");
@@ -1097,6 +1109,11 @@ function deselect_emblem(emblem) {
     emblem.selectAll(".popup").remove();
     // FIXME: remove the <g> tags
     emblem.selectAll(".lines").remove();
+
+    // Sort emblems to that small circles can't be obscured by bigger circles
+    emblems.sort(function (a, b) {
+        return d3.descending(a.length, b.length);
+    });
 }
 
 var filtered_people_counter = {}

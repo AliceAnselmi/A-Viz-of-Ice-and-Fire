@@ -979,7 +979,7 @@ function mouseleave(d) {
 
 
 function select_emblem(emblem, data) {
-    // Bring this element to the top, when we deselect we will resort
+    // Bring this element to the top, when we deselect we will re-sort
     emblem.raise();
     
     center = ({id: 0, data: data, x: 0, y: 0, fx: 0, fy: 0})
@@ -1019,9 +1019,7 @@ function select_emblem(emblem, data) {
         .join("svg:image")
         .attr("class", "popup")
         .attr("xlink:href", (d) => {
-            // FIXME: We want to display all allegiances here...
             var allegiance = d.data.Allegiances;
-            //var allegiance = d.Allegiances
             return "assets/emblems/" + allegiance + ".PNG"
         })
         .attr('width', emblem_size + "%")
@@ -1068,7 +1066,9 @@ function select_emblem(emblem, data) {
     // ---------------------------//
 
     function click(e, d) {
+        // FIXME: Make the transparent parts of the images click-through
         // FIXME: Show selection!
+
         d3.select(this).raise();
     }
 

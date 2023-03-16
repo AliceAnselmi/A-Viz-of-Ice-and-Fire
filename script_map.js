@@ -1043,6 +1043,10 @@ function select_emblem(emblem, data) {
 
     emblem.select(".emblem").attr("visibility", "hidden");
 
+    // Hide the location tooltip here too so that it doesn't stay visible
+    // if the user doesn't move the mouse
+    map_tooltip.attr("visibility", "hidden");
+
     return
 
     function tick() {

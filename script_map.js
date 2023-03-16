@@ -116,7 +116,6 @@ function create_mapview() {
 
     map_svg.call(zoom).on("dblclick.zoom", null);
 
-
     return map_svg
 }
 
@@ -149,14 +148,14 @@ const map_tooltip = d3.select("body").append("g")
     .style("left", "0px")
     
 const allegiance_tooltip = d3.select(".ui").append("g")
-.attr("class", "allegiance_tooltip")
-.style("position", "absolute")
-.style("visibility", "hidden")
-.style("background-color", "white")
-.style("border", "solid")
-.style("border-width", "2px")
-.style("border-radius", "5px")
-.style("padding", "5px")
+    .attr("class", "allegiance_tooltip")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
 
 
 // ---------------------------//
@@ -339,6 +338,7 @@ var move_handle_one_tick = function (e, d,) {
                 sliderVals[0] = Math.min(sliderVals[0], new_value);
                 sliderVals[1] = Math.max(sliderVals[0], new_value);
             }
+
             update_slider_infos(sliderVals[0], sliderVals[1]);
             updateMap(sliderVals[0], sliderVals[1], mapMode);
         }
@@ -439,11 +439,9 @@ function startDrag(event) {
     var x_cursor = event.x;
     d3.select(this).raise().classed("active", true)
         .style("cursor", "grabbing")
-
 }
 
 function onDrag(event, d) {
-
     //positioning of button
     var x_cursor = event.x;
     var x_other_handle = x_slider(sliderVals[d == 0 ? 1 : 0])
@@ -499,12 +497,11 @@ function endDrag(event, d) {
         } else {
             v = Math.round(x_slider.invert(x_cursor))
         }
-
     }
-    sliderVals[d] = v
-    v1 = Math.min(sliderVals[0], sliderVals[1]);
-    v2 = Math.max(sliderVals[0], sliderVals[1]);
 
+    sliderVals[d] = v
+    sliderVals[0] = Math.min(sliderVals[0], sliderVals[1]);
+    sliderVals[1] = Math.max(sliderVals[0], sliderVals[1]);
 
     d3.select(this)
         .classed("active", false)
@@ -514,12 +511,11 @@ function endDrag(event, d) {
     selRange
         .attr("x1", x_slider(v1))
         .attr("x2", x_slider(v2))
-    slider_infos_text.text(mapMode + " " + sliderVals[0] + " - " + sliderVals[1])
+    
     update_slider_infos(sliderVals[0], sliderVals[1]);
-    updateMap(v1, v2, mapMode);
+    updateMap(sliderVals[0], sliderVals[1], mapMode);
 
 }
-
 
 // ---------------------------//
 //      View     selector     //
@@ -549,7 +545,6 @@ view_selector
     .attr("x", bottombar_width * 0.05)
     .attr("y", 40)
 
-
 var slider_selector_text = g_slider.append("text")
     .attr("x", bottombar_width * 0.07)
     .attr("y", view_selector.attr("y") * 1.7)
@@ -573,7 +568,6 @@ view_selector.on("click", updateView);
 
 function updateView() {
 
-
     switch (mapMode) {
         case MapMode.Book:
             mapMode = MapMode.Year;
@@ -588,7 +582,6 @@ function updateView() {
     // .attr('object-position', 'center')
     // .attr('width', slider_length)
     // .attr('y', 5)
-
 
     if (mapMode == MapMode.Book) {
         v1 = 0;
@@ -605,7 +598,6 @@ function updateView() {
             .attr("transform", "translate(0,12)")
             .style("stroke-width", bottombar_height / 8.4 + "px")
         handle.style("width", "3%")
-
     } else {
         v1 = 297;
         v2 = 300;
@@ -625,6 +617,7 @@ function updateView() {
             .style("stroke-width", bottombar_height / 5.1 + "px")
         handle.style("width", "3.5%")
     }
+
     selRange
         .attr("x1", x_slider(sliderVals[0]))
         .attr("x2", x_slider(sliderVals[1]))
@@ -633,9 +626,7 @@ function updateView() {
     slider_selector_text.text(mapMode + " view")
     update_slider_infos(sliderVals[0], sliderVals[1]);
     updateMap(v1, v2, mapMode);
-
 }
-
 
 // ---------------------------//
 //  Coordinates calculation  //
@@ -670,7 +661,6 @@ var process_coordinates = (d) => {
 // ---------------------------//
 //     Allegiance Filter      //
 // --------------------------//
-
 
 const g_filter = ui_side_svg.append("g")
 
@@ -711,7 +701,6 @@ var filter_menu_open = false;
 var display_filter_menu = function (d) {
     if (filter_menu_open == false) {
         filter_menu_open = true;
-
         ui_side_svg.transition()
             .attr("transform", "translate(0,0)");
     } else {
@@ -719,7 +708,6 @@ var display_filter_menu = function (d) {
         ui_side_svg.transition()
             .attr("transform", "translate(" + (-sidebar_width * 0.75) + " ,0)");
     }
-
 }
 
 var allegiances = ["Arryn", "Baratheon", "Greyjoy", "Lannister", "Martell", "Night's Watch", "Stark", "Targaryen", "Tully", "Tyrell", "Wildling", "None"]
@@ -744,7 +732,9 @@ filters.append("pattern")
         return "assets/emblems/" + d + ".PNG"
     })
     .attr("width", sidebar_width / 4)
+
 var selected_allegiances = [];
+
 filters
     .append("circle")
     .attr("class", "filter_circle")
@@ -779,7 +769,6 @@ filters
             .html(d)
 
     })
-    
     .on("mouseleave", function (e, d) {
         allegiance_tooltip.style("visibility", "hidden");
         if (!selected_allegiances.includes(d)) {
@@ -788,7 +777,6 @@ filters
                 .attr("stroke", "black")
         }
     })
-
     .on("click", function (e, d) {
         if (!selected_allegiances.includes(d))
             selected_allegiances.push(d)
@@ -843,7 +831,6 @@ g_reset.append("text")
     .attr("cursor", "pointer");
 
 g_reset.on("click", () => {
-
     selected_allegiances = [];
     d3.selectAll(".filter_circle")
         .attr("stroke-width", "1px")
@@ -858,8 +845,7 @@ g_reset.on("click", () => {
         .attr("stroke-width", "1px")
         .attr("stroke", "black")
     updateMap(v1, v2, mapMode)
-
-})
+});
 
 
 // ---------------------------//
@@ -1009,7 +995,6 @@ function create_emblems(map) {
 function mouseleave(d) {
     map_tooltip.style("visibility", "hidden");
 }
-
 
 function select_emblem(emblem, data) {
     // Bring this element to the top, when we deselect we will re-sort
@@ -1246,9 +1231,9 @@ function updateMap(min, max, mapMode) {
                 return filtered_counter[location] == location_to_deaths[location].length || selected_emblem.data()[0][0].Death_Location ==location
             else
                 return filtered_counter[location] == location_to_deaths[location].length 
-            })
-    .attr("visibility", "hidden")
-    .attr("pointer-events", "none");
+        })
+        .attr("visibility", "hidden")
+        .attr("pointer-events", "none");
 
     d3.selectAll(".emblem")
         .filter((d) => {
@@ -1267,9 +1252,9 @@ function updateMap(min, max, mapMode) {
         })
         .attr("visibility", "visible")
         .attr("pointer-events", "all");
+
     filtered_people_counter = filtered_counter;
 }
-
 
 // ---------------------------//
 //      Credits     button     //
@@ -1295,6 +1280,7 @@ const credits_button = g_slider.append("rect")
             .attr("stroke-width", "1px")
             .attr("stroke", btn_stroke_color)
     })
+
 credits_button.attr("x", bottombar_width * 0.84)
     .attr("y", 40)
 
@@ -1314,6 +1300,7 @@ const credits_button_text = g_slider.append("text")
             .attr("stroke-width", "1px")
             .attr("stroke", btn_stroke_color)
     })
+
 credits_button.on("click", () => {
     if (credits_button_clicked == false) {
         credits_button_clicked = true;
@@ -1382,7 +1369,7 @@ g_credits.selectAll("rect")
     })
     .attr('y', height * 0.24)
 
-names = ["Julius Häger", "Philip Berrez", "Fabian Hugert", "Alice Anselmi", "Christoffer Eriksson"]
+names = ["Julius Häger", "Philip Berrez", "Fabian Hugert", "Alice Anselmi", "Christoffer Eriksson"];
 g_credits.selectAll("text")
     .data([0, 1, 2, 3, 4, 5])
     .enter().append("text")
@@ -1396,7 +1383,6 @@ g_credits.selectAll("text")
     })
     .attr('y', height * 0.53)
 
-
 //USE THIS FUNCTION TO ADD A ROLE AND THE LINKEDIN BUTTON
 function append_role(role, person_idx, y_offset){
     g_credits.append("text")
@@ -1406,6 +1392,7 @@ function append_role(role, person_idx, y_offset){
     .attr("x",  80 + width * 0.13 * person_idx)
     .attr('y', height * 0.56 + y_offset)
 }
+
 function append_linkedin_button(link, person_idx){
     var linkedin_button = g_credits.append("rect")
     .attr("class","team")
@@ -1451,18 +1438,16 @@ function append_linkedin_button(link, person_idx){
     .on("click", () => {
         window.open(link)
     });
+}
 
-} 
-
-
-button_width=width/8.9
+button_width = width / 8.9
 
 append_role("➢ Data", 4, 0)
 append_role("➢ Back-end", 4, 20)
 append_role("➢ Front-end", 4, 40)
 append_linkedin_button("https://www.linkedin.com/in/alice-anselmi/", 4)
     
-    const team_button = g_credits.append("rect")
+const team_button = g_credits.append("rect")
     .attr("id", "team_selector_rect")
     .attr('width', button_width)
     .attr('height', height / 16)
@@ -1484,8 +1469,8 @@ append_linkedin_button("https://www.linkedin.com/in/alice-anselmi/", 4)
             .attr("stroke", btn_stroke_color)
     })
     .on("click", () => {
-            show_team();
-        });
+        show_team();
+    });
 
 const team_button_text = g_credits.append("text")
     .attr("x", team_button.attr("x")*1.11)
@@ -1506,15 +1491,15 @@ const team_button_text = g_credits.append("text")
         show_team();
     });
 
-    function show_team() {
-        d3.selectAll(".team").attr("opacity", 1)
-         d3.selectAll(".instructions").attr("opacity", 0)
-         d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
-        d3.selectAll(".objectives").attr("opacity", 0)
-        }
+function show_team() {
+    d3.selectAll(".team").attr("opacity", 1)
+    d3.selectAll(".instructions").attr("opacity", 0)
+    d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
+    d3.selectAll(".objectives").attr("opacity", 0)
+}
 
 // ------------------INSTRUCTIONS -------------------//
-    const instructions_button = g_credits.append("rect")
+const instructions_button = g_credits.append("rect")
     .attr("id", "instructions_selector_rect")
     .attr('width',button_width)
     .attr('height', height / 16)
@@ -1536,11 +1521,8 @@ const team_button_text = g_credits.append("text")
             .attr("stroke", btn_stroke_color)
     })
     .on("click", () => {
-                show_instructions();
-        });
-
-
-        
+        show_instructions();
+    });
 
 const instruction_button_text = g_credits.append("text")
     .attr("x", instructions_button.attr("x")*1.05)
@@ -1560,16 +1542,17 @@ const instruction_button_text = g_credits.append("text")
     })
     .on("click", () => {
         show_instructions();
-});
+    });
 
 //opacity instead of visibility because otherwise clashes with "about " button
-    function show_instructions() {
-        d3.selectAll(".team").attr("opacity", 0)
-        d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
-         d3.selectAll(".instructions").attr("opacity", 1)
-         d3.selectAll(".objectives").attr("opacity", 0)
-    }
-    g_credits.append("text")
+function show_instructions() {
+    d3.selectAll(".team").attr("opacity", 0)
+    d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
+        d3.selectAll(".instructions").attr("opacity", 1)
+        d3.selectAll(".objectives").attr("opacity", 0)
+}
+    
+g_credits.append("text")
     .attr("class", "instructions")
     .attr('x', width / 2)
     .attr('y', height / 5)
@@ -1578,33 +1561,32 @@ const instruction_button_text = g_credits.append("text")
     .attr("text-anchor", "middle")
     .text("Instructions")
 
-    text_x = 90+ width * 0.12
-    text_y =  height / 3.5
-    offset=35
+text_x = 90+ width * 0.12
+text_y =  height / 3.5
+offset=35
 
-    function append_text_to_instructions(text, line_number){
-        g_credits.append("text")
-    .attr("class","instructions")
-    .text(text)
-    .style("font-size", "23px")
-    .attr("x", text_x )
-    .attr('y', text_y+offset*line_number)
-    }
+function append_text_to_instructions(text, line_number) {
+    g_credits.append("text")
+        .attr("class","instructions")
+        .text(text)
+        .style("font-size", "23px")
+        .attr("x", text_x )
+        .attr('y', text_y+offset*line_number)
+}
 
-    append_text_to_instructions("A Viz of Ice and Fire is a map of the characters' deaths in \"A Song of Ice and Fire\" by George R. R. Martin.", 0)
-    append_text_to_instructions("This visualization is the final project for the \"Information Visualization\" course at KTH.", 1)
-    append_text_to_instructions(" ➢ Zoom in and out to see the details of the map. Click on the circles to see who died in each location.", 3)
-    append_text_to_instructions(" ➢ Click on the \"Books/Years view\" button to choose the filtering criteria you want to apply.", 4)
-    append_text_to_instructions(" ➢ Select a range in the slider to see who died in the chosen range of books/chapters or time period.",5)
-    append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by allegiance.", 6)
-    append_text_to_instructions(" Note for bigger screens: zoom in the browser to have a better positioning of elements!", 8)
+append_text_to_instructions("A Viz of Ice and Fire is a map of the characters' deaths in \"A Song of Ice and Fire\" by George R. R. Martin.", 0)
+append_text_to_instructions("This visualization is the final project for the \"Information Visualization\" course at KTH.", 1)
+append_text_to_instructions(" ➢ Zoom in and out to see the details of the map. Click on the circles to see who died in each location.", 3)
+append_text_to_instructions(" ➢ Click on the \"Books/Years view\" button to choose the filtering criteria you want to apply.", 4)
+append_text_to_instructions(" ➢ Select a range in the slider to see who died in the chosen range of books/chapters or time period.",5)
+append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by allegiance.", 6)
+append_text_to_instructions(" Note for bigger screens: zoom in the browser to have a better positioning of elements!", 8)
 
-    d3.selectAll(".instructions").attr("opacity", 0)
+d3.selectAll(".instructions").attr("opacity", 0)
 
+// ------------------REFERENCES -------------------// 
 
-    
-    // ------------------REFERENCES -------------------//   
-    const references_button = g_credits.append("rect")
+const references_button = g_credits.append("rect")
     .attr("id", "references_selector_rect")
     .attr('width',button_width)
     .attr('height', height / 16)
@@ -1626,14 +1608,10 @@ const instruction_button_text = g_credits.append("text")
             .attr("stroke", btn_stroke_color)
     })
     .on("click", () => {
-                show_references();
-        });
+        show_references();
+    });
 
-
-
-    // ------------------REFERENCES -------------------//    
- 
-    // ------------------REFERENCES -------------------//    
+// ------------------REFERENCES -------------------//    
 
 const references_button_text = g_credits.append("text")
     .attr("x", references_button.attr("x")*1.045)
@@ -1653,78 +1631,71 @@ const references_button_text = g_credits.append("text")
     })
     .on("click", () => {
         show_references();
-});
-
+    });
 
 g_credits.append("text")
-.attr("class", "references")
-.attr('x', width / 2)
-.attr('y', height / 5)
-.attr('font-size', '38px')
-.attr('font-weight', 'bold')
-.attr("text-anchor", "middle")
-.text("References")
-
-
-
+    .attr("class", "references")
+    .attr('x', width / 2)
+    .attr('y', height / 5)
+    .attr('font-size', '38px')
+    .attr('font-weight', 'bold')
+    .attr("text-anchor", "middle")
+    .text("References")
 
 function append_text_to_references(text, line_number){
     g_credits.append("text")
-.attr("class","references")
-.text(text)
-.style("font-size", "23px")
-.attr("x", text_x )
-.attr('y',text_y+offset*line_number)
-
+        .attr("class","references")
+        .text(text)
+        .style("font-size", "23px")
+        .attr("x", text_x )
+        .attr('y',text_y+offset*line_number)
 }
 
 function append_link_to_references(link, line_number, start_x){    
-        var access_button = g_credits.append("rect")
-        .attr("class","references")
-        .attr('width', 100)
-        .attr('height', 30)
-        .attr('stroke', btn_stroke_color)
-        .attr('x',start_x)
-        .attr('y', text_y+offset*line_number - 25)
-        .attr('fill', btn_color)
-        .attr("cursor", "pointer")
-        .on("mouseover", function (d) {
-            d3.select(this)
-                .attr("stroke", highlight_color)
-                .attr("stroke-width", "3px")
-        })
-        .on("mouseleave", function (d) {
-            d3.select(this)
-                .attr("stroke-width", "1px")
-                .attr("stroke", btn_stroke_color)
-        })
-        .on("click", () => {
-            window.open(link)
-            });
-
-
-        g_credits.append("text")
-        .attr("class","references")
-        .attr("x", access_button.attr("x")*1.02)
-        .attr("y", parseInt(access_button.attr("y")) +25)
-        .attr("font-size", (bottombar_height / 5 + "px"))
-        .attr("cursor", "pointer")
-        .text("Access")
-        .on("mouseover", function (d) {
-            d3.select("#instructions_selector_rect")
-                .attr("stroke", highlight_color)
-                .attr("stroke-width", "3px")
-        })
-        .on("mouseleave", function (d) {
-            d3.select("#instructions_selector_rect")
-                .attr("stroke-width", "1px")
-                .attr("stroke", btn_stroke_color)
-        })
-        .on("click", () => {
-            window.open(link)
+    var access_button = g_credits.append("rect")
+    .attr("class","references")
+    .attr('width', 100)
+    .attr('height', 30)
+    .attr('stroke', btn_stroke_color)
+    .attr('x',start_x)
+    .attr('y', text_y+offset*line_number - 25)
+    .attr('fill', btn_color)
+    .attr("cursor", "pointer")
+    .on("mouseover", function (d) {
+        d3.select(this)
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select(this)
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+        window.open(link)
         });
 
 
+    g_credits.append("text")
+    .attr("class","references")
+    .attr("x", access_button.attr("x")*1.02)
+    .attr("y", parseInt(access_button.attr("y")) +25)
+    .attr("font-size", (bottombar_height / 5 + "px"))
+    .attr("cursor", "pointer")
+    .text("Access")
+    .on("mouseover", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+        window.open(link)
+    });
 }
 append_text_to_references("➢ Data: Kaggle fan-made dataset ", 0)
 append_link_to_references("https://www.kaggle.com/datasets/mylesoneill/game-of-thrones", 0, text_x+500)
@@ -1734,91 +1705,88 @@ append_link_to_references("https://awoiaf.westeros.org/index.php/Main_Page", 1, 
 //The End ;-)
 d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
 
-
 function show_references(){
     d3.selectAll(".team").attr("opacity", 0)
     d3.selectAll(".references").attr("opacity", 1).attr("pointer-events", "all")
-     d3.selectAll(".instructions").attr("opacity", 0)
-     d3.selectAll(".objectives").attr("opacity", 0)
-    
+    d3.selectAll(".instructions").attr("opacity", 0)
+    d3.selectAll(".objectives").attr("opacity", 0)
 }
-
 
 // ------------------LEARNING OBJECTIVES -------------------//   
 
 const objectives_button = g_credits.append("rect")
-.attr("id", "objectives_selector_rect")
-.attr('width', button_width)
-.attr('height', height / 16)
-.attr('stroke', btn_stroke_color)
-.attr('x', width * 0.7)
-.attr('y', height * 0.72)
-.attr("rx", 10)
-.attr("ry", 10)
-.attr('fill', btn_color)
-.attr("cursor", "pointer")
-.on("mouseover", function (d) {
-    d3.select(this)
-        .attr("stroke", highlight_color)
-        .attr("stroke-width", "3px")
-})
-.on("mouseleave", function (d) {
-    d3.select(this)
-        .attr("stroke-width", "1px")
-        .attr("stroke", btn_stroke_color)
-})
-.on("click", () => {
-            show_objectives();
+    .attr("id", "objectives_selector_rect")
+    .attr('width', button_width)
+    .attr('height', height / 16)
+    .attr('stroke', btn_stroke_color)
+    .attr('x', width * 0.7)
+    .attr('y', height * 0.72)
+    .attr("rx", 10)
+    .attr("ry", 10)
+    .attr('fill', btn_color)
+    .attr("cursor", "pointer")
+    .on("mouseover", function (d) {
+        d3.select(this)
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select(this)
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+        show_objectives();
     });
 
 
 
 const objectives_button_text = g_credits.append("text")
-.attr("x", objectives_button.attr("x")*1.01)
-.attr("y", objectives_button.attr("y")*1.06)
-.attr("font-size", (bottombar_height / 5.5 + "px"))
-.attr("cursor", "pointer")
-.text("Learning objectives")
-.on("mouseover", function (d) {
-    d3.select("#instructions_selector_rect")
-        .attr("stroke", highlight_color)
-        .attr("stroke-width", "3px")
-})
-.on("mouseleave", function (d) {
-    d3.select("#instructions_selector_rect")
-        .attr("stroke-width", "1px")
-        .attr("stroke", btn_stroke_color)
-})
-.on("click", () => {
-    show_objectives();
-});
+    .attr("x", objectives_button.attr("x")*1.01)
+    .attr("y", objectives_button.attr("y")*1.06)
+    .attr("font-size", (bottombar_height / 5.5 + "px"))
+    .attr("cursor", "pointer")
+    .text("Learning objectives")
+    .on("mouseover", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke", highlight_color)
+            .attr("stroke-width", "3px")
+    })
+    .on("mouseleave", function (d) {
+        d3.select("#instructions_selector_rect")
+            .attr("stroke-width", "1px")
+            .attr("stroke", btn_stroke_color)
+    })
+    .on("click", () => {
+        show_objectives();
+    });
 
 
 g_credits.append("text")
-.attr("class", "objectives")
-.attr('x', width / 2)
-.attr('y', height / 5)
-.attr('font-size', '38px')
-.attr('font-weight', 'bold')
-.attr("text-anchor", "middle")
-.text("What have we learned?")
+    .attr("class", "objectives")
+    .attr('x', width / 2)
+    .attr('y', height / 5)
+    .attr('font-size', '38px')
+    .attr('font-weight', 'bold')
+    .attr("text-anchor", "middle")
+    .text("What have we learned?")
 
 function show_objectives(){
-    d3.selectAll(".team").attr("opacity", 0)
-    d3.selectAll(".references").attr("opacity",0).attr("pointer-events", "none")
-     d3.selectAll(".instructions").attr("opacity", 0)
-     d3.selectAll(".objectives").attr("opacity", 1)
+    d3.selectAll(".team").attr("opacity", 0);
+    d3.selectAll(".references").attr("opacity",0).attr("pointer-events", "none");
+    d3.selectAll(".instructions").attr("opacity", 0);
+    d3.selectAll(".objectives").attr("opacity", 1);
 }
 
-function append_text_to_objectives(text, line_number){
+function append_text_to_objectives(text, line_number) {
     g_credits.append("text")
-.attr("class","objectives")
-.text(text)
-.style("font-size", "23px")
-.attr("x", text_x )
-.attr('y', text_y+offset*line_number)
+        .attr("class","objectives")
+        .text(text)
+        .style("font-size", "23px")
+        .attr("x", text_x )
+        .attr('y', text_y+offset*line_number)
 }
 
-append_text_to_objectives("Learning objective 1", 0)
+append_text_to_objectives("Learning objective 1", 0);
 
-d3.selectAll(".objectives").attr("opacity", 0)
+d3.selectAll(".objectives").attr("opacity", 0);

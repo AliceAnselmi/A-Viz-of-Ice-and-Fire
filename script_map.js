@@ -884,11 +884,6 @@ function create_emblems(map) {
             let coord = place_to_coordinate[d[0].Death_Location];
             return `translate(${coord.x_pixels},${coord.y_pixels})`
         })
-        .on("click", click)
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
-
 
     emblems
         .append("circle")
@@ -902,7 +897,11 @@ function create_emblems(map) {
         .attr('class', 'emblem')
         .style('width', "2%")
         .style("height", "auto")
-        .attr("cursor", "pointer");
+        .attr("cursor", "pointer")
+        .on("click", click)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave);
 
     map_image.on("click", function (e, d) {
         deselect_emblem(selected_emblem);
@@ -912,7 +911,7 @@ function create_emblems(map) {
     return emblems
     var selected_location;
     function click(e, d) {
-        emblem = d3.select(this)
+        emblem = d3.select(this.parentNode)
         
         deselect_emblem(selected_emblem, d)
         selected_emblem = emblem;

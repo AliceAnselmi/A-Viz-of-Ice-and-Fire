@@ -1455,6 +1455,7 @@ function append_linkedin_button(link, person_idx){
 } 
 
 
+button_width=width/8.9
 
 append_role("➢ Data", 4, 0)
 append_role("➢ Back-end", 4, 20)
@@ -1463,10 +1464,10 @@ append_linkedin_button("https://www.linkedin.com/in/alice-anselmi/", 4)
     
     const team_button = g_credits.append("rect")
     .attr("id", "team_selector_rect")
-    .attr('width', width / 9)
+    .attr('width', button_width)
     .attr('height', height / 16)
     .attr('stroke', btn_stroke_color)
-    .attr('x', width * 0.25)
+    .attr('x', width * 0.18)
     .attr('y', height * 0.72)
     .attr("rx", 10)
     .attr("ry", 10)
@@ -1487,7 +1488,7 @@ append_linkedin_button("https://www.linkedin.com/in/alice-anselmi/", 4)
         });
 
 const team_button_text = g_credits.append("text")
-    .attr("x", team_button.attr("x")*1.09)
+    .attr("x", team_button.attr("x")*1.11)
     .attr("y", team_button.attr("y")*1.06)
     .attr("font-size", (bottombar_height / 5 + "px"))
     .attr("cursor", "pointer")
@@ -1508,16 +1509,17 @@ const team_button_text = g_credits.append("text")
     function show_team() {
         d3.selectAll(".team").attr("opacity", 1)
          d3.selectAll(".instructions").attr("opacity", 0)
-         d3.selectAll(".references").attr("opacity", 0)
-    }
+         d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
+        d3.selectAll(".objectives").attr("opacity", 0)
+        }
 
 // ------------------INSTRUCTIONS -------------------//
     const instructions_button = g_credits.append("rect")
     .attr("id", "instructions_selector_rect")
-    .attr('width', width / 9)
+    .attr('width',button_width)
     .attr('height', height / 16)
     .attr('stroke', btn_stroke_color)
-    .attr('x', width * 0.44)
+    .attr('x', width * 0.35)
     .attr('y', height * 0.72)
     .attr("rx", 10)
     .attr("ry", 10)
@@ -1541,7 +1543,7 @@ const team_button_text = g_credits.append("text")
         
 
 const instruction_button_text = g_credits.append("text")
-    .attr("x", instructions_button.attr("x")*1.04)
+    .attr("x", instructions_button.attr("x")*1.05)
     .attr("y", instructions_button.attr("y")*1.06)
     .attr("font-size", (bottombar_height / 5 + "px"))
     .attr("cursor", "pointer")
@@ -1563,9 +1565,9 @@ const instruction_button_text = g_credits.append("text")
 //opacity instead of visibility because otherwise clashes with "about " button
     function show_instructions() {
         d3.selectAll(".team").attr("opacity", 0)
-        d3.selectAll(".references").attr("opacity", 0)
+        d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
          d3.selectAll(".instructions").attr("opacity", 1)
-        
+         d3.selectAll(".objectives").attr("opacity", 0)
     }
     g_credits.append("text")
     .attr("class", "instructions")
@@ -1599,12 +1601,15 @@ const instruction_button_text = g_credits.append("text")
 
     d3.selectAll(".instructions").attr("opacity", 0)
 
+
+    
+    // ------------------REFERENCES -------------------//   
     const references_button = g_credits.append("rect")
     .attr("id", "references_selector_rect")
-    .attr('width', width / 9)
+    .attr('width',button_width)
     .attr('height', height / 16)
     .attr('stroke', btn_stroke_color)
-    .attr('x', width * 0.63)
+    .attr('x', width * 0.52)
     .attr('y', height * 0.72)
     .attr("rx", 10)
     .attr("ry", 10)
@@ -1625,10 +1630,13 @@ const instruction_button_text = g_credits.append("text")
         });
 
 
+
+    // ------------------REFERENCES -------------------//    
+ 
     // ------------------REFERENCES -------------------//    
 
 const references_button_text = g_credits.append("text")
-    .attr("x", references_button.attr("x")*1.04)
+    .attr("x", references_button.attr("x")*1.045)
     .attr("y", references_button.attr("y")*1.06)
     .attr("font-size", (bottombar_height / 5 + "px"))
     .attr("cursor", "pointer")
@@ -1678,8 +1686,6 @@ function append_link_to_references(link, line_number, start_x){
         .attr('stroke', btn_stroke_color)
         .attr('x',start_x)
         .attr('y', text_y+offset*line_number - 25)
-        .attr("rx", 10)
-        .attr("ry", 10)
         .attr('fill', btn_color)
         .attr("cursor", "pointer")
         .on("mouseover", function (d) {
@@ -1733,5 +1739,86 @@ function show_references(){
     d3.selectAll(".team").attr("opacity", 0)
     d3.selectAll(".references").attr("opacity", 1).attr("pointer-events", "all")
      d3.selectAll(".instructions").attr("opacity", 0)
+     d3.selectAll(".objectives").attr("opacity", 0)
     
 }
+
+
+// ------------------LEARNING OBJECTIVES -------------------//   
+
+const objectives_button = g_credits.append("rect")
+.attr("id", "objectives_selector_rect")
+.attr('width', button_width)
+.attr('height', height / 16)
+.attr('stroke', btn_stroke_color)
+.attr('x', width * 0.7)
+.attr('y', height * 0.72)
+.attr("rx", 10)
+.attr("ry", 10)
+.attr('fill', btn_color)
+.attr("cursor", "pointer")
+.on("mouseover", function (d) {
+    d3.select(this)
+        .attr("stroke", highlight_color)
+        .attr("stroke-width", "3px")
+})
+.on("mouseleave", function (d) {
+    d3.select(this)
+        .attr("stroke-width", "1px")
+        .attr("stroke", btn_stroke_color)
+})
+.on("click", () => {
+            show_objectives();
+    });
+
+
+
+const objectives_button_text = g_credits.append("text")
+.attr("x", objectives_button.attr("x")*1.01)
+.attr("y", objectives_button.attr("y")*1.06)
+.attr("font-size", (bottombar_height / 5.5 + "px"))
+.attr("cursor", "pointer")
+.text("Learning objectives")
+.on("mouseover", function (d) {
+    d3.select("#instructions_selector_rect")
+        .attr("stroke", highlight_color)
+        .attr("stroke-width", "3px")
+})
+.on("mouseleave", function (d) {
+    d3.select("#instructions_selector_rect")
+        .attr("stroke-width", "1px")
+        .attr("stroke", btn_stroke_color)
+})
+.on("click", () => {
+    show_objectives();
+});
+
+
+g_credits.append("text")
+.attr("class", "objectives")
+.attr('x', width / 2)
+.attr('y', height / 5)
+.attr('font-size', '38px')
+.attr('font-weight', 'bold')
+.attr("text-anchor", "middle")
+.text("What have we learned?")
+
+function show_objectives(){
+    d3.selectAll(".team").attr("opacity", 0)
+    d3.selectAll(".references").attr("opacity",0).attr("pointer-events", "none")
+     d3.selectAll(".instructions").attr("opacity", 0)
+     d3.selectAll(".objectives").attr("opacity", 1)
+}
+
+function append_text_to_objectives(text, line_number){
+    g_credits.append("text")
+.attr("class","objectives")
+.text(text)
+.style("font-size", "23px")
+.attr("x", text_x )
+.attr('y', text_y+offset*line_number)
+}
+
+append_text_to_objectives("Learning objective 1", 0)
+
+d3.selectAll(".objectives").attr("opacity", 0)

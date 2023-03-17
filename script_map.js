@@ -125,38 +125,18 @@ function create_mapview() {
 // ---------------------------//
 const tooltip = d3.select("body").append("g")
     .attr("class", "tooltip")
-    .style("position", "absolute")
-    .style("visibility", "hidden")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
     .style("top", "0px")
     .style("left", "0px")
 
 const map_tooltip = d3.select("body").append("g")
     .attr("class", "location_tooltip")
-    .style("position", "absolute")
-    .style("visibility", "hidden")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
     .style("top", "0px")
     .style("left", "0px")
     
 const allegiance_tooltip = d3.select(".ui").append("g")
     .attr("class", "allegiance_tooltip")
-    .style("position", "absolute")
-    .style("visibility", "hidden")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
-
+    .style("top", "0px")
+    .style("left", "0px")
 
 // ---------------------------//
 //          Slider           //
@@ -988,7 +968,7 @@ function create_emblems(map) {
             .style('white-space', 'nowrap')
             .style('right', null)
             .style('pointer-events', 'none')
-            .html(`<b> ${d[0].Death_Location} </b> <br>
+            .html(`<h3 style="margin:0;padding:0;"> ${d[0].Death_Location} </h3>
                    Deaths: ${numdead} <br>`)
 
         // Show images for each house that has died here
@@ -1162,7 +1142,7 @@ function select_emblem(emblem, data) {
             .style('white-space', 'nowrap')
             .style('right', null)
             .style('pointer-events', 'none')
-            .html( `<b> Name: </b> ${d.Name} <br> 
+            .html( `<h2 style="margin:0;padding:0;"> ${d.Name} </h2> 
                     <b> Allegiance: </b> ${d.Allegiances} <br> 
                     <b> Year of death: </b> ${d.Death_Year} AC <br>
                     <b> Death location: </b> ${d.Death_Location} <br> 

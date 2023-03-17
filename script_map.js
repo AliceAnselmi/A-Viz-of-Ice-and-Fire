@@ -977,50 +977,34 @@ function create_emblems(map) {
             return selected_allegiances.length > 0 ? selected_allegiances.includes(house[0]) : true;
         });
 
-        // FIXME: We probably want to have a better value that depends on content...
-        // but it seems hard...?
-        const min_tooltip_width = 150;
+        const tooltip_y_offset = 10;
 
-        const tooltip_top_offset = 10;
+        const tooltip_right_x_offset = 25;
+        const tooltip_left_x_offset = 15;
 
-        const tooltip_right_offset_x = 25;
-        const tooltip_left_offset_x = 15;
+        map_tooltip
+        .style('top', e.clientY - tooltip_y_offset + 'px')
+        .style('left', e.clientX + tooltip_right_x_offset + 'px')
+        .style('white-space', 'nowrap')
+        .style('right', null)
+        .style('pointer-events', 'none')
+        .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead + "<br>")
 
-        if (e.clientX + min_tooltip_width < window.innerWidth)
+        // Show images for each house that has died here
+        map_tooltip
+            .selectAll("img")
+            .data(houses)
+            .join("img")
+            .attr("src", function (d) { return "assets/emblems/" + d[0] + ".PNG"})
+            .attr("width", "24px")
+            .attr("height", "24px")
+
+        let width = map_tooltip.node().offsetWidth;
+        if (e.clientX + width + 35 > window.innerWidth)
         {
             map_tooltip
-            .style('top', e.clientY - tooltip_top_offset + 'px')
-            .style('left', e.clientX + tooltip_right_offset_x + 'px')
-            .style('right', null)
-            .style('pointer-events', 'none')
-            .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead + "<br>")
-
-            // Show images for each house that has died here
-            map_tooltip
-                .selectAll("img")
-                .data(houses)
-                .join("img")
-                .attr("src", function (d) { return "assets/emblems/" + d[0] + ".PNG"})
-                .attr("width", "24px")
-                .attr("height", "24px")
-        }
-        else
-        {
-            map_tooltip
-                .style('top', e.clientY - tooltip_top_offset + 'px')
-                .style('left', null)
-                .style('right', window.innerWidth - e.clientX + tooltip_left_offset_x + 'px')
-                .style('pointer-events', 'none')
-                .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead + "<br>")
-
-            // Show images for each house that has died here
-            map_tooltip
-                .selectAll("img")
-                .data(houses)
-                .join("img")
-                .attr("src", function (d) { return "assets/emblems/" + d[0] + ".PNG"})
-                .attr("width", "24px")
-                .attr("height", "24px")
+            .style('left', null)
+            .style('right', window.innerWidth - e.clientX + tooltip_left_x_offset + 'px')
         }
     }
 

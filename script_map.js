@@ -731,7 +731,7 @@ filters.append("pattern")
     .attr("height", 1)
     .append("svg:image")
     .attr("xlink:href", (d) => {
-        return "assets/emblems/" + d + ".PNG"
+        return "assets/emblems/" + d + ".png"
     })
     .attr("width", sidebar_width / 4)
 
@@ -983,19 +983,20 @@ function create_emblems(map) {
         const tooltip_left_x_offset = 15;
 
         map_tooltip
-        .style('top', e.clientY - tooltip_y_offset + 'px')
-        .style('left', e.clientX + tooltip_right_x_offset + 'px')
-        .style('white-space', 'nowrap')
-        .style('right', null)
-        .style('pointer-events', 'none')
-        .html("<b>" + d[0].Death_Location + "</b> <br>Deaths: " + numdead + "<br>")
+            .style('top', e.clientY - tooltip_y_offset + 'px')
+            .style('left', e.clientX + tooltip_right_x_offset + 'px')
+            .style('white-space', 'nowrap')
+            .style('right', null)
+            .style('pointer-events', 'none')
+            .html(`<b> ${d[0].Death_Location} </b> <br>
+                   Deaths: ${numdead} <br>`)
 
         // Show images for each house that has died here
         map_tooltip
             .selectAll("img")
             .data(houses)
             .join("img")
-            .attr("src", function (d) { return "assets/emblems/" + d[0] + ".PNG"})
+            .attr("src", function (d) { return "assets/emblems/" + d[0] + ".png"})
             .attr("width", "24px")
             .attr("height", "24px")
 
@@ -1056,7 +1057,7 @@ function select_emblem(emblem, data) {
         .attr("class", "popup")
         .attr("xlink:href", (d) => {
             var allegiance = d.data.Allegiances;
-            return "assets/emblems/" + allegiance + ".PNG"
+            return "assets/emblems/" + allegiance + ".png"
         })
         .attr('width', emblem_size + "%")
         // .attr("height", "3%")
@@ -1149,13 +1150,32 @@ function select_emblem(emblem, data) {
         } else {
             lastBook += "(`•ω•) γʞɔυwγʞɔυʇ Ɉnǝw ϱniʜɈǝmoƧ !ǝiƨqooʜw ǝiƨqO"
         }
-        tooltip
-            .style('top', e.clientY - 30 + 'px')
-            .style('left', e.clientX + 30 + 'px')
-            .html("<b>Name: </b>" + d.Name + "<br> <b> Allegiance: </b>" + d.Allegiances + "<br> <b> Year of death: </b>" + d.Death_Year +
-                " AC <br><b> Death location: </b>" + d.Death_Location + "<br> <b>First appeared in: </b> " + firstBook + ", chapter " + d.Book_Intro_Chapter +
-                "<br> <b> Last appeared in: </b>" + lastBook + ", chapter " + d.Death_Chapter + "<br>")
 
+        const tooltip_y_offset = 10;
+
+        const tooltip_right_x_offset = 25;
+        const tooltip_left_x_offset = 15;
+
+        tooltip
+            .style('top', e.clientY - tooltip_y_offset + 'px')
+            .style('left', e.clientX + tooltip_right_x_offset + 'px')
+            .style('white-space', 'nowrap')
+            .style('right', null)
+            .style('pointer-events', 'none')
+            .html( `<b> Name: </b> ${d.Name} <br> 
+                    <b> Allegiance: </b> ${d.Allegiances} <br> 
+                    <b> Year of death: </b> ${d.Death_Year} AC <br>
+                    <b> Death location: </b> ${d.Death_Location} <br> 
+                    <b> First appeared in: </b> ${firstBook}, chapter ${d.Book_Intro_Chapter} <br> 
+                    <b> Last appeared in: </b> ${lastBook}, chapter ${d.Death_Chapter} <br>`)
+
+        let width = tooltip.node().offsetWidth;
+        if (e.clientX + width + 35 > window.innerWidth)
+        {
+            tooltip
+                .style('left', null)
+                .style('right', window.innerWidth - e.clientX + tooltip_left_x_offset + 'px')
+        }
     }
 
     function mouseleave(d) {

@@ -724,12 +724,12 @@ filters
     .attr("stroke", "black")
     .attr('cx', (d, i) => {
         if (i % 2 == 0)
-            return emblemX
+            return emblemX;
         else
-            return emblemX + sidebar_width/3
+            return emblemX + sidebar_width / 3;
     })
     .attr('cy', (d, i) => {
-        return emblemY + sidebar_height/8 * (parseInt(i / 2))
+        return emblemY + sidebar_height / 8 * (parseInt(i / 2))
     })
     .attr("r", sidebar_width /8)
     .style("fill", (d, i) => {
@@ -965,9 +965,7 @@ function create_emblems(map) {
         map_tooltip
             .style('top', e.clientY - tooltip_y_offset + 'px')
             .style('left', e.clientX + tooltip_right_x_offset + 'px')
-            .style('white-space', 'nowrap')
             .style('right', null)
-            .style('pointer-events', 'none')
             .html(`<h3 style="margin:0;padding:0;"> ${d[0].Death_Location} </h3>
                    Deaths: ${numdead} <br>`)
 
@@ -984,11 +982,10 @@ function create_emblems(map) {
         if (e.clientX + width + 35 > window.innerWidth)
         {
             map_tooltip
-            .style('left', null)
-            .style('right', window.innerWidth - e.clientX + tooltip_left_x_offset + 'px')
+                .style('left', null)
+                .style('right', window.innerWidth - e.clientX + tooltip_left_x_offset + 'px')
         }
     }
-
 }
 
 function mouseleave(d) {
@@ -1139,9 +1136,7 @@ function select_emblem(emblem, data) {
         tooltip
             .style('top', e.clientY - tooltip_y_offset + 'px')
             .style('left', e.clientX + tooltip_right_x_offset + 'px')
-            .style('white-space', 'nowrap')
             .style('right', null)
-            .style('pointer-events', 'none')
             .html( `<h2 style="margin:0;padding:0;"> ${d.Name} </h2> 
                     <b> Allegiance: </b> ${d.Allegiances} <br> 
                     <b> Year of death: </b> ${d.Death_Year} AC <br>

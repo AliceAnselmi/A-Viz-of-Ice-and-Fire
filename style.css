@@ -35,6 +35,9 @@ body, svg {
     border-width: 2px;
     border-radius: 5px;
     padding: 5px;
+    /* Make it so the text doesn't wrap, this is essential for measuring size */
+    white-space: nowrap;
+    pointer-events: none;
 }
 
 #sidebar_svg{

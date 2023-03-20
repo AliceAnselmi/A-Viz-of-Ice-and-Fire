@@ -1454,12 +1454,31 @@ function append_linkedin_button(link, person_idx){
 }
 
 button_width = width / 8.9
+append_role("➢ Back-end", 1, 0)
+append_role("➢ Front-end", 1, 20)
+append_role("➢ Data handling", 1, 40)
+append_linkedin_button("Put your link here Julius", 5)
+
+append_role("➢ Front-end", 2, 0)
+append_role("➢ Sonification", 2, 20)
+append_role("➢ UX/UI", 2, 40)
+append_linkedin_button("Put your link here Philip", 5)
+
+append_role("➢ UI/UX", 3, 0)
+append_role("➢ Data handling", 3, 20)
+append_role("➢ Front-end", 3, 40)
+append_linkedin_button("https://www.linkedin.com/in/fabian-hugert/", 5)
 
 append_role("➢ Data", 4, 0)
 append_role("➢ Back-end", 4, 20)
 append_role("➢ Front-end", 4, 40)
 append_linkedin_button("https://www.linkedin.com/in/alice-anselmi/", 4)
-    
+
+append_role("➢ UI/UX", 5, 0)
+append_role("➢ User testing", 5, 20)
+append_role("➢ Data handling", 5, 40)
+append_linkedin_button("https://www.linkedin.com/in/christoffer-eriksson-696486256/", 5)
+
 const team_button = g_credits.append("rect")
     .attr("id", "team_selector_rect")
     .attr('width', button_width)
@@ -1710,11 +1729,22 @@ function append_link_to_references(link, line_number, start_x){
         window.open(link)
     });
 }
-append_text_to_references("➢ Data: Kaggle fan-made dataset ", 0)
-append_link_to_references("https://www.kaggle.com/datasets/mylesoneill/game-of-thrones", 0, text_x+500)
-append_text_to_references("➢ Data: A Song of Ice and Fire Wiki", 1)
-append_link_to_references("https://awoiaf.westeros.org/index.php/Main_Page", 1, text_x+500)
-
+append_text_to_references("➢ Kaggle fan-made dataset - Data ", 0)
+append_link_to_references("https://www.kaggle.com/datasets/mylesoneill/game-of-thrones", 0, text_x+1100)
+append_text_to_references("➢ A Song of Ice and Fire Wiki - Data ", 1)
+append_link_to_references("https://awoiaf.westeros.org/index.php/Main_Page", 1, text_x+1100)
+append_text_to_references("➢ Bevan, Nigel. (2009). What is the difference between the purpose of usability and user experience evaluation methods?", 2)
+append_link_to_references("https://www.researchgate.net/publication/238775905_What_is_the_difference_between_the_purpose_of_usability_and_user_experience_evaluation_methods", 2, text_x+1100)
+append_text_to_references("➢ Arnold P. O. S. Vermeeren, et al. 2010. User experience evaluation methods: current state and development needs", 3)
+append_link_to_references("https://dl.acm.org/doi/10.1145/1868914.1868973", 3, text_x+1100)
+append_text_to_references("➢ Catherine Plaisant. 2004. The challenge of information visualization evaluation", 4)
+append_link_to_references("https://doi.org/10.1145/989863.989880", 4, text_x+1100)
+append_text_to_references("➢ Mazza, R. (2009). Introduction to Information Visualization.", 5)
+append_link_to_references("https://link-springer-com.focus.lib.kth.se/book/10.1007/978-1-84800-219-7", 5, text_x+1100)
+append_text_to_references("➢ Salvendy, G. (2012). Handbook of Human Factors and Ergonomics (4. Aufl. ed.).", 6)
+append_link_to_references("https://www.wiley.com/en-us/Handbook+of+Human+Factors+and+Ergonomics%2C+5th+Edition-p-9781119636083", 6, text_x+1100)
+append_text_to_references("➢ A Song of Ice and fire Speculative map - Traced asset", 6)
+append_link_to_references("https://www.worldanvil.com/w/a-summer-of-ice-and-fire-jester-117/map/225236e7-5acb-495c-9486-94606aec90c3", 7, text_x+1100)
 //The End ;-)
 d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
 
@@ -1800,6 +1830,6 @@ function append_text_to_objectives(text, line_number) {
         .attr('y', text_y+offset*line_number)
 }
 
-append_text_to_objectives("Learning objective 1", 0);
+append_text_to_objectives("Learning Design", 0);
 
 d3.selectAll(".objectives").attr("opacity", 0);

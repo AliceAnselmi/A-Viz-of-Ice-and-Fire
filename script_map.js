@@ -1457,7 +1457,7 @@ button_width = width / 8.9
 append_role("➢ Back-end", 1, 0)
 append_role("➢ Front-end", 1, 20)
 append_role("➢ Data handling", 1, 40)
-append_linkedin_button("Put your link here Julius", 5)
+append_linkedin_button("https://www.linkedin.com/in/julius-h%C3%A4ger/", 5)
 
 append_role("➢ Front-end", 2, 0)
 append_role("➢ Sonification", 2, 20)
@@ -1743,7 +1743,7 @@ append_text_to_references("➢ Mazza, R. (2009). Introduction to Information Vis
 append_link_to_references("https://link-springer-com.focus.lib.kth.se/book/10.1007/978-1-84800-219-7", 5, text_x+1100)
 append_text_to_references("➢ Salvendy, G. (2012). Handbook of Human Factors and Ergonomics (4. Aufl. ed.).", 6)
 append_link_to_references("https://www.wiley.com/en-us/Handbook+of+Human+Factors+and+Ergonomics%2C+5th+Edition-p-9781119636083", 6, text_x+1100)
-append_text_to_references("➢ A Song of Ice and fire Speculative map - Traced asset", 6)
+append_text_to_references("➢ A Song of Ice and fire Speculative map - Traced asset", 7)
 append_link_to_references("https://www.worldanvil.com/w/a-summer-of-ice-and-fire-jester-117/map/225236e7-5acb-495c-9486-94606aec90c3", 7, text_x+1100)
 //The End ;-)
 d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")

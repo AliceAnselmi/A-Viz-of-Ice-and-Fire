@@ -1457,17 +1457,17 @@ button_width = width / 8.9
 append_role("➢ Back-end", 1, 0)
 append_role("➢ Front-end", 1, 20)
 append_role("➢ Data handling", 1, 40)
-append_linkedin_button("https://www.linkedin.com/in/julius-h%C3%A4ger/", 5)
+append_linkedin_button("https://www.linkedin.com/in/julius-h%C3%A4ger/", 1)
 
 append_role("➢ Front-end", 2, 0)
 append_role("➢ Sonification", 2, 20)
 append_role("➢ UX/UI", 2, 40)
-append_linkedin_button("Put your link here Philip", 5)
+append_linkedin_button("Put your link here Philip", 2)
 
 append_role("➢ UI/UX", 3, 0)
 append_role("➢ Data handling", 3, 20)
 append_role("➢ Front-end", 3, 40)
-append_linkedin_button("https://www.linkedin.com/in/fabian-hugert/", 5)
+append_linkedin_button("https://www.linkedin.com/in/fabian-hugert/", 3)
 
 append_role("➢ Data", 4, 0)
 append_role("➢ Back-end", 4, 20)

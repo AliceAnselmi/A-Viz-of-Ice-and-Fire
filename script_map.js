@@ -10,6 +10,9 @@ forward_button_upper_img = "assets/right_upper.png"
 back_button_lower_img = "assets/left_lower.png"
 forward_button_lower_img = "assets/right_lower.png"
 
+// audio stuff
+const ctx = new AudioContext();
+let audio;
 
 const svg = create_mapview();
 var width = window.innerWidth;
@@ -538,6 +541,8 @@ function endDrag(event, d) {
     }
 
     sliderVals[d] = v
+    //console.log(v + "what is this"); // it is chapters
+    //console.log(mapMode)
     sliderVals[0] = Math.min(sliderVals[0], sliderVals[1]);
     sliderVals[1] = Math.max(sliderVals[0], sliderVals[1]);
 
@@ -823,7 +828,7 @@ filters
                 .attr("stroke-width", "1px")
                 .attr("stroke", "black")
         }
-        console.log(selected_allegiances)
+        //console.log(selected_allegiances)
         updateMap(sliderVals[0], sliderVals[1], mapMode)
     })
 
@@ -971,7 +976,21 @@ function create_emblems(map) {
         
         deselect_emblem(selected_emblem, d)
         selected_emblem = emblem;
+
+
+        //sound stuff for emblems
         selected_location = d[0].Death_Location
+        console.log(selected_location + ", died here")
+        // function for determining which sound to play
+        // function for playing music
+        //let chosen_sound = choose_sound(selected_location) 
+        //fetch_sound(selected_sound)
+        //fetch_sound(choose_sound(selected_location))
+        //playback(chosen_sound)
+        playLocationSound(selected_location);
+
+       
+
         select_emblem(emblem, d)
         updateMap(sliderVals[0], sliderVals[1], mapMode);
     }
@@ -1709,10 +1728,9 @@ append_text_to_instructions("This visualization is the final project for the \"I
 append_text_to_instructions(" ➢ Zoom in and out to see the details of the map. Click on the circles to see who died in each location.", 3)
 append_text_to_instructions(" ➢ Click on the \"Books/Years view\" button to choose the filtering criteria you want to apply.", 4)
 append_text_to_instructions(" ➢ Select a range in the slider to see who died in the chosen range of books/chapters or time period.",5)
-append_text_to_instructions(" ➢ Grab the center of the slider in order to move the entire chosen range to left or right.", 6)
-append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by allegiance.", 7)
-append_link_to_instructions("https://youtu.be/vuvKUIf31jc", 8, 900)
-append_text_to_instructions(" Note for bigger screens: zoom in the browser to have a better positioning of elements!", 9)
+append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by allegiance.", 6)
+append_link_to_instructions("https://youtu.be/u8KiZ5eEQKc", 7, 900)
+append_text_to_instructions(" Note for bigger screens: zoom in the browser to have a better positioning of elements!", 8)
 
 d3.selectAll(".instructions").attr("opacity", 0)
 
@@ -1941,7 +1959,92 @@ append_text_to_objectives("This project was inspired by the lack of readability 
 append_text_to_objectives("For instance, its lack of axis to read the bars values, and nonlinear shape also made it difficult to read.",6)
 append_text_to_objectives("We have written a quick explanation of how to use the Viz, as well as a quick demo video showcasing an example interaction of the viz.",7)
 append_text_to_objectives("During this project we have performed a number of user evaluations to identify areas of improvements,",8)
-append_text_to_objectives("which led us to improve for instance the UI to clarify what is intractable or not. And improve layout to communicate functionality,",9)
-append_text_to_objectives("as well as additional functionalities and interactions.",10)
+append_text_to_objectives("which led us to improve for instance the UI to clarify what is intractable or not. And improve layout to communicate functionality.",9)
+
 
 d3.selectAll(".objectives").attr("opacity", 0);
+
+
+
+// ---------------------------//
+//           Sound          //
+// --------------------------//
+
+//const ctx = new AudioContext();
+//let audio
+
+
+function choose_sound(locationName, callback) {
+
+    var city = ["King's Landing", "Winterfell", "Castle Black", "The Twins", "Meereen", "Harrenhal", "Riverrun", "Dragonstone", "Storm's End", "Whispers", "Astapor", "Moat Cailin", "The Eyrie", "Burning Septry", "Stokeworth", "Yunkai", "Braavos", "Darry", "Deepwood Motte", "Dreadfort", "Duskendale", "Fairmarket", "Hornwood", "Maidenpool", "Oldstones", "Oldtown", "Pyke", "Saltpans", "Vaes Dothrak", "Volantis"]
+    var horse = ["Dothraki Sea", "Red Waste", "Disputed Lands"]
+    var house = ["Crossroads Inn"]
+    var mountain = ["Mountains of the Moon"]
+    var ocean = ["Blackwater Bay", "Old Wyk", "Summer Sea"]
+    var river = ["Riverlands", "Blackwater Rush", "Gods Eye", "Green Fork", "Mummer's Ford", "Greenblood", "Red Fork"]
+    var winter = ["Beyond the Wall", "Haunted Forest", "Craster's Keep", "Fist of the First Men", "The North", "Skirling Pass", "Bridge of Skulls", "The Wall"]
+    var forest = [] // maybe???
+    console.log("in choose sound")
+
+    let chosen_sound;
+    if (city.includes(locationName)) {
+        console.log("city");
+        chosen_sound = "./assets/sfx/CITY.mp3";
+    } 
+    
+    else if (horse.includes(locationName)) {
+        console.log("horse");
+        chosen_sound = "./assets/sfx/HORSE.mp3";
+    } 
+    
+    else if (house.includes(locationName)) {
+        console.log("house");
+        chosen_sound = "./assets/sfx/HOUSE.mp3";
+    } 
+    
+    else if (mountain.includes(locationName)) {
+        console.log("mountain");
+        chosen_sound = "./assets/sfx/MOUNTAIN.mp3";
+    } 
+    
+    else if (ocean.includes(locationName)) {
+        console.log("ocean");
+        chosen_sound = "./assets/sfx/OCEAN.mp3";
+    } 
+    
+    else if (river.includes(locationName)) {
+        console.log("river");
+        chosen_sound = "./assets/sfx/RIVER.mp3";
+    } 
+    
+    else if (winter.includes(locationName)) {
+        console.log("winter");
+        chosen_sound = "./assets/sfx/WINTER.mp3";
+    } else {
+        console.log("else");
+        chosen_sound = "./assets/sfx/RIVER.mp3";
+    }
+    fetch(chosen_sound)
+    .then(data => data.arrayBuffer())
+    .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+    .then(decodedAudio => {
+      audio = decodedAudio;
+      // call the callback function with the decoded audio
+      callback(audio);
+    });
+    
+}
+
+function playback() {
+    console.log("in playback")
+    const playSound = ctx.createBufferSource();
+    playSound.buffer = audio;
+    playSound.connect(ctx.destination);
+    playSound.start(ctx.currentTime);
+}
+
+const playLocationSound = (locationName) => {
+    choose_sound(locationName, (audio) => {
+      playback(audio);
+    });
+  };

@@ -10,6 +10,9 @@ forward_button_upper_img = "assets/right_upper.png"
 back_button_lower_img = "assets/left_lower.png"
 forward_button_lower_img = "assets/right_lower.png"
 
+// audio stuff
+const ctx = new AudioContext();
+let audio;
 
 const svg = create_mapview();
 var width = window.innerWidth;
@@ -538,6 +541,8 @@ function endDrag(event, d) {
     }
 
     sliderVals[d] = v
+    //console.log(v + "what is this"); // it is chapters
+    //console.log(mapMode)
     sliderVals[0] = Math.min(sliderVals[0], sliderVals[1]);
     sliderVals[1] = Math.max(sliderVals[0], sliderVals[1]);
 
@@ -823,7 +828,7 @@ filters
                 .attr("stroke-width", "1px")
                 .attr("stroke", "black")
         }
-        console.log(selected_allegiances)
+        //console.log(selected_allegiances)
         updateMap(sliderVals[0], sliderVals[1], mapMode)
     })
 
@@ -972,6 +977,15 @@ function create_emblems(map) {
         deselect_emblem(selected_emblem, d)
         selected_emblem = emblem;
         selected_location = d[0].Death_Location
+        console.log(selected_location + ", died here")
+        // function for determining which sound to play
+        // function for playing music
+        let selected_sound = choose_sound(selected_location) 
+        fetch_sound(selected_sound)
+        //fetch_sound(choose_sound(selected_location))
+        playback()
+
+
         select_emblem(emblem, d)
         updateMap(sliderVals[0], sliderVals[1], mapMode);
     }
@@ -1944,3 +1958,81 @@ append_text_to_objectives("which led us to improve for instance the UI to clarif
 
 
 d3.selectAll(".objectives").attr("opacity", 0);
+
+
+
+// ---------------------------//
+//           Sound          //
+// --------------------------//
+
+
+
+
+function choose_sound(locationName) {
+    var city = ["King's Landing", "Winterfell", "Castle Black", "The Twins", "Meereen", "Harrenhal", "Riverrun", "Dragonstone", "Storm's End", "Whispers", "Astapor", "Moat Cailin", "The Eyrie", "Burning Septry", "Stokeworth", "Yunkai", "Braavos", "Darry", "Deepwood Motte", "Dreadfort", "Duskendale", "Fairmarket", "Hornwood", "Maidenpool", "Oldstones", "Oldtown", "Pyke", "Saltpans", "Vaes Dothrak", "Volantis"]
+    var horse = ["Dothraki Sea", "Red Waste", "Disputed Lands"]
+    var house = ["Crossroads Inn"]
+    var mountain = ["Mountains of the Moon"]
+    var ocean = ["Blackwater Bay", "Old Wyk", "Summer Sea"]
+    var river = ["Riverlands", "Blackwater Rush", "Gods Eye", "Green Fork", "Mummer's Ford", "Greenblood", "Red Fork"]
+    var winter = ["Beyond the Wall", "Haunted Forest", "Craster's Keep", "Fist of the First Men", "The North", "Skirling Pass", "Bridge of Skulls", "The Wall"]
+    var forest = [] // maybe???
+    console.log("in choose sound")
+
+    if (city.includes(locationName)) {
+        console.log("city");
+        return "./assets/sfx/loudness_CITY 1.mp3";
+    } 
+    
+    else if (horse.includes(locationName)) {
+        console.log("horse");
+        return "./assets/sfx/loudness_HORSE 1.mp3";
+    } 
+    
+    else if (house.includes(locationName)) {
+        console.log("house");
+        return "./assets/sfx/loudness_HOUSE 1.mp3";
+    } 
+    
+    else if (mountain.includes(locationName)) {
+        console.log("mountain");
+        return "./assets/sfx/loudness_MOUNTAIN 1.mp3";
+    } 
+    
+    else if (ocean.includes(locationName)) {
+        console.log("ocean");
+        return "./assets/sfx/loudness_OCEAN 1.mp3";
+    } 
+    
+    else if (river.includes(locationName)) {
+        console.log("river");
+        return "./assets/sfx/loudness_RIVER 1.mp3";
+    } 
+    
+    else if (winter.includes(locationName)) {
+        console.log("winter");
+        return "./assets/sfx/loudness_WINTER 1.mp3";
+    } else {
+        console.log("else");
+        return "./assets/sfx/loudness_RIVER 1.mp3";
+    }
+
+}
+
+function fetch_sound(directory) {
+    console.log("in fetch sound")
+    fetch(directory)
+    .then(data => data.arrayBuffer())
+    .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+    .then(decodedAudio => {
+        audio = decodedAudio;
+    });
+}
+
+function playback() {
+    console.log("in playback")
+    const playSound = ctx.createBufferSource();
+    playSound.buffer = audio;
+    playSound.connect(ctx.destination);
+    playSound.start(ctx.currentTime);
+}

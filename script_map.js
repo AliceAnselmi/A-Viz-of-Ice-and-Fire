@@ -1605,6 +1605,52 @@ function append_text_to_instructions(text, line_number) {
         .attr("x", text_x )
         .attr('y', text_y+offset*line_number)
 }
+function append_link_to_instructions(link, line_number, start_x){
+    var access_button = g_credits.append("rect")
+        .attr("class","instructions")
+        .attr('width', 100)
+        .attr('height', 30)
+        .attr('stroke', btn_stroke_color)
+        .attr('x',start_x)
+        .attr('y', text_y+offset*line_number - 25)
+        .attr('fill', btn_color)
+        .attr("cursor", "pointer")
+        .on("mouseover", function (d) {
+            d3.select(this)
+                .attr("stroke", highlight_color)
+                .attr("stroke-width", "3px")
+        })
+        .on("mouseleave", function (d) {
+            d3.select(this)
+                .attr("stroke-width", "1px")
+                .attr("stroke", btn_stroke_color)
+        })
+        .on("click", () => {
+            window.open(link)
+        });
+
+
+    g_credits.append("text")
+        .attr("class","instructions")
+        .attr("x", access_button.attr("x")*1.02)
+        .attr("y", parseInt(access_button.attr("y")) +25)
+        .attr("font-size", (bottombar_height / 5 + "px"))
+        .attr("cursor", "pointer")
+        .text("Demo")
+        .on("mouseover", function (d) {
+            d3.select("#instructions_selector_rect")
+                .attr("stroke", highlight_color)
+                .attr("stroke-width", "3px")
+        })
+        .on("mouseleave", function (d) {
+            d3.select("#instructions_selector_rect")
+                .attr("stroke-width", "1px")
+                .attr("stroke", btn_stroke_color)
+        })
+        .on("click", () => {
+            window.open(link)
+        });
+}
 
 append_text_to_instructions("A Viz of Ice and Fire is a map of the characters' deaths in \"A Song of Ice and Fire\" by George R. R. Martin.", 0)
 append_text_to_instructions("This visualization is the final project for the \"Information Visualization\" course at KTH.", 1)
@@ -1612,6 +1658,7 @@ append_text_to_instructions(" ➢ Zoom in and out to see the details of the map.
 append_text_to_instructions(" ➢ Click on the \"Books/Years view\" button to choose the filtering criteria you want to apply.", 4)
 append_text_to_instructions(" ➢ Select a range in the slider to see who died in the chosen range of books/chapters or time period.",5)
 append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by allegiance.", 6)
+append_link_to_instructions("https://youtu.be/u8KiZ5eEQKc", 7, 900)
 append_text_to_instructions(" Note for bigger screens: zoom in the browser to have a better positioning of elements!", 8)
 
 d3.selectAll(".instructions").attr("opacity", 0)
@@ -1745,6 +1792,9 @@ append_text_to_references("➢ Salvendy, G. (2012). Handbook of Human Factors an
 append_link_to_references("https://www.wiley.com/en-us/Handbook+of+Human+Factors+and+Ergonomics%2C+5th+Edition-p-9781119636083", 6, text_x+1100)
 append_text_to_references("➢ A Song of Ice and fire Speculative map - Traced asset", 7)
 append_link_to_references("https://www.worldanvil.com/w/a-summer-of-ice-and-fire-jester-117/map/225236e7-5acb-495c-9486-94606aec90c3", 7, text_x+1100)
+append_text_to_references("➢ Game of Thrones - The Killing Fields - Information viz", 8)
+append_link_to_references("https://public.tableau.com/app/profile/harpreetghuman/viz/TheKillingFieldsofGOT/GOT", 8, text_x+1100)
+
 //The End ;-)
 d3.selectAll(".references").attr("opacity", 0).attr("pointer-events", "none")
 
@@ -1830,6 +1880,15 @@ function append_text_to_objectives(text, line_number) {
         .attr('y', text_y+offset*line_number)
 }
 
-append_text_to_objectives("Learning Design", 0);
+append_text_to_objectives("Throughout this project we have worked closely together to construct this visualization. Where we attempted to visualize", 0);
+append_text_to_objectives("the overall spread of character deaths and locations of GoT in a comprehensive manner.", 1);
+append_text_to_objectives("We do this by keeping clutter to a minimum, both data points and UI elements. Ensuring the user can get a", 2);
+append_text_to_objectives("quick overview, and then procure details. The user is able to filter by various criteria, as well as zooming and panning across the map.", 3);
+append_text_to_objectives("This project was inspired by the lack of readability in an older GoT visualization (H. Ghuman 2017). (see references)",5)
+append_text_to_objectives("For instance, its lack of axis to read the bars values, and nonlinear shape also made it difficult to read.",6)
+append_text_to_objectives("We have written a quick explanation of how to use the Viz, as well as a quick demo video showcasing an example interaction of the viz.",7)
+append_text_to_objectives("During this project we have performed a number of user evaluations to identify areas of improvements,",8)
+append_text_to_objectives("which led us to improve for instance the UI to clarify what is intractable or not. And improve layout to communicate functionality.",9)
+
 
 d3.selectAll(".objectives").attr("opacity", 0);

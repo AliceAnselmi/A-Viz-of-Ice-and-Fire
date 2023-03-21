@@ -58,8 +58,32 @@
       <updated>1678094773149</updated>
       <workItem from="1678094791351" duration="5157000" />
       <workItem from="1679251546991" duration="2750000" />
-      <workItem from="1679324172454" duration="652000" />
+      <workItem from="1679324172454" duration="1023000" />
+      <workItem from="1679337159264" duration="212000" />
+      <workItem from="1679388772768" duration="1824000" />
     </task>
+    <task id="LOCAL-00001" summary="Changes">
+      <created>1679324915595</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1679324915595</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Quick fix of overlapping reference, and added Julius' linkedin">
+      <created>1679337216571</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1679337216571</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Forgot to fix index row, fixed now">
+      <created>1679337328003</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1679337328003</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -79,7 +103,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes" />
+    <MESSAGE value="Quick fix of overlapping reference, and added Julius' linkedin" />
+    <MESSAGE value="Forgot to fix index row, fixed now" />
+    <option name="LAST_COMMIT_MESSAGE" value="Forgot to fix index row, fixed now" />
   </component>
   <component name="WindowStateProjectService">
     <state x="667" y="489" key="#Web_Browsers" timestamp="1679252980818">

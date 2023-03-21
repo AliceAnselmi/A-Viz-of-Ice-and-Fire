@@ -1989,40 +1989,40 @@ function choose_sound(locationName, callback) {
     let chosen_sound;
     if (city.includes(locationName)) {
         console.log("city");
-        chosen_sound = "./assets/sfx/loudness_CITY 1.mp3";
+        chosen_sound = "./assets/sfx/CITY.mp3";
     } 
     
     else if (horse.includes(locationName)) {
         console.log("horse");
-        chosen_sound = "./assets/sfx/loudness_HORSE 1.mp3";
+        chosen_sound = "./assets/sfx/HORSE.mp3";
     } 
     
     else if (house.includes(locationName)) {
         console.log("house");
-        chosen_sound = "./assets/sfx/loudness_HOUSE 1.mp3";
+        chosen_sound = "./assets/sfx/HOUSE.mp3";
     } 
     
     else if (mountain.includes(locationName)) {
         console.log("mountain");
-        chosen_sound = "./assets/sfx/loudness_MOUNTAIN 1.mp3";
+        chosen_sound = "./assets/sfx/MOUNTAIN.mp3";
     } 
     
     else if (ocean.includes(locationName)) {
         console.log("ocean");
-        chosen_sound = "./assets/sfx/loudness_OCEAN 1.mp3";
+        chosen_sound = "./assets/sfx/OCEAN.mp3";
     } 
     
     else if (river.includes(locationName)) {
         console.log("river");
-        chosen_sound = "./assets/sfx/loudness_RIVER 1.mp3";
+        chosen_sound = "./assets/sfx/RIVER.mp3";
     } 
     
     else if (winter.includes(locationName)) {
         console.log("winter");
-        chosen_sound = "./assets/sfx/loudness_WINTER 1.mp3";
+        chosen_sound = "./assets/sfx/WINTER.mp3";
     } else {
         console.log("else");
-        chosen_sound = "./assets/sfx/loudness_RIVER 1.mp3";
+        chosen_sound = "./assets/sfx/RIVER.mp3";
     }
     console.log("in fetch sound")
     /*

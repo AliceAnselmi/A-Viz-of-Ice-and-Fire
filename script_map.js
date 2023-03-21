@@ -351,8 +351,8 @@ var slider_image = slider.append("svg:image")
 //.style("height", "17px")
 
 var x_slider = d3.scaleLinear()
-    .domain([min_chapter, max_chapter])
-    .range([slider_length * 0.04 + handle_offset, slider_length * 0.87 + handle_offset])
+    .domain([min_chapter, max_chapter]) // input, book chapter
+    .range([slider_length * 0.04 + handle_offset, slider_length * 0.87 + handle_offset]) // output, positions
     .clamp(true);
 var xMin = x_slider(min_chapter),
     xMax = x_slider(max_chapter)
@@ -398,9 +398,40 @@ var selRange = slider.append("line")
     .style("stroke", "url(#linear-gradient)")
     .attr("transform", "translate(0,12)")
     .style("opacity", 0.6)
+    .style("cursor", "pointer")
     .style("stroke-width", bottombar_height / 8.4 + "px")
     .attr("x1", x_slider(sliderVals[0]))
     .attr("x2", x_slider(sliderVals[1]))
+    .call(d3.drag()
+            .on("drag", function (event, d) {
+                let range = sliderVals[1] - sliderVals[0];
+
+                if (x_slider(sliderVals[0]) + event.dx <= xMin)
+                {
+                    sliderVals[0] = x_slider.invert(xMin);
+                    sliderVals[1] = x_slider.invert(xMin) + range;
+                } 
+                else if (x_slider(sliderVals[1]) + event.dx >= xMax)
+                {
+                    sliderVals[0] = x_slider.invert(xMax) - range;
+                    sliderVals[1] = x_slider.invert(xMax);
+                } 
+                else 
+                {
+                    sliderVals[0] = Math.round(x_slider.invert(x_slider(sliderVals[0]) + event.dx));
+                    sliderVals[1] = Math.round(x_slider.invert(x_slider(sliderVals[1]) + event.dx));
+                }
+
+                d3.select(handle.nodes()[0]).attr("x", x_slider(sliderVals[0]) - handle_offset);
+                d3.select(handle.nodes()[1]).attr("x", x_slider(sliderVals[1]) - handle_offset);
+
+                selRange
+                    .attr("x1", x_slider(sliderVals[0]))
+                    .attr("x2", x_slider(sliderVals[1]))
+
+                update_slider_infos(sliderVals[0], sliderVals[1]);
+                updateMap(sliderVals[0], sliderVals[1], mapMode);
+            }))
 
 
 var clickedhandle;
@@ -431,7 +462,7 @@ function onDrag(event, d) {
     //positioning of button
     var x_cursor = event.x;
     var x_other_handle = x_slider(sliderVals[d == 0 ? 1 : 0])
-    //handle overlap
+    //snap handles together
     if (d == 0) { //if lower handle
         if (x_cursor >= x_other_handle - 10) {
             x_cursor = x_other_handle
@@ -442,6 +473,7 @@ function onDrag(event, d) {
         }
     }
 
+    // snap to edges
     if (x_cursor < xMin && x_cursor <= x_other_handle + 10)
         x_cursor = xMin;
     else if (x_cursor > xMax && x_cursor >= x_other_handle - 10)

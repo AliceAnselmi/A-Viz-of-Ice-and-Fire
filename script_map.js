@@ -391,7 +391,7 @@ var linearGradient = defs.append("linearGradient")
         return d.color;
     });
 
-
+var rangeSliderLeftHandleOffset = 0;
 var selRange = slider.append("line")
     .data(x_slider.range())
     .attr("class", "sel-range")
@@ -403,34 +403,54 @@ var selRange = slider.append("line")
     .attr("x1", x_slider(sliderVals[0]))
     .attr("x2", x_slider(sliderVals[1]))
     .call(d3.drag()
+            .on("start", function (event, d) {
+                rangeSliderLeftHandleOffset = x_slider(sliderVals[0]) - event.x
+            })
             .on("drag", function (event, d) {
                 let range = sliderVals[1] - sliderVals[0];
-
-                if (x_slider(sliderVals[0]) + event.dx <= xMin)
+                let x_range = x_slider(sliderVals[1]) - x_slider(sliderVals[0]);
+                
+                let handle0 = event.x + rangeSliderLeftHandleOffset;
+                let handle1 = event.x + rangeSliderLeftHandleOffset + x_range;
+                
+                if (handle0 < xMin)
                 {
-                    sliderVals[0] = x_slider.invert(xMin);
-                    sliderVals[1] = x_slider.invert(xMin) + range;
-                } 
-                else if (x_slider(sliderVals[1]) + event.dx >= xMax)
+                    handle0 = xMin;
+                    handle1 = xMin + x_range;
+                }
+                else if (handle1 > xMax)
                 {
-                    sliderVals[0] = x_slider.invert(xMax) - range;
-                    sliderVals[1] = x_slider.invert(xMax);
-                } 
-                else 
-                {
-                    sliderVals[0] = Math.round(x_slider.invert(x_slider(sliderVals[0]) + event.dx));
-                    sliderVals[1] = Math.round(x_slider.invert(x_slider(sliderVals[1]) + event.dx));
+                    handle0 = xMax - x_range;
+                    handle1 = xMax;
                 }
 
-                d3.select(handle.nodes()[0]).attr("x", x_slider(sliderVals[0]) - handle_offset);
-                d3.select(handle.nodes()[1]).attr("x", x_slider(sliderVals[1]) - handle_offset);
+                d3.select(handle.nodes()[0]).attr("x", handle0 - handle_offset);
+                d3.select(handle.nodes()[1]).attr("x", handle1 - handle_offset);
+
+                selRange
+                    .attr("x1", handle0)
+                    .attr("x2", handle1)
+
+                // Now that we have the coordinates, lets convert to
+
+                sliderVals[0] = Math.round(x_slider.invert(handle0));
+                sliderVals[1] = Math.round(x_slider.invert(handle1));
+
+                update_slider_infos(sliderVals[0], sliderVals[1]);
+                updateMap(sliderVals[0], sliderVals[1], mapMode);
+            })
+            .on("end", function (event, d) {
+                // Snap the values to their final values
+
+                let handle0 = x_slider(sliderVals[0]);
+                let handle1 = x_slider(sliderVals[1]);
+
+                d3.select(handle.nodes()[0]).attr("x", handle0 - handle_offset);
+                d3.select(handle.nodes()[1]).attr("x", handle1 - handle_offset);
 
                 selRange
                     .attr("x1", x_slider(sliderVals[0]))
                     .attr("x2", x_slider(sliderVals[1]))
-
-                update_slider_infos(sliderVals[0], sliderVals[1]);
-                updateMap(sliderVals[0], sliderVals[1], mapMode);
             }))
 
 

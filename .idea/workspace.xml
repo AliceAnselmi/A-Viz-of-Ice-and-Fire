@@ -23,7 +23,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596dd399-63b9-44ce-936a-5e944db1f9d1" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/script_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/script_map.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +60,7 @@
       <workItem from="1679324172454" duration="1023000" />
       <workItem from="1679337159264" duration="212000" />
       <workItem from="1679388772768" duration="1961000" />
-      <workItem from="1679432042743" duration="739000" />
+      <workItem from="1679432042743" duration="1342000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1679324915595</created>
@@ -127,7 +126,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/script_map.js</url>
-          <line>892</line>
+          <line>944</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">

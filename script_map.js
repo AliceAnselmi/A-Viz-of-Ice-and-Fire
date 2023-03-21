@@ -976,15 +976,20 @@ function create_emblems(map) {
         
         deselect_emblem(selected_emblem, d)
         selected_emblem = emblem;
+
+
+        //sound stuff for emblems
         selected_location = d[0].Death_Location
         console.log(selected_location + ", died here")
         // function for determining which sound to play
         // function for playing music
-        let selected_sound = choose_sound(selected_location) 
-        fetch_sound(selected_sound)
+        //let chosen_sound = choose_sound(selected_location) 
+        //fetch_sound(selected_sound)
         //fetch_sound(choose_sound(selected_location))
-        playback()
+        //playback(chosen_sound)
+        playLocationSound(selected_location);
 
+       
 
         select_emblem(emblem, d)
         updateMap(sliderVals[0], sliderVals[1], mapMode);
@@ -1965,10 +1970,12 @@ d3.selectAll(".objectives").attr("opacity", 0);
 //           Sound          //
 // --------------------------//
 
+//const ctx = new AudioContext();
+//let audio
 
 
+function choose_sound(locationName, callback) {
 
-function choose_sound(locationName) {
     var city = ["King's Landing", "Winterfell", "Castle Black", "The Twins", "Meereen", "Harrenhal", "Riverrun", "Dragonstone", "Storm's End", "Whispers", "Astapor", "Moat Cailin", "The Eyrie", "Burning Septry", "Stokeworth", "Yunkai", "Braavos", "Darry", "Deepwood Motte", "Dreadfort", "Duskendale", "Fairmarket", "Hornwood", "Maidenpool", "Oldstones", "Oldtown", "Pyke", "Saltpans", "Vaes Dothrak", "Volantis"]
     var horse = ["Dothraki Sea", "Red Waste", "Disputed Lands"]
     var house = ["Crossroads Inn"]
@@ -1979,46 +1986,65 @@ function choose_sound(locationName) {
     var forest = [] // maybe???
     console.log("in choose sound")
 
+    let chosen_sound;
     if (city.includes(locationName)) {
         console.log("city");
-        return "./assets/sfx/loudness_CITY 1.mp3";
+        chosen_sound = "./assets/sfx/loudness_CITY 1.mp3";
     } 
     
     else if (horse.includes(locationName)) {
         console.log("horse");
-        return "./assets/sfx/loudness_HORSE 1.mp3";
+        chosen_sound = "./assets/sfx/loudness_HORSE 1.mp3";
     } 
     
     else if (house.includes(locationName)) {
         console.log("house");
-        return "./assets/sfx/loudness_HOUSE 1.mp3";
+        chosen_sound = "./assets/sfx/loudness_HOUSE 1.mp3";
     } 
     
     else if (mountain.includes(locationName)) {
         console.log("mountain");
-        return "./assets/sfx/loudness_MOUNTAIN 1.mp3";
+        chosen_sound = "./assets/sfx/loudness_MOUNTAIN 1.mp3";
     } 
     
     else if (ocean.includes(locationName)) {
         console.log("ocean");
-        return "./assets/sfx/loudness_OCEAN 1.mp3";
+        chosen_sound = "./assets/sfx/loudness_OCEAN 1.mp3";
     } 
     
     else if (river.includes(locationName)) {
         console.log("river");
-        return "./assets/sfx/loudness_RIVER 1.mp3";
+        chosen_sound = "./assets/sfx/loudness_RIVER 1.mp3";
     } 
     
     else if (winter.includes(locationName)) {
         console.log("winter");
-        return "./assets/sfx/loudness_WINTER 1.mp3";
+        chosen_sound = "./assets/sfx/loudness_WINTER 1.mp3";
     } else {
         console.log("else");
-        return "./assets/sfx/loudness_RIVER 1.mp3";
+        chosen_sound = "./assets/sfx/loudness_RIVER 1.mp3";
     }
+    console.log("in fetch sound")
+    /*
+    fetch(chosen_sound)
+    .then(data => data.arrayBuffer())
+    .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+    .then(decodedAudio => {
+        audio = decodedAudio;
+    });
+    */
 
+    fetch(chosen_sound)
+    .then(data => data.arrayBuffer())
+    .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+    .then(decodedAudio => {
+      audio = decodedAudio;
+      // call the callback function with the decoded audio
+      callback(audio);
+    });
+    
 }
-
+/*
 function fetch_sound(directory) {
     console.log("in fetch sound")
     fetch(directory)
@@ -2028,6 +2054,7 @@ function fetch_sound(directory) {
         audio = decodedAudio;
     });
 }
+*/
 
 function playback() {
     console.log("in playback")
@@ -2036,3 +2063,9 @@ function playback() {
     playSound.connect(ctx.destination);
     playSound.start(ctx.currentTime);
 }
+
+const playLocationSound = (locationName) => {
+    choose_sound(locationName, (audio) => {
+      playback(audio);
+    });
+  };

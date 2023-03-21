@@ -1657,9 +1657,10 @@ append_text_to_instructions("This visualization is the final project for the \"I
 append_text_to_instructions(" ➢ Zoom in and out to see the details of the map. Click on the circles to see who died in each location.", 3)
 append_text_to_instructions(" ➢ Click on the \"Books/Years view\" button to choose the filtering criteria you want to apply.", 4)
 append_text_to_instructions(" ➢ Select a range in the slider to see who died in the chosen range of books/chapters or time period.",5)
-append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by allegiance.", 6)
-append_link_to_instructions("https://youtu.be/u8KiZ5eEQKc", 7, 900)
-append_text_to_instructions(" Note for bigger screens: zoom in the browser to have a better positioning of elements!", 8)
+append_text_to_instructions(" ➢ Grab the center of the slider in order to move the entire chosen range to left or right.", 6)
+append_text_to_instructions(" ➢ Click on the emblems in the left pop-up menu to filter the characters by allegiance.", 7)
+append_link_to_instructions("https://youtu.be/u8KiZ5eEQKc", 8, 900)
+append_text_to_instructions(" Note for bigger screens: zoom in the browser to have a better positioning of elements!", 9)
 
 d3.selectAll(".instructions").attr("opacity", 0)
 
@@ -1888,7 +1889,7 @@ append_text_to_objectives("This project was inspired by the lack of readability 
 append_text_to_objectives("For instance, its lack of axis to read the bars values, and nonlinear shape also made it difficult to read.",6)
 append_text_to_objectives("We have written a quick explanation of how to use the Viz, as well as a quick demo video showcasing an example interaction of the viz.",7)
 append_text_to_objectives("During this project we have performed a number of user evaluations to identify areas of improvements,",8)
-append_text_to_objectives("which led us to improve for instance the UI to clarify what is intractable or not. And improve layout to communicate functionality.",9)
-
+append_text_to_objectives("which led us to improve for instance the UI to clarify what is intractable or not. And improve layout to communicate functionality,",9)
+append_text_to_objectives("as well as additional functionalities and interactions.",10)
 
 d3.selectAll(".objectives").attr("opacity", 0);
